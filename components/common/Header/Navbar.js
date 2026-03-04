@@ -20,25 +20,26 @@ const navItems = [
 ];
 
 
-const Navbar = () => {
+const Navbar = ({ news_categories, settings }) => {
     const pathname = usePathname();
     const [isOpen, setIsOpen] = useState(false);
+
 
     return (
         <nav className="relative">
             {/* Desktop Navbar */}
             <div className="hidden lg:flex items-center ">
                 <ul className="flex items-start">
-                    {navItems.map((item) => (
-                        <li key={item.id} className="relative group">
+                    {news_categories?.map((item) => (
+                        <li key={item?.id} className="relative group">
                             <Link
-                                href={item.slug}
+                                href={`/category/${item?.slug}`}
                                 className={`px-3 py-4 block text-[13px] sm:text-sm md:text-xl font-semibold tracking-wide transition-colors duration-200 flex items-center gap-1 ${pathname === item.slug
                                     ? 'text-white underline decoration-2 underline-offset-8'
                                     : 'text-white/90 hover:text-white'
                                     }`}
                             >
-                                {item.name}
+                                {item?.name}
                                 {/* <svg className="w-2 h-2 fill-current opacity-60" viewBox="0 0 20 20">
                                     <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
                                 </svg> */}

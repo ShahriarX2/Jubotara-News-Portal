@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
 
-export default function PremiumCategoryBlock({ title, news, vertical = false }) {
+export default function PremiumCategoryBlock({ title, news, vertical = false, slug }) {
   const firstNews = news[0];
   let others;
   if (vertical) {
@@ -22,7 +22,7 @@ export default function PremiumCategoryBlock({ title, news, vertical = false }) 
     <div className="flex flex-col">
       <div className="flex items-center justify-between border-t-4 border-primary pt-3 mb-6">
         <h2 className="text-xl md:text-2xl font-semibold text-secondary  ">{title}</h2>
-        <Link href={`/category/national`} className="text-xl md:text-2xl font-semibold text-secondary  flex items-center gap-1 hover:underline">
+        <Link href={`/category/${slug}`} className="text-xl md:text-2xl font-semibold text-secondary  flex items-center gap-1 hover:underline">
           আরও খবর
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
         </Link>

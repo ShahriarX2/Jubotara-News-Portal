@@ -10,8 +10,8 @@ import truncate from "@/utils/truncate";
 export default async function TrendingNews() {
 
   const featuredNews = await getTrandingNews();
-  const featuredNewsFirst = featuredNews[0];
-  const featuredOthers = featuredNews.slice(1, 6)
+
+  const featuredOthers = featuredNews.slice(1, 7)
 
   return (
     <Container className="">
@@ -22,7 +22,7 @@ export default async function TrendingNews() {
 
               {/* Text */}
               <div className="flex-1">
-                <Link href={`/`} className="text-gray-600 text-lg md:text-[22px] leading-[24px] md:leading-[26px] group-hover:text-primary font-semibold ">
+                <Link href={`/news/${news?.slug}`} className="text-gray-600 text-lg md:text-[22px] leading-[24px] md:leading-[26px] group-hover:text-primary font-semibold ">
                   {news?.name}
                 </Link>
                 <p className="text-gray-500 text-base md:text-xl mt-2 line-clamp-2 md:line-clamp-3">

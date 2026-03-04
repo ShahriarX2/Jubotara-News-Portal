@@ -17,6 +17,15 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'admin.crimevision24.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'admin.banglastarnews.com',
+      },
+      {
+        protocol: 'http',
+        hostname: 'admin.banglastarnews.com',
+      },
+
     ],
   },
   async rewrites() {

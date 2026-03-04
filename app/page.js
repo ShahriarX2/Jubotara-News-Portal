@@ -22,6 +22,8 @@ export default async function Home() {
   const nationalNews = await getNewsByCat("national", 20)
   const crimeNews = await getNewsByCat("অপরাধ", 20);
 
+  const lifestyleNews = await getNewsByCat("lifestyle", 20)
+
 
   const sportsNews = await getNewsByCat("sports", 20)
   const sortsFirstNews = sportsNews[0];
@@ -36,10 +38,10 @@ export default async function Home() {
   const trendingNews = await getTrendingNews();
   const videoNews = await getVideoNews();
 
-
-  const internatinal = await getNewsByCat("international", 20)
+  const internationalNews = await getNewsByCat("international", 20)
   const entertainmentNews = await getNewsByCat("entertainment", 20)
   const economyNews = await getNewsByCat("economy", 20)
+
 
 
 
@@ -62,13 +64,15 @@ export default async function Home() {
         <TrendingNewsSection />
         <ThumbnailNewsSection
           title={"এক্সক্লুসিভ"}
-          news={trendingNews}
+          news={lifestyleNews}
+          slug={'lifestyle'}
         />
         {/* Politics Section */}
         <SpecialCategorySection
           title="রাজনীতি"
           firstNews={politicsFirstNews}
           sideNews={politicsSideNews}
+          slug={'politics'}
         />
         {/* Ad Space  */}
         <Container >
@@ -82,6 +86,7 @@ export default async function Home() {
           title="সারাদেশ"
           featureNews={saradeshFirstNews}
           gridNews={saradeshSideNews}
+          slug={'town_village'}
         />
 
         {/* Video News Section */}
@@ -92,6 +97,7 @@ export default async function Home() {
           title="খেলাধুলা"
           firstNews={sortsFirstNews}
           sideNews={sportsSideNews}
+          slug={'sports'}
 
         />
 
@@ -100,8 +106,8 @@ export default async function Home() {
         {/* Categories Section */}
         <Container className="">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-4 xl:gap-6">
-            <PremiumCategoryBlock title="জাতীয়" news={crimeNews} />
-            <PremiumCategoryBlock title="আন্তর্জাতিক" news={internatinal} />
+            <PremiumCategoryBlock title="জাতীয়" news={nationalNews} slug={'national'} />
+            <PremiumCategoryBlock title="আন্তর্জাতিক" news={internationalNews} slug={'international'} />
           </div>
         </Container>
 
@@ -116,9 +122,9 @@ export default async function Home() {
 
         <Container className="">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <PremiumCategoryBlock title="অপরাধ" news={crimeNews} vertical={true} />
-            <PremiumCategoryBlock title="বিনোদন" news={entertainmentNews} vertical={true} />
-            <PremiumCategoryBlock title="অর্থনীতি" news={economyNews} vertical={true} />
+            <PremiumCategoryBlock title="অপরাধ" news={crimeNews} vertical={true} slug={'অপরাধ'} />
+            <PremiumCategoryBlock title="বিনোদন" news={entertainmentNews} vertical={true} slug={'entertainment'} />
+            <PremiumCategoryBlock title="অর্থনীতি" news={economyNews} vertical={true} slug={'economy'} />
           </div>
         </Container>
       </main>

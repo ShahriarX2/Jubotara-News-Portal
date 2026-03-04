@@ -28,9 +28,10 @@ const HeronNewsSection = async () => {
                                     {featuredNewsFirst?.name}
                                 </h1>
                             </Link>
-                            <p className="text-gray-600  text-base md:text-2xl leading-relaxed mt-2 md:mt-3 ">
+                            <p className="text-gray-600  text-base md:text-2xl leading-relaxed mt-2 md:mt-3 line-clamp-3 md:line-clamp-6
+ ">
 
-                                {truncate(featuredNewsFirst?.description)}
+                                {truncate(featuredNewsFirst?.description, 700)}
                             </p>
                             {/* <div className="flex items-center gap-4 text-sm text-gray-500 font-bold uppercase">
                             <span className="text-primary">{mainNews.category}</span>

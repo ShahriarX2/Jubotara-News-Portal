@@ -1,26 +1,34 @@
-export default function truncate(str, limit = 200) {
-  // Strip HTML tags
-  const noTags = str.replace(/<\/?[^>]+(>|$)/g, '')
+export default function truncate(str = "", limit = 200) {
+  // যদি str না থাকে বা string না হয় → safe fallback
+  if (typeof str !== "string") {
+    return "";
+  }
 
-  // Decode basic HTML entities manually (DOMParser is not available server-side)
+  // Strip HTML tags
+  const noTags = str.replace(/<\/?[^>]+(>|$)/g, "");
+
+  // Decode basic HTML entities manually
   let decodedString = noTags
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
     .replace(/&quot;/g, '"')
     .replace(/&#039;/g, "'")
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
 
   // Truncate logic
   if (decodedString.length > limit) {
-    let truncated = decodedString.substring(0, limit)
+    let truncated = decodedString.substring(0, limit);
 
-    if (decodedString.charAt(limit) !== ' ') {
-      truncated = truncated.substring(0, truncated.lastIndexOf(' '))
+    if (decodedString.charAt(limit) !== " ") {
+      const lastSpace = truncated.lastIndexOf(" ");
+      if (lastSpace > 0) {
+        truncated = truncated.substring(0, lastSpace);
+      }
     }
 
-    decodedString = truncated + '...'
+    decodedString = truncated + "...";
   }
 
-  return decodedString
+  return decodedString;
 }

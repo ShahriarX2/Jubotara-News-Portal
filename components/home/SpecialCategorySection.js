@@ -5,7 +5,7 @@ import Container from '../common/Container';
 import { getNewsByCat } from '@/lib/fetchData';
 import truncate from '@/utils/truncate';
 
-const SpecialCategorySection = async ({ title, firstNews = {}, sideNews = [] }) => {
+const SpecialCategorySection = async ({ title, firstNews = {}, sideNews = [], slug }) => {
 
 
     // console.log("sportsNews", sportsNews)
@@ -20,7 +20,7 @@ const SpecialCategorySection = async ({ title, firstNews = {}, sideNews = [] }) 
                         <div className="w-1.5 h-8 bg-secondary"></div>
                         <h2 className="text-xl md:text-2xl font-semibold text-secondary">{title}</h2>
                     </div>
-                    <Link href={`/category/national`} className="text-xl md:text-2xl font-semibold text-secondary  flex items-center gap-1 hover:underline">
+                    <Link href={`/category/${slug}`} className="text-xl md:text-2xl font-semibold text-secondary  flex items-center gap-1 hover:underline">
                         আরও খবর
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
                     </Link>
