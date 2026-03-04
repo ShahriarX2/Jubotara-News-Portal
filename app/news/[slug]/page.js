@@ -14,6 +14,8 @@ import CopyButton from '@/components/news/CopyButton';
 import Link from 'next/link';
 import ThumbnailNewsSection from '@/components/home/ThumbnailNewsSection';
 import { FaGoogle, FaWhatsapp } from "react-icons/fa";
+import { getNewsByCat, getSingleNews, getTrandingNews } from '@/lib/fetchData';
+import { formatBengaliDate } from '@/utils/formatDate';
 
 
 export async function generateMetadata({ params }) {
@@ -28,18 +30,31 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function NewsDetailPage({ params }) {
-
-    const trendingNews = await getTrendingNews();
+    const trendingNews = await getTrandingNews();
     const { slug } = await params;
-    // console.log("slug from details page", slug)
-    const news = await getNewsBySlug(slug);
+
+    const news = await getSingleNews(slug);
+    if (!news) {
+        notFound();
+    }
+    let category
+    if (news?.categories) {
+        category = news?.categories[0]
+    }
+
+
+    const reletedNews = await getNewsByCat(category?.slug, 5);
+
+
+    // console.log("reletedNews details page", reletedNews,)
+
+    const formattedPublishedDate = formatBengaliDate(news?.created_at);
+
     const breakingNews = await getBreakingNews();
     const allNews = await getNews();
     const latestNews = allNews.filter(n => n.slug !== slug).slice(0, 5);
 
-    if (!news) {
-        notFound();
-    }
+
 
     // Get current URL for sharing
     // const fullUrl = `https://banglastar.com/news/${slug}`;
@@ -56,25 +71,23 @@ export default async function NewsDetailPage({ params }) {
                         <div className="space-y-6">
                             {/* Category and Date */}
                             <div className="flex items-center gap-4 text-base md:text-xl">
-                                <span className="bg-primary text-white px-3 py-1 font-bold">{news.category}</span>
+                                <span className="bg-primary text-white px-3 py-1 font-bold">{category?.name}</span>
 
                             </div>
 
                             {/* Title */}
                             <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 leading-[1] md:leading-6">
-                                {news.title}
+                                {news?.name}
                             </h1>
 
                             {/* Author and Toolbar */}
                             <div className="flex flex-wrap items-center justify-between gap-4  border-y border-gray-100">
                                 <div className="flex items-center gap-3">
-                                    {/* <div className="w-10 h-10 bg-red-50 flex items-center justify-center text-primary font-bold text-lg">
-                                        {news.author.charAt(0)}
-                                    </div> */}
-                                    <div>
-                                        <p className="text-base md:text-xl font-bold text-gray-800">{news.author}</p>
 
-                                        <span className="text-gray-500 font-medium">{news.date} | {news.time}</span>
+                                    <div>
+                                        <p className="text-base md:text-xl font-bold text-gray-800">নিজস্ব প্রতিবেদক</p>
+
+                                        <span className="text-gray-500 font-medium">{formattedPublishedDate}</span>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3">
@@ -87,8 +100,8 @@ export default async function NewsDetailPage({ params }) {
                             {/* Main Image */}
                             <div className="relative h-[300px] md:h-[500px] w-full overflow-hidden shadow-inner">
                                 <Image
-                                    src={news.image}
-                                    alt={news.title}
+                                    src={news?.featured_image}
+                                    alt={news?.name || "news image"}
                                     fill
                                     priority
                                     className="object-cover"
@@ -96,11 +109,14 @@ export default async function NewsDetailPage({ params }) {
                             </div>
 
                             {/* Content */}
-                            <div className="text-base md:text-xl lg:md:text-[22px] text-gray-800  font-medium">
-                                {/* Split content by newlines and wrap in paragraphs */}
-                                {news?.content?.split('\n').map((para, i) => (
-                                    <p key={i} className="mb-4">{para}</p>
-                                ))}
+                            <div className="">
+
+                                <div
+                                    className='text-base md:text-xl lg:md:text-[22px] text-gray-800  font-medium'
+                                    dangerouslySetInnerHTML={{
+                                        __html: news.description || '<p>No content available.</p>'
+                                    }}
+                                ></div>
 
 
                             </div>
@@ -169,16 +185,18 @@ export default async function NewsDetailPage({ params }) {
                         <div className="p-3 md:p-6  border border-slate-300">
                             <h2 className="text-xl font-bold mb-6 border-b-2 border-primary pb-2 flex items-center gap-2">
                                 <span className="w-2 h-6 bg-primary inline-block"></span>
-                                আরো সংবাদ
+                                ট্রেন্ডিং সংবাদ
                             </h2>
                             <div className="space-y-2">
-                                {latestNews.map(item => (
+                                {trendingNews?.slice(0, 11)?.map(item => (
                                     <HorizontalCard key={item.id} news={item} />
                                 ))}
                             </div>
-                            <button className="w-full mt-6 py-2 text-primary font-bold text-base md:text-xl bg-red-50 hover:bg-red-100 transition-colors">
+                            {/* <Link
+                                href={`/news/${category?.slug}`}
+                                className="w-full mt-6 py-2 text-primary font-bold text-base md:text-xl bg-red-50 hover:bg-red-100 transition-colors">
                                 সব খবর পড়ুন
-                            </button>
+                            </Link> */}
                         </div>
 
 
@@ -187,7 +205,8 @@ export default async function NewsDetailPage({ params }) {
             </main>
             <ThumbnailNewsSection
                 title={"আরও খবর"}
-                news={trendingNews}
+                news={reletedNews}
+                slug={category?.slug}
             />
 
 

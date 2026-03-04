@@ -11,29 +11,39 @@ import ThumbnailNewsSection from '@/components/home/ThumbnailNewsSection';
 import TrendingBar from '@/components/common/Header/TrendingBar';
 import HeronNewsSection from '@/components/home/HeronNewsSection';
 import VideoSection from '@/components/home/VideoSection';
+import { getNewsByCat } from '@/lib/fetchData';
 
 export default async function Home() {
-  const allNews = await getNews();
-  const breakingNews = await getBreakingNews();
+
+  const politicsNews = await getNewsByCat("politics", 20)
+  const politicsFirstNews = politicsNews[0];
+  const politicsSideNews = politicsNews.slice(1, 7)
+
+  const nationalNews = await getNewsByCat("national", 20)
+  const crimeNews = await getNewsByCat("অপরাধ", 20);
+
+  const lifestyleNews = await getNewsByCat("lifestyle", 20)
+
+
+  const sportsNews = await getNewsByCat("sports", 20)
+  const sportsFirstNews = sportsNews[0];
+  const sportsSideNews = sportsNews.slice(1, 7)
+
+
+  const saraDeshNews = await getNewsByCat("town_village", 9)
+  const saradeshFirstNews = saraDeshNews[0];
+  const saradeshSideNews = saraDeshNews.slice(1, 7)
+  // console.log("saraDeshNews", saraDeshNews)
+
   const trendingNews = await getTrendingNews();
   const videoNews = await getVideoNews();
 
-  // Reference structure: 
-  // Main featured (1) + Grid below it (4)
-  const mainNews = allNews[2];
-  const heroGridNews = allNews.slice(1, 5);
+  const internationalNews = await getNewsByCat("international", 20)
+  const entertainmentNews = await getNewsByCat("entertainment", 20)
+  const economyNews = await getNewsByCat("economy", 20)
 
-  // For CountryWide Section (National)
-  const nationalMain = allNews[2];
-  const nationalGrid = allNews.slice(0, 4);
 
-  // Sports News (Title: খেলাধুলা)
-  const sportsMain = allNews[3];
-  const sportsSide = allNews.slice(0, 6);
 
-  // Politics News (Title: রাজনীতি)
-  const politicsMain = allNews[1];
-  const politicsSide = allNews.slice(0, 8);
 
   return (
     <div className=" min-h-screen bg-[#eff3f6]">
@@ -50,17 +60,19 @@ export default async function Home() {
 
       <main className="pb-12 space-y-4">
         {/* Dynamic Hero Row matching reference */}
-        <HeronNewsSection mainNews={mainNews} bottomNews={heroGridNews} />
+        <HeronNewsSection />
         <TrendingNewsSection />
         <ThumbnailNewsSection
           title={"এক্সক্লুসিভ"}
-          news={trendingNews}
+          news={lifestyleNews}
+          slug={'lifestyle'}
         />
         {/* Politics Section */}
         <SpecialCategorySection
           title="রাজনীতি"
-          mainNews={politicsMain}
-          sideNews={politicsSide}
+          firstNews={politicsFirstNews}
+          sideNews={politicsSideNews}
+          slug={'politics'}
         />
         {/* Ad Space  */}
         <Container >
@@ -72,27 +84,31 @@ export default async function Home() {
         {/* Country Wide Section */}
         <CountryWideSection
           title="সারাদেশ"
-          featureNews={nationalMain}
-          gridNews={nationalGrid}
+          featureNews={saradeshFirstNews}
+          gridNews={saradeshSideNews}
+          slug={'town_village'}
         />
 
         {/* Video News Section */}
         <VideoSection videos={videoNews} />
 
         {/* Sports Section */}
-        <SpecialCategorySection
+        {sportsFirstNews  &&   <SpecialCategorySection
           title="খেলাধুলা"
-          mainNews={sportsMain}
-          sideNews={sportsSide}
-        />
+          firstNews={sportsFirstNews}
+          sideNews={sportsSideNews}
+          slug={'sports'}
+
+        />}
+      
 
 
 
         {/* Categories Section */}
         <Container className="">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-4 xl:gap-6">
-            <PremiumCategoryBlock title="জাতীয়" news={allNews.slice(0, 5)} />
-            <PremiumCategoryBlock title="আন্তর্জাতিক" news={allNews.slice(3, 8)} />
+            <PremiumCategoryBlock title="জাতীয়" news={nationalNews} slug={'national'} />
+            <PremiumCategoryBlock title="আন্তর্জাতিক" news={internationalNews} slug={'international'} />
           </div>
         </Container>
 
@@ -107,9 +123,9 @@ export default async function Home() {
 
         <Container className="">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <PremiumCategoryBlock title="খেলাধুলা (অন্যান্য)" news={allNews.slice(1, 4)} vertical={true} />
-            <PremiumCategoryBlock title="বিনোদন" news={allNews.slice(4, 7)} vertical={true} />
-            <PremiumCategoryBlock title="অন্যান্য" news={allNews.slice(2, 5)} vertical={true} />
+            <PremiumCategoryBlock title="অপরাধ" news={crimeNews} vertical={true} slug={'অপরাধ'} />
+            <PremiumCategoryBlock title="বিনোদন" news={entertainmentNews} vertical={true} slug={'entertainment'} />
+            <PremiumCategoryBlock title="অর্থনীতি" news={economyNews} vertical={true} slug={'economy'} />
           </div>
         </Container>
       </main>
