@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Container from '../common/Container';
+import truncate from '@/utils/truncate';
 
 const CountryWideSection = ({ title, featureNews, gridNews = [] }) => {
     if (!featureNews) return null;
@@ -27,8 +28,8 @@ const CountryWideSection = ({ title, featureNews, gridNews = [] }) => {
                     <div className="md:col-span-6">
                         <Link href={`/news/${featureNews.slug}`} className="block relative h-[250px] md:h-[350px] w-full overflow-hidden">
                             <Image
-                                src={featureNews.image}
-                                alt={featureNews.title}
+                                src={featureNews?.featured_image}
+                                alt={featureNews?.name}
                                 fill
                                 className="object-cover transition-transform duration-700 hover:scale-105"
                             />
@@ -38,36 +39,38 @@ const CountryWideSection = ({ title, featureNews, gridNews = [] }) => {
                         <div>
                             <Link href={`/news/${featureNews.slug}`} className="group">
                                 <h3 className="text-gray-600 text-lg md:text-[22px] leading-[24px] md:leading-[26px] group-hover:text-primary font-semibold transition-colors mb-1 md:mb-2">
-                                    {featureNews.title}
+                                    {featureNews?.name}
                                 </h3>
                             </Link>
                             <p className="text-gray-600 text-base md:text-xl leading-relaxed line-clamp-2 md:line-clamp-6">
-                                {featureNews.summary}
+
+                                {truncate(featureNews?.description)}
                             </p>
                         </div>
-                        <div className=" text-base md:text-xl font-semibold text-gray-700 uppercase tracking-wider mt-2 md:mt-0">
+                        {/* <div className=" text-base md:text-xl font-semibold text-gray-700 uppercase tracking-wider mt-2 md:mt-0">
                             {featureNews.date} | {featureNews.time}
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
                 {/* Bottom Grid of 4 */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {gridNews.slice(0, 4).map((news) => (
-                        <Link key={news.id} href={`/news/${news.slug}`} className="group">
+                        <Link key={news.id} href={`/news/${news.slug}`} className="group ">
                             <div className="relative h-44 w-full mb-2 overflow-hidden bg-gray-100">
                                 <Image
-                                    src={news.image}
-                                    alt={news.title}
+                                    src={news?.featured_image}
+                                    alt={news?.name}
                                     fill
                                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                                 />
                             </div>
                             <h4 className="text-gray-600 text-lg md:text-[22px] leading-[24px] md:leading-[26px] group-hover:text-primary font-semibold transition-colors line-clamp-2">
-                                {news?.title}
+                                {news?.name}
                             </h4>
-                            <p className="text-gray-500 text-base md:text-xl line-clamp-2 leading-relaxed ">
-                                {news?.summary}
+                            <p className="text-gray-500 text-base md:text-xl line-clamp-2 leading-relaxed mt-1">
+
+                                {truncate(news?.description)}
                             </p>
                         </Link>
                     ))}

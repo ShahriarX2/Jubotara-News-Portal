@@ -2,9 +2,14 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Container from '../common/Container';
+import { getNewsByCat } from '@/lib/fetchData';
+import truncate from '@/utils/truncate';
 
-const SpecialCategorySection = ({ title, mainNews, sideNews = [] }) => {
-    if (!mainNews) return null;
+const SpecialCategorySection = async ({ title, firstNews = {}, sideNews = [] }) => {
+
+
+    // console.log("sportsNews", sportsNews)
+
 
     return (
         <Container >
@@ -25,43 +30,44 @@ const SpecialCategorySection = ({ title, mainNews, sideNews = [] }) => {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     {/* Left: Featured News Item */}
                     <div className="lg:col-span-4 flex flex-col group">
-                        <Link href={`/news/${mainNews.slug}`} className="block relative h-64 w-full overflow-hidden">
+                        <Link href={`/news/${firstNews.slug}`} className="block relative h-64 w-full overflow-hidden">
                             <Image
-                                src={mainNews.image}
-                                alt={mainNews.title}
+                                src={firstNews?.featured_image}
+                                alt={firstNews?.name}
                                 fill
                                 className="object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                         </Link>
                         <div className="mt-2 md:mt-3 space-y-1">
-                            <Link href={`/news/${mainNews.slug}`}>
+                            <Link href={`/news/${firstNews?.slug}`}>
                                 <h3 className="text-gray-600 text-lg md:text-[22px] leading-[24px] md:leading-[26px] group-hover:text-primary font-semibold transition-colors">
-                                    {mainNews.title}
+                                    {firstNews.name}
                                 </h3>
                             </Link>
-                            <p className="text-gray-600 text-base md:text-xl leading-relaxed line-clamp-2">
-                                {mainNews.summary}
-                            </p>
+                            {firstNews?.description && <p className="text-gray-600 text-base md:text-xl leading-relaxed line-clamp-2">
+                                {truncate(firstNews?.description)}
+                            </p>}
+
                         </div>
                     </div>
 
                     {/* Right: Small News Items in 2 Columns */}
                     <div className="lg:col-span-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                            {sideNews.slice(0, 6).map((item, index) => (
+                            {sideNews?.map((item, index) => (
                                 <Link key={item.id} href={`/news/${item.slug}`} className="flex gap-2 p-2 md:gap-4 md:p-4 border border-slate-300 mb-0 hover:bg-[#eff3f6] transition-colors group h-fit">
                                     <div className="flex-1 space-y-1">
                                         <h4 className="text-gray-600 text-lg md:text-[22px] leading-[24px] md:leading-[26px] group-hover:text-primary font-semibold transition-colors line-clamp-2">
-                                            {item.title}
+                                            {item?.name}
                                         </h4>
-                                        <p className="text-base md:text-xl text-gray-500 line-clamp-2 leading-relaxed">
-                                            {item.summary}
+                                        <p className="text-base md:text-xl text-gray-500 line-clamp-1 leading-relaxed">
+                                            {truncate(item?.description)}
                                         </p>
                                     </div>
                                     <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden">
                                         <Image
-                                            src={item.image}
-                                            alt={item.title}
+                                            src={item?.featured_image}
+                                            alt={item?.name}
                                             fill
                                             className="object-cover"
                                         />
