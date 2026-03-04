@@ -101,7 +101,7 @@ export default async function NewsDetailPage({ params }) {
                             <div className="relative h-[300px] md:h-[500px] w-full overflow-hidden shadow-inner">
                                 <Image
                                     src={news?.featured_image}
-                                    alt={news.title}
+                                    alt={news?.name || "news image"}
                                     fill
                                     priority
                                     className="object-cover"
