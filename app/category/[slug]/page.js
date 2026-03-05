@@ -4,20 +4,53 @@ import Container from '@/components/common/Container';
 import Link from 'next/link';
 import Image from 'next/image';
 import truncate from '@/utils/truncate';
+import { FRONT_END_URL } from '@/utils/baseUrl';
 
 const toBanglaNumber = (n) => {
     const banglaNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
     return n.toString().split('').map(digit => banglaNumbers[digit] || digit).join('');
 };
 
+
 export async function generateMetadata({ params }) {
     const { slug } = await params;
+    const category = await getSingleCategories(slug);
     const menus = await getMenus();
-    // In live API, menus have 'link' instead of 'slug' and 'label' instead of 'name'
-    const category = menus.find(c => c.link === slug || c.slug === slug);
-    const categoryName = category?.label || category?.name || 'বিভাগ';
+
+    // Robust category detection
+    const categoryFromMenu = menus.find(c => c.link === slug || c.slug === slug);
+    const categoryName = category?.name || categoryFromMenu?.label || categoryFromMenu?.name || 'বিভাগ';
+
+    const title = `${categoryName} | বাংলা স্টার নিউজ`;
+    const description = `${categoryName} বিভাগের সর্বশেষ সংবাদ, ব্রেকিং নিউজ এবং বিশেষ প্রতিবেদন দেখুন বাংলা স্টার নিউজে।`;
+    const siteUrl = FRONT_END_URL;
+    const pageUrl = `${siteUrl}/category/${slug}`;
+
     return {
-        title: `${categoryName} | বাংলা স্টার নিউজ`,
+        title,
+        description,
+        metadataBase: new URL(siteUrl),
+        alternates: {
+            canonical: pageUrl,
+        },
+        openGraph: {
+            title,
+            description,
+            url: pageUrl,
+            siteName: 'বাংলা স্টার নিউজ',
+            locale: 'bn_BD',
+            type: 'website',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            site: '@banglastar',
+        },
+        robots: {
+            index: true,
+            follow: true,
+        },
     };
 }
 
@@ -58,8 +91,33 @@ export default async function CategoryPage({ params, searchParams }) {
 
     const totalPages = meta.last_page || 1;
 
+    // JSON-LD Breadcrumb
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'হোম',
+                item: FRONT_END_URL,
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: categoryName,
+                item: `${FRONT_END_URL}/category/${slug}`,
+            },
+        ],
+    };
+
     return (
         <div className="flex flex-col min-h-screen bg-[#eff3f6]">
+            {/* Add Structured Data */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <main className="py-6 px-2">
                 <Container>
                     <div className="flex flex-col lg:flex-row gap-2 md:gap-6">

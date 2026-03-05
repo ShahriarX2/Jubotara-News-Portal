@@ -8,7 +8,12 @@ const ShareButtons = ({ title, url }) => {
   const [absoluteUrl, setAbsoluteUrl] = useState('');
 
   useEffect(() => {
-    setAbsoluteUrl(`${window.location.origin}${url}`);
+    // Check if the URL is already absolute
+    if (url.startsWith('http')) {
+      setAbsoluteUrl(url);
+    } else {
+      setAbsoluteUrl(`${window.location.origin}${url}`);
+    }
   }, [url]);
 
   const handleCopy = async () => {

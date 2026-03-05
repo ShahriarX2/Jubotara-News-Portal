@@ -1,5 +1,7 @@
 // metaHelpers.js
 
+import { BASE_URL } from "./baseUrl";
+
 
 export const getMetaDescriptionByMetaName = (data, metaName) => {
   // console.log("from meta helper",jsonData?.data);
@@ -40,13 +42,19 @@ export const getMediaLinkByMetaName = (data, metaName) => {
   const item = data.find(
     (dataItem) => dataItem.meta_name === metaName
   );
-// console.log("from utils", item)
+  // console.log("from utils", item)
   if (item?.file_directory && item?.filename) {
     return item.file_directory + item.filename;
   }
 
   return null;
 };
+
+
+
+export const getImageUrl = (url) => {
+  return `${BASE_URL}/${url}`
+}
 
 // export const getMediaLinkByMetaName = (data, metaName) => {
 //   if (!data || !metaName) return null;

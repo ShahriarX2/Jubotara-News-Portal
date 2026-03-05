@@ -65,3 +65,61 @@
     scrollbar-width: none;
   }
 }
+
+/* Focused News Print Styles */
+@media print {
+  header, 
+  footer, 
+  aside, 
+  .no-print, 
+  .thumbnail-news-section, 
+  .mb-nav, 
+  nav, 
+  .bottom-nav,
+  .mobile-bottom-nav {
+      display: none !important;
+  }
+  
+  body, 
+  main {
+      background: white !important;
+      padding: 0 !important;
+      margin: 0 !important;
+  }
+  
+  #printable-news {
+      width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border: none !important;
+  }
+  
+  article {
+      border: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+  }
+  
+  .container {
+      max-width: 100% !important;
+      width: 100% !important;
+      display: block !important;
+      padding: 0 !important;
+      margin: 0 !important;
+  }
+  
+  .grid {
+      display: block !important;
+  }
+  
+  img {
+      max-width: 100% !important;
+      height: auto !important;
+      margin: 20px 0 !important;
+  }
+
+  /* Ensure text is readable */
+  p, h1, h2, h3, span {
+      color: black !important;
+  }
+}

@@ -2,9 +2,23 @@
 import Link from 'next/link';
 import Logo from './Header/Logo';
 import Container from './Container';
+import { getSettings } from '@/lib/fetchData';
+import { getImageUrl, getMediaLinkByMetaName, getMetaValueByMetaName } from '@/utils/metaHelpers';
 
-const Footer = () => {
+const Footer = async () => {
     const currentYear = new Date().getFullYear();
+    const settings = await getSettings()
+
+    const logo = getMediaLinkByMetaName(settings, "site_logoimg_id");
+    const email = getMetaValueByMetaName(settings, "company_email") || "nfo@banglastar.com";
+    const phone = getMetaValueByMetaName(settings, "company_phone");
+    const phone_2 = getMetaValueByMetaName(settings, "phone_2");
+    const footer_content = getMetaValueByMetaName(settings, "footer_content")
+    const bottom_footer_content = getMetaValueByMetaName(settings, "bottom_footer_content");
+
+    const logoUrl = getImageUrl(logo)
+
+    // console.log("logo", logoUrl)
 
     return (
         <footer className="bg-secondary text-white pt-16 pb-4 mt-12">
@@ -12,11 +26,12 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 xl:gap-12">
                     {/* About */}
                     <div className="space-y-3 md:space-y-6">
-                        <div className="flex bg-white p-2 w-fit">
-                            <Logo />
+                        <div className="flex bg-white p-1.5 w-fit">
+                            <Logo logoUrl={logoUrl} />
                         </div>
                         <p className="text-gray-200 text-base md:text-xl leading-relaxed">
-                            বাংলা স্টার নিউজ বাংলাদেশের একটি জনপ্রিয় অনলাইন সংবাদ মাধ্যম। আমরা সঠিক ও বস্তুনিষ্ঠ সংবাদ সবার আগে আপনার কাছে পৌঁছে দিতে প্রতিশ্রুতিবদ্ধ।
+
+                            <p dangerouslySetInnerHTML={{ __html: footer_content }} />
                         </p>
                         <div className="flex items-center gap-4">
                             {/* {['facebook', 'twitter', 'youtube', 'instagram'].map((social) => (
@@ -46,9 +61,9 @@ const Footer = () => {
                     <div className="space-y-3 md:space-y-6">
                         <h3 className="text-base md:text-xl font-bold border-l-4 border-primary pl-3 text-gray-100">প্রতিষ্ঠান</h3>
                         <ul className="space-y-2 text-base md:text-lg text-gray-200 ">
-                            <li><Link href="/about" className="hover:text-white transition-colors">আমাদের সম্পর্কে</Link></li>
+                            {/* <li><Link href="/about" className="hover:text-white transition-colors">আমাদের সম্পর্কে</Link></li> */}
                             <li><Link href="/team" className="hover:text-white transition-colors">আমাদের টিম</Link></li>
-                            <li><Link href="/contact" className="hover:text-white transition-colors">যোগাযোগ</Link></li>
+                            {/* <li><Link href="/contact" className="hover:text-white transition-colors">যোগাযোগ</Link></li> */}
                             <li><Link href="/privacy" className="hover:text-white transition-colors">গোপনীয়তা নীতি</Link></li>
                             <li><Link href="/terms" className="hover:text-white transition-colors">ব্যবহারের শর্তাবলী</Link></li>
                         </ul>
@@ -59,15 +74,16 @@ const Footer = () => {
                         <h3 className="text-base md:text-xl font-bold border-l-4 border-primary pl-3 text-gray-100">যোগাযোগ</h3>
                         <div className="text-base md:text-lg text-gray-200 space-y-2">
                             <p>১২৩ স্টার ভিলা, সেক্টর ৭, উত্তরা, ঢাকা-১২৩০</p>
-                            <p>ফোন: +৮৮০ ২ ১২৩৪৫৬৭</p>
-                            <p>ইমেইল: info@banglastar.com</p>
+                            <p>ফোন: {phone}</p>
+                            <p>ইমেইল: {email}</p>
                         </div>
                     </div>
                 </div>
 
                 {/* Bottom Bar */}
                 <div className="mt-3 pt-4 border-t border-gray-600 text-center text-base md:text-lg text-gray-200 ">
-                    <p>© {currentYear} বাংলা স্টার নিউজ | সর্বস্বত্ব সংরক্ষিত।</p>
+                    {/* <p>© {currentYear} বাংলা স্টার নিউজ | সর্বস্বত্ব সংরক্ষিত।</p> */}
+                    <p dangerouslySetInnerHTML={{ __html: bottom_footer_content }} />
 
                 </div>
             </Container>

@@ -46,14 +46,7 @@ const Navbar = ({ news_categories, settings }) => {
                             </Link>
                         </li>
                     ))}
-                    {/* <li className="px-3">
-                        <button className="text-white/90 hover:text-white font-black text-[13px] flex items-center gap-1">
-                            MORE
-                            <svg className="w-3 h-3 fill-current opacity-60" viewBox="0 0 24 24">
-                                <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-                            </svg>
-                        </button>
-                    </li> */}
+
                 </ul>
             </div>
 
@@ -82,19 +75,19 @@ const Navbar = ({ news_categories, settings }) => {
 
             {/* Mobile Menu Overlay */}
             {isOpen && (
-                <div className="fixed inset-0 top-[60px] bg-[#003366] z-[100] p-6 lg:hidden">
+                <div className="fixed inset-0 top-[60px] bg-secondary z-[100] p-6 lg:hidden">
                     <ul className="flex flex-col gap-4">
-                        {navItems.map((item) => (
-                            <li key={item.id}>
+                        {news_categories?.map((item) => (
+                            <li key={item?.id}>
                                 <Link
-                                    href={item.slug}
+                                    href={`/category/${item?.slug}`}
                                     onClick={() => setIsOpen(false)}
-                                    className={`text-xl font-black ${pathname === item.slug
+                                    className={`text-xl font-black ${pathname === item?.slug
                                         ? 'text-white'
                                         : 'text-white/70 hover:text-white'
                                         }`}
                                 >
-                                    {item.name}
+                                    {item?.name}
                                 </Link>
                             </li>
                         ))}

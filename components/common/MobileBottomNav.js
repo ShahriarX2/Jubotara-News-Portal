@@ -8,18 +8,17 @@ import {
     Home,
     Globe,
     Newspaper,
-    Search,
     Menu,
     X,
-    ChevronRight,
-    Info,
-    Mail,
     Facebook,
     Twitter,
-    Youtube
+    Youtube,
+    ChevronRight,
+    YoutubeIcon,
+    Video
 } from 'lucide-react';
 
-export default function MobileBottomNav() {
+export default function MobileBottomNav({ news_categories }) {
     const pathname = usePathname();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [categories, setCategories] = useState([]);
@@ -35,8 +34,9 @@ export default function MobileBottomNav() {
     const navItems = [
         { name: 'হোম', icon: <Home size={22} />, path: '/' },
         { name: 'সারাদেশ', icon: <Globe size={22} />, path: '/category/national' },
-        { name: 'খবর', icon: <Newspaper size={22} />, path: '/all-news' },
-        { name: 'অনুসন্ধান', icon: <Search size={22} />, path: '/search' },
+        { name: 'রাজনীতি', icon: <Newspaper size={22} />, path: '/category/politics' },
+        { name: 'ভিডিও', icon: <YoutubeIcon size={25} />, path: '/category/video' },
+        // { name: 'অনুসন্ধান', icon: <Search size={22} />, path: '/search' },
     ];
 
     // Close menu when path changes
@@ -59,7 +59,7 @@ export default function MobileBottomNav() {
                     }`}
             >
                 {/* Drawer Header */}
-                <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-primary text-white">
+                <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-secondary text-white">
                     <div>
                         <h2 className="text-lg font-black">Bangla Star</h2>
                         <p className="text-base opacity-80">সর্বশেষ সংবাদ ও বিনোদন</p>
@@ -74,23 +74,24 @@ export default function MobileBottomNav() {
 
                 {/* Categories Scrollable Area */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-2">
-                    <p className="text-base font-bold text-gray-700 uppercase tracking-widest mb-2 ">বিভাগসমূহ</p>
-                    {categories?.map((cat) => (
+                    <p className="text-lg font-bold text-gray-700 uppercase tracking-widest mb-2 ">বিভাগসমূহ</p>
+                    {news_categories?.map((cat) => (
                         <Link
-                            key={cat.id}
-                            href={`/category/${cat.slug}`}
-                            className="flex items-center gap-4 p-1 rounded-xl hover:bg-[#eff3f6] transition-all group"
+                            key={cat?.id}
+                            href={`/category/${cat?.slug}`}
+                            className="flex items-center justify-between gap-4 p-1 rounded-xl hover:bg-[#eff3f6] transition-all group"
                         >
-                            {/* <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-                                <ChevronRight size={16} />
-                            </div> */}
+
                             <span className="font-bold text-gray-500 group-hover:text-primary transition-colors">
-                                {cat.name}
+                                {cat?.name}
+                            </span>
+                            <span className="w-8 h-8  flex items-center justify-center text-gray-400 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                                <ChevronRight size={16} />
                             </span>
                         </Link>
                     ))}
 
-                    <div className="pt-6 border-t border-gray-100 mt-2 space-y-2">
+                    {/* <div className="pt-6 border-t border-gray-100 mt-2 space-y-2">
                         <p className="text-base font-bold text-gray-700 uppercase tracking-widest ">অন্যান্য</p>
                         <Link href="/about" className="flex items-center gap-2  text-gray-600 font-bold hover:text-primary 
                         transition-colors group">
@@ -100,7 +101,7 @@ export default function MobileBottomNav() {
                          transition-colors group">
                             <Mail size={20} className="text-gray-400 group-hover:text-primary" /> যোগাযোগ
                         </Link>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Drawer Footer */}

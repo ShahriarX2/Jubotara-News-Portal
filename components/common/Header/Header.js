@@ -6,7 +6,7 @@ import HeaderActions from './HeaderActions';
 import BreakingNews from '@/components/common/Header/BreakingNews';
 import { getBreakingNews } from '@/lib/api';
 import { getFeaturedCategories, getSettings } from '@/lib/fetchData';
-import { getMediaLinkByMetaName } from '@/utils/metaHelpers';
+import { getImageUrl, getMediaLinkByMetaName } from '@/utils/metaHelpers';
 
 const Header = async () => {
     const breakingNews = await getBreakingNews();
@@ -14,7 +14,8 @@ const Header = async () => {
     const settings = await getSettings()
 
     const logo = getMediaLinkByMetaName(settings, "site_logoimg_id");
-    console.log("logo", logo)
+    const logoUrl = getImageUrl(logo)
+    // console.log("logo", logo)
 
     return (
         <header className="w-full sticky top-0 z-50 ">
@@ -27,7 +28,7 @@ const Header = async () => {
                     <div className="flex items-start ">
                         {/* Logo Container - Absolute Positioned to Overlap */}
                         <div className="absolute top-[9px] left-0 md:left-6 z-[70]">
-                            <Logo logo={logo} />
+                            <Logo logoUrl={logoUrl} />
                         </div>
 
                         {/* Empty spacer for the logo on desktop */}
