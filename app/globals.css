@@ -1,10 +1,15 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #EE1D23;
+  --color-secondary: #671A1B;
+  
+  --font-sans: var(--font-solaiman-lipi), "SolaimanLipi", ui-sans-serif, system-ui, sans-serif;
+  --font-bengali: var(--font-solaiman-lipi), "SolaimanLipi", sans-serif;
+}
 
 /* Custom styles for news theme */
 @layer base {
-
   *,
   html,
   body {
@@ -49,7 +54,6 @@
 .animate-ticker {
   animation: ticker 20s linear infinite;
 }
-
 
 .animate-ticker:hover {
   animation-play-state: paused;
