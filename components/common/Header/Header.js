@@ -4,8 +4,7 @@ import Navbar from './Navbar';
 import Container from '../Container';
 import HeaderActions from './HeaderActions';
 import BreakingNews from '@/components/common/Header/BreakingNews';
-import { getBreakingNews } from '@/lib/api';
-import { getFeaturedCategories, getSettings } from '@/lib/fetchData';
+import { getBreakingNews, getFeaturedCategories, getSettings } from '@/lib/fetchData';
 import { getImageUrl, getMediaLinkByMetaName } from '@/utils/metaHelpers';
 
 const Header = async () => {

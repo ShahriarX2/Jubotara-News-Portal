@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { divisions, districts, upazilas } from '@/lib/locations';
+import axiosInstance from '@/utils/axiosInstance';
 
 const SearchIcon = () => (
   <svg
@@ -24,27 +24,62 @@ const SearchIcon = () => (
 const LocationSearch = () => {
   const router = useRouter();
 
+  const [divisions, setDivisions] = useState([]);
+  const [districts, setDistricts] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('');
-  const [selectedUpazila, setSelectedUpazila] = useState('');
+  const [loadingDivisions, setLoadingDivisions] = useState(false);
+  const [loadingDistricts, setLoadingDistricts] = useState(false);
 
-  // ✅ Derived data (NO useEffect needed)
-  const availableDistricts = selectedDivision
-    ? districts[selectedDivision] || []
-    : [];
+  useEffect(() => {
+    const fetchDivisions = async () => {
+      setLoadingDivisions(true);
+      try {
+        const res = await axiosInstance.get('locations/divisions');
+        console.log("res", res.data)
+        if (res.data.success) {
+          setDivisions(res.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching divisions:', error);
+      } finally {
+        setLoadingDivisions(false);
+      }
+    };
 
-  const availableUpazilas = selectedDistrict
-    ? upazilas[selectedDistrict] || []
-    : [];
+    fetchDivisions();
+  }, []);
+
+  useEffect(() => {
+    if (selectedDivision) {
+      const fetchDistricts = async () => {
+        setLoadingDistricts(true);
+        try {
+          const res = await axiosInstance.get(`locations/districts?division_id=${selectedDivision}`);
+          if (res.data.success) {
+            setDistricts(res.data.data);
+          }
+        } catch (error) {
+          console.error('Error fetching districts:', error);
+        } finally {
+          setLoadingDistricts(false);
+        }
+      };
+
+      fetchDistricts();
+    } else {
+      setDistricts([]);
+    }
+  }, [selectedDivision]);
 
   const handleSearch = () => {
+    if (!selectedDivision) return;
+
     const params = new URLSearchParams();
+    params.append('division_id', selectedDivision);
+    if (selectedDistrict) params.append('district_id', selectedDistrict);
 
-    if (selectedDivision) params.append('division', selectedDivision);
-    if (selectedDistrict) params.append('district', selectedDistrict);
-    if (selectedUpazila) params.append('upazila', selectedUpazila);
-
-    router.push(`/search?${params.toString()}`);
+    router.push(`/location?${params.toString()}`);
   };
 
   return (
@@ -66,14 +101,14 @@ const LocationSearch = () => {
                 const value = e.target.value;
                 setSelectedDivision(value);
                 setSelectedDistrict('');
-                setSelectedUpazila('');
               }}
+              disabled={loadingDivisions}
               className="w-full p-2.5 bg-[#eff3f6] border border-gray-300 text-gray-900 text-base focus:ring-blue-500 focus:border-blue-500 block focus:outline-none"
             >
-              <option value="">বিভাগ নির্বাচন করুন</option>
+              <option value="">{loadingDivisions ? 'লোড হচ্ছে...' : 'বিভাগ নির্বাচন করুন'}</option>
               {divisions.map((div) => (
                 <option key={div.id} value={div.id}>
-                  {div.bnName}
+                  {div.bn_name || div.name}
                 </option>
               ))}
             </select>
@@ -89,27 +124,25 @@ const LocationSearch = () => {
               onChange={(e) => {
                 const value = e.target.value;
                 setSelectedDistrict(value);
-                setSelectedUpazila('');
               }}
-              disabled={!selectedDivision}
+              disabled={!selectedDivision || loadingDistricts}
               className="w-full p-2.5 bg-[#eff3f6] border border-gray-300 text-gray-900 text-base focus:ring-blue-500 focus:border-blue-500 block disabled:opacity-50 focus:outline-none"
             >
-              <option value="">জেলা নির্বাচন করুন</option>
-              {availableDistricts.map((dist) => (
+              <option value="">{loadingDistricts ? 'লোড হচ্ছে...' : 'জেলা নির্বাচন করুন'}</option>
+              {districts.map((dist) => (
                 <option key={dist.id} value={dist.id}>
-                  {dist.bnName}
+                  {dist.bn_name}
                 </option>
               ))}
             </select>
           </div>
-
-
         </div>
       </div>
 
       <button
         onClick={handleSearch}
-        className="mt-3 md:mt-6 w-full bg-secondary hover:bg-secondary text-white font-bold py-2 px-3 md:py-3 md:px-4 flex items-center justify-center gap-2 transition-colors uppercase tracking-wider"
+        disabled={!selectedDivision}
+        className="mt-3 md:mt-6 w-full bg-secondary hover:bg-secondary text-white font-bold py-2 px-3 md:py-3 md:px-4 flex items-center justify-center gap-2 transition-colors uppercase tracking-wider disabled:opacity-50"
       >
         <SearchIcon />
         অনুসন্ধান করুন
