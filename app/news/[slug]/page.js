@@ -1,9 +1,9 @@
 
 import ShareButtons from '@/components/news/ShareButtons';
 import PrintButton from '@/components/news/PrintButton';
-
+import NewsPrintTemplate from '@/components/news/NewsPrintTemplate';
 import HorizontalCard from '@/components/news/HorizontalCard';
-import { getBreakingNews, getNews } from '@/lib/api';
+import { getNews } from '@/lib/api';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import Container from '@/components/common/Container';
@@ -118,9 +118,9 @@ export default async function NewsDetailPage({ params }) {
 
     const formattedPublishedDate = formatBengaliDate(news?.created_at);
 
-    const breakingNews = await getBreakingNews();
+
     const allNews = await getNews();
-    const latestNews = allNews.filter(n => n.slug !== slug).slice(0, 5);
+
 
 
 
@@ -156,155 +156,150 @@ export default async function NewsDetailPage({ params }) {
     };
 
     return (
-        <div className="flex flex-col min-h-screen bg-[#eff3f6]">
-            {/* Add Structured Data */}
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            />
+        <>
+            {/* Dedicated Print Template - Only visible when printing */}
+            <NewsPrintTemplate news={news} category={category} />
+
+            {/* Screen UI - Hidden when printing */}
+            <div className="flex flex-col min-h-screen bg-[#eff3f6] print:hidden">
+                {/* Add Structured Data */}
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                />
 
 
-            <main className="py-2">
-                <Container className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                    {/* Main Content */}
-                    <article className="lg:col-span-8 p-3 md:p-6 border border-slate-300 ">
-                        <div className="space-y-6" id="printable-news">
-                            {/* Category and Date */}
-                            <div className="flex items-center gap-4 text-base md:text-xl no-print">
-                                <span className="bg-primary text-white px-3 py-1 font-bold">{category?.name}</span>
+                <main className="py-2">
+                    <Container className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                        {/* Main Content */}
+                        <article className="lg:col-span-8 p-3 md:p-6 border border-slate-300 bg-white">
+                            <div className="space-y-6">
+                                {/* Category and Date */}
+                                <div className="flex items-center gap-4 text-base md:text-xl">
+                                    <span className="bg-primary text-white px-3 py-1 font-bold">{category?.name}</span>
+                                </div>
 
-                            </div>
+                                {/* Title */}
+                                <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 leading-[1] md:leading-6">
+                                    {news?.name}
+                                </h1>
 
-                            {/* Title */}
-                            <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 leading-[1] md:leading-6">
-                                {news?.name}
-                            </h1>
-
-                            {/* Author and Toolbar */}
-                            <div className="flex flex-wrap items-center justify-between gap-4  border-y border-gray-100">
-                                <div className="flex items-center gap-3">
-
-                                    <div>
-                                        <p className="text-base md:text-xl font-bold text-gray-800">নিজস্ব প্রতিবেদক</p>
-
-                                        <span className="text-gray-500 font-medium">{formattedPublishedDate}</span>
+                                {/* Author and Toolbar */}
+                                <div className="flex flex-wrap items-center justify-between gap-4 border-y border-gray-100 py-3">
+                                    <div className="flex items-center gap-3">
+                                        <div>
+                                            <p className="text-base md:text-xl font-bold text-gray-800">নিজস্ব প্রতিবেদক</p>
+                                            <span className="text-gray-500 font-medium">{formattedPublishedDate}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <ShareButtons title={news?.name || news?.title} url={fullUrl} />
+                                        <PrintButton />
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-3 no-print">
-                                    <ShareButtons title={news?.name || news?.title} url={fullUrl} />
-                                    <PrintButton />
-                                    {/* <CopyButton url={fullUrl} /> */}
+
+                                {/* Main Image */}
+                                <div className="relative h-[300px] md:h-[500px] w-full overflow-hidden shadow-inner">
+                                    <Image
+                                        src={news?.featured_image}
+                                        alt={news?.name || "news image"}
+                                        fill
+                                        priority
+                                        className="object-cover"
+                                    />
+                                </div>
+
+                                {/* Content */}
+                                <div>
+                                    <div
+                                        className='text-base md:text-xl lg:md:text-[22px] text-gray-800 font-medium'
+                                        dangerouslySetInnerHTML={{
+                                            __html: news.description || '<p>No content available.</p>'
+                                        }}
+                                    ></div>
                                 </div>
                             </div>
 
-                            {/* Main Image */}
-                            <div className="relative h-[300px] md:h-[500px] w-full overflow-hidden shadow-inner">
-                                <Image
-                                    src={news?.featured_image}
-                                    alt={news?.name || "news image"}
-                                    fill
-                                    priority
-                                    className="object-cover"
-                                />
-                            </div>
+                            {/* Share and Tags */}
+                            <div className="pt-10 border-t border-slate-300 mt-10">
+                                <div className="bg-gradient-to-r from-blue-50 to-gray-50 rounded-sm p-6 md:p-8 shadow-sm">
 
-                            {/* Content */}
-                            <div>
-                                <div
-                                    className='text-base md:text-xl lg:md:text-[22px] text-gray-800 font-medium'
-                                    dangerouslySetInnerHTML={{
-                                        __html: news.description || '<p>No content available.</p>'
-                                    }}
-                                ></div>
-                            </div>
-                        </div>
+                                    <h3 className="text-lg md:text-2xl font-semibold text-gray-800 mb-6">
+                                        আপডেটেড খবর পেতে আমাদের সাথে যুক্ত থাকুন
+                                    </h3>
 
-                        {/* Share and Tags */}
-                        <div className="pt-10 border-t border-slate-300 no-print">
-                            <div className="bg-gradient-to-r from-blue-50 to-gray-50 rounded-sm p-6 md:p-8 shadow-sm">
+                                    <div className="flex flex-col md:flex-row gap-4">
 
-                                <h3 className="text-lg md:text-2xl font-semibold text-gray-800 mb-6">
-                                    আপডেটেড খবর পেতে আমাদের সাথে যুক্ত থাকুন
-                                </h3>
+                                        {/* Google News */}
+                                        <Link
+                                            href="#"
+                                            className="flex items-center gap-4 bg-white hover:bg-blue-50 border border-slate-300 rounded-xl px-5 py-4 transition-all duration-300 hover:shadow-md group"
+                                        >
+                                            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-100 text-blue-700 text-xl group-hover:scale-110 transition">
+                                                <FaGoogle />
+                                            </div>
+                                            <div>
+                                                <p className="text-base font-semibold text-gray-800">
+                                                    গুগল নিউজ চ্যানেল
+                                                </p>
+                                                <p className="text-sm text-gray-500">
+                                                    ফলো করুন সর্বশেষ আপডেট পেতে
+                                                </p>
+                                            </div>
+                                        </Link>
 
-                                <div className="flex flex-col md:flex-row gap-4">
+                                        {/* WhatsApp Channel */}
+                                        <Link
+                                            href="#"
+                                            className="flex items-center gap-4 bg-white hover:bg-green-50 border border-slate-300 rounded-xl px-5 py-4 transition-all duration-300 hover:shadow-md group"
+                                        >
+                                            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-green-100 text-green-600 text-xl group-hover:scale-110 transition">
+                                                <FaWhatsapp />
+                                            </div>
+                                            <div>
+                                                <p className="text-base font-semibold text-gray-800">
+                                                    হোয়াটসঅ্যাপ চ্যানেল
+                                                </p>
+                                                <p className="text-sm text-gray-500">
+                                                    সরাসরি নোটিফিকেশন পেতে যুক্ত থাকুন
+                                                </p>
+                                            </div>
+                                        </Link>
 
-                                    {/* Google News */}
-                                    <Link
-                                        href="#"
-                                        className="flex items-center gap-4 bg-white hover:bg-blue-50 border border-slate-300 rounded-xl px-5 py-4 transition-all duration-300 hover:shadow-md group"
-                                    >
-                                        <div className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-100 text-blue-700 text-xl group-hover:scale-110 transition">
-                                            <FaGoogle />
-                                        </div>
-                                        <div>
-                                            <p className="text-base font-semibold text-gray-800">
-                                                গুগল নিউজ চ্যানেল
-                                            </p>
-                                            <p className="text-sm text-gray-500">
-                                                ফলো করুন সর্বশেষ আপডেট পেতে
-                                            </p>
-                                        </div>
-                                    </Link>
-
-                                    {/* WhatsApp Channel */}
-                                    <Link
-                                        href="#"
-                                        className="flex items-center gap-4 bg-white hover:bg-green-50 border border-slate-300 rounded-xl px-5 py-4 transition-all duration-300 hover:shadow-md group"
-                                    >
-                                        <div className="w-12 h-12 flex items-center justify-center rounded-full bg-green-100 text-green-600 text-xl group-hover:scale-110 transition">
-                                            <FaWhatsapp />
-                                        </div>
-                                        <div>
-                                            <p className="text-base font-semibold text-gray-800">
-                                                হোয়াটসঅ্যাপ চ্যানেল
-                                            </p>
-                                            <p className="text-sm text-gray-500">
-                                                সরাসরি নোটিফিকেশন পেতে যুক্ত থাকুন
-                                            </p>
-                                        </div>
-                                    </Link>
-
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </article>
+                        </article>
 
-                    {/* Sidebar */}
-                    <aside className="lg:col-span-4 space-y-6">
-                        {/* Ad Placeholder */}
-                        <div className="bg-gray-100 h-64 flex items-center justify-center border-2 border-dashed border-slate-300">
-                            <span className="text-gray-400 font-bold uppercase tracking-widest text-xs">বিজ্ঞাপন / Advertisement</span>
-                        </div>
-                        {/* Latest News */}
-                        <div className="p-3 md:p-6  border border-slate-300">
-                            <h2 className="text-xl font-bold mb-6 border-b-2 border-primary pb-2 flex items-center gap-2">
-                                <span className="w-2 h-6 bg-primary inline-block"></span>
-                                ট্রেন্ডিং সংবাদ
-                            </h2>
-                            <div className="space-y-2">
-                                {trendingNews?.slice(0, 11)?.map(item => (
-                                    <HorizontalCard key={item.id} news={item} />
-                                ))}
+                        {/* Sidebar */}
+                        <aside className="lg:col-span-4 space-y-6">
+                            {/* Ad Placeholder */}
+                            <div className="bg-gray-100 h-64 flex items-center justify-center border-2 border-dashed border-slate-300">
+                                <span className="text-gray-400 font-bold uppercase tracking-widest text-xs">বিজ্ঞাপন / Advertisement</span>
                             </div>
-                            {/* <Link
-                                href={`/news/${category?.slug}`}
-                                className="w-full mt-6 py-2 text-primary font-bold text-base md:text-xl bg-red-50 hover:bg-red-100 transition-colors">
-                                সব খবর পড়ুন
-                            </Link> */}
-                        </div>
+                            {/* Latest News */}
+                            <div className="p-3 md:p-6  border border-slate-300 bg-white">
+                                <h2 className="text-xl font-bold mb-6 border-b-2 border-primary pb-2 flex items-center gap-2">
+                                    <span className="w-2 h-6 bg-primary inline-block"></span>
+                                    ট্রেন্ডিং সংবাদ
+                                </h2>
+                                <div className="space-y-2">
+                                    {trendingNews?.slice(0, 11)?.map(item => (
+                                        <HorizontalCard key={item.id} news={item} />
+                                    ))}
+                                </div>
+                            </div>
 
 
-                    </aside>
-                </Container>
-            </main>
-            <ThumbnailNewsSection
-                title={"আরও খবর"}
-                news={reletedNews}
-                slug={category?.slug}
-            />
-
-
-        </div >
+                        </aside>
+                    </Container>
+                </main>
+                <ThumbnailNewsSection
+                    title={"আরও খবর"}
+                    news={reletedNews}
+                    slug={category?.slug}
+                />
+            </div>
+        </>
     );
 }

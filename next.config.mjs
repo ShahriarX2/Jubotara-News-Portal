@@ -32,7 +32,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://admin.crimevision24.com/api/v1/:path*",
+        destination: "http://admin.banglastarnews.com/api/v1/:path*",
 
       },
     ];
