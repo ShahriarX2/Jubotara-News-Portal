@@ -13,6 +13,7 @@ import { FaGoogle, FaWhatsapp } from "react-icons/fa";
 import { getNewsByCat, getSingleNews, getTrandingNews } from '@/lib/fetchData';
 import { formatBengaliDate } from '@/utils/formatDate';
 import { FRONT_END_URL } from '@/utils/baseUrl';
+import FacebookComments from '@/components/news/FacebookComments';
 
 
 export async function generateMetadata({ params }) {
@@ -269,6 +270,9 @@ export default async function NewsDetailPage({ params }) {
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Facebook Comments */}
+                            <FacebookComments url={fullUrl} />
                         </article>
 
                         {/* Sidebar */}
