@@ -108,8 +108,8 @@ export default async function NewsDetailPage({ params }) {
         notFound();
     }
     const settings = await getSettings();
-    const googleNewsUrl = getMetaValueByMetaName(settings, "google_news_url") || "#";
-    const whatsappChannelUrl = getMetaValueByMetaName(settings, "whatsapp_channel_url") || "#";
+    const googleNewsUrl = getMetaValueByMetaName(settings, "google_news_channle_link") || "#";
+    const whatsappChannelUrl = getMetaValueByMetaName(settings, "whats_app_channle_link") || "#";
 
     let category
     if (news?.categories) {
