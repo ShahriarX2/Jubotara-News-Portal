@@ -24,7 +24,11 @@ const HeronNewsSection = async () => {
                     {/* Text Side */}
                     <div className="md:col-span-4 lg:col-span-5 flex flex-col justify-between ">
                         <div className=''>
-                            <Link href={`/news/${featuredNewsFirst?.slug}`} className="group">
+                            <Link
+                                href={`/news/${featuredNewsFirst?.slug}`}
+                                // href={`/news/${featuredNewsFirst?.id}`}
+
+                                className="group">
                                 <h1 className="text-2xl md:text-3xl xl:text-5xl  text-gray-950 leading-[1.15]
                              group-hover:text-primary transition-colors">
                                     {featuredNewsFirst?.name}
