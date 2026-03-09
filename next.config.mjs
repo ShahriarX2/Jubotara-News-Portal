@@ -25,6 +25,14 @@ const nextConfig = {
         protocol: 'http',
         hostname: 'admin.banglastarnews.com',
       },
+        {
+        protocol: 'https',
+        hostname: 'admin.banglastar.com',
+      },
+      {
+        protocol: 'http',
+        hostname: 'admin.banglastar.com',
+      },
 
     ],
   },
@@ -32,7 +40,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "http://admin.banglastarnews.com/api/v1/:path*",
+        destination: "https://admin.banglastar.com/api/v1/:path*",
 
       },
     ];

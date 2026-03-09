@@ -87,7 +87,7 @@ const LocationSearch = () => {
 
       <div>
         <h3 className="text-xl md:text-2xl font-bold text-secondary  border-b  border-gray-100 flex items-center justify-center">
-          খুঁজুন
+          সারাদেশ
         </h3>
 
         <div className="space-y-3">
@@ -143,7 +143,8 @@ const LocationSearch = () => {
       <button
         onClick={handleSearch}
         disabled={!selectedDivision}
-        className="mt-3 md:mt-6 w-full bg-secondary hover:bg-secondary text-white font-bold py-2 px-3 md:py-3 md:px-4 flex items-center justify-center gap-2 transition-colors uppercase tracking-wider disabled:opacity-50"
+        className="mt-3 md:mt-6 w-full bg-secondary hover:bg-secondary text-white font-bold py-2 px-3 md:py-3 md:px-4 flex items-center justify-center gap-2 transition-colors uppercase
+         tracking-wider "
       >
         <SearchIcon />
         অনুসন্ধান করুন

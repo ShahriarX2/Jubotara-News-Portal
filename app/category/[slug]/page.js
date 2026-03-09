@@ -115,12 +115,12 @@ export default async function CategoryPage({ params, searchParams }) {
             />
             <main className="py-6 px-2">
                 <Container>
-                    <div className="flex flex-col lg:flex-row gap-2 md:gap-6">
-                        <div className="lg:w-3/4">
+                    <div className="flex flex-col lg:flex-row gap-2 md:gap-6 ">
+                        <div className="lg:w-3/4 ">
                             {/* Category Title */}
-                            <div className="mb-4">
-                                <div className="flex items-center gap-4  mb-4">
-                                    <h1 className="text-3xl font-bold text-[#003366]">
+                            <div className="">
+                                <div className="flex items-center gap-4 mt-2.5  mb-4">
+                                    <h1 className="text-2xl font-bold text-[#003366] ">
                                         {categoryName}
                                     </h1>
                                     <div className="flex-1 border-t border-gray-300 mt-2"></div>
@@ -261,9 +261,9 @@ export default async function CategoryPage({ params, searchParams }) {
                                 </div>
                             </div>
                         </div>
-                        <div className="lg:w-1/4">
+                        <div className="lg:w-1/4 ">
                             <div className="sticky top-6">
-                                <h2 className="text-xl font-bold text-red-600 border-b-2 border-red-600 pb-1 mb-4">
+                                <h2 className="text-2xl font-bold text-red-600 border-b-2 border-red-600 pb-1 mb-4">
                                     সর্বশেষ
                                 </h2>
                                 <div className="flex flex-col gap-4">

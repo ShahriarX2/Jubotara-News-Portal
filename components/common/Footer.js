@@ -4,6 +4,7 @@ import Logo from './Header/Logo';
 import Container from './Container';
 import { getSettings } from '@/lib/fetchData';
 import { getImageUrl, getMediaLinkByMetaName, getMetaValueByMetaName } from '@/utils/metaHelpers';
+import { FaFacebook, FaInstagram, FaPinterest, FaTwitter, FaYoutube } from 'react-icons/fa';
 
 const Footer = async () => {
     const currentYear = new Date().getFullYear();
@@ -13,10 +14,23 @@ const Footer = async () => {
     const email = getMetaValueByMetaName(settings, "company_email") || "nfo@banglastar.com";
     const phone = getMetaValueByMetaName(settings, "company_phone");
     const phone_2 = getMetaValueByMetaName(settings, "phone_2");
-    const footer_content = getMetaValueByMetaName(settings, "footer_content")
+    const facebook_url = getMetaValueByMetaName(settings, "facebook_url") || "#";
+    const instagram_url = getMetaValueByMetaName(settings, "instagram_url") || "#";
+    const twitter_url = getMetaValueByMetaName(settings, "twitter_url") || "#";
+    const youtube_url = getMetaValueByMetaName(settings, "youtube_url") || "#";
+    const footer_content = getMetaValueByMetaName(settings, "footer_content") || "#"
     const bottom_footer_content = getMetaValueByMetaName(settings, "bottom_footer_content");
 
     const logoUrl = getImageUrl(logo)
+    // console.log({ instagram_url, facebook_url, twitter_url, youtube_url })
+
+    const socialLinks = [
+        { icon: FaFacebook, color: "hover:text-[#1877F2]", href: facebook_url },
+        { icon: FaYoutube, color: "hover:text-[#FF0000]", href: youtube_url },
+        { icon: FaInstagram, color: "hover:text-[#E4405F]", href: instagram_url },
+        { icon: FaTwitter, color: "hover:text-[#1DA1F2]", href: twitter_url },
+        // { icon: FaPinterest, color: "hover:text-[#BD081C]", href: "https://www.pinterest.com" },
+    ];
 
     // console.log("logo", logoUrl)
 
@@ -77,7 +91,21 @@ const Footer = async () => {
                             <p>ফোন: {phone}</p>
                             <p>ইমেইল: {email}</p>
                         </div>
+                        {/* <p className="font-semibold mb-3 text-sm tracking-wide text-white">SOCIAL LINKS</p> */}
+                        <div className="flex items-center gap-4 text-xl">
+                            {socialLinks.map((social, idx) => (
+                                <Link
+                                    key={idx}
+                                    href={social.href}
+                                    target="_blank"
+                                    className={`${social.color} text-white transition`}
+                                >
+                                    <social.icon />
+                                </Link>
+                            ))}
+                        </div>
                     </div>
+
                 </div>
 
                 {/* Bottom Bar */}

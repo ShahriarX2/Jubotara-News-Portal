@@ -6,6 +6,7 @@ import HeaderActions from './HeaderActions';
 import BreakingNews from '@/components/common/Header/BreakingNews';
 import { getBreakingNews, getFeaturedCategories, getSettings } from '@/lib/fetchData';
 import { getImageUrl, getMediaLinkByMetaName } from '@/utils/metaHelpers';
+import Link from 'next/link';
 
 const Header = async () => {
     const breakingNews = await getBreakingNews();
@@ -26,8 +27,14 @@ const Header = async () => {
                 <Container className="flex items-center justify-between min-h-[50px] relative">
                     <div className="flex items-start ">
                         {/* Logo Container - Absolute Positioned to Overlap */}
-                        <div className="absolute top-[9px] left-0 md:left-6 z-[70]">
+                        <div className="absolute md:top-[9px] left-0 md:left-6 z-[70]">
                             <Logo logoUrl={logoUrl} />
+
+                        </div>
+                        <div className=' md:hidden bg-secondary '>
+                            <Link
+                                href="/"
+                                className='font-bold text-base ml-1'>Bangla Star</Link>
                         </div>
 
                         {/* Empty spacer for the logo on desktop */}

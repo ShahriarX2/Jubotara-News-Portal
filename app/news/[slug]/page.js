@@ -178,7 +178,7 @@ export default async function NewsDetailPage({ params }) {
                 <main className="py-2">
                     <Container className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                         {/* Main Content */}
-                        <article className="lg:col-span-8 p-3 md:p-6 border border-slate-300 bg-white">
+                        <article className="lg:col-span-9 p-3 md:p-6 border border-slate-300 bg-white">
                             <div className="space-y-6">
                                 {/* Category and Date */}
                                 <div className="flex items-center gap-4 text-base md:text-xl">
@@ -285,7 +285,7 @@ export default async function NewsDetailPage({ params }) {
                         </article>
 
                         {/* Sidebar */}
-                        <aside className="lg:col-span-4 space-y-6">
+                        <aside className="lg:col-span-3 space-y-6">
                             {/* Ad Placeholder */}
                             <div className="bg-gray-100 h-64 flex items-center justify-center border-2 border-dashed border-slate-300">
                                 <span className="text-gray-400 font-bold uppercase tracking-widest text-xs">বিজ্ঞাপন / Advertisement</span>
