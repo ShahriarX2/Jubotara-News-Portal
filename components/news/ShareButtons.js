@@ -18,7 +18,25 @@ const ShareButtons = ({ title, url }) => {
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(absoluteUrl);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(absoluteUrl);
+      } else {
+        // Fallback for non-secure contexts or browsers without clipboard API
+        const textArea = document.createElement("textarea");
+        textArea.value = absoluteUrl;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        textArea.style.top = "0";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+          document.execCommand('copy');
+        } catch (err) {
+          console.error('Fallback copy failed', err);
+        }
+        document.body.removeChild(textArea);
+      }
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -38,16 +56,6 @@ const ShareButtons = ({ title, url }) => {
       href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(absoluteUrl)}`,
     },
     {
-      name: 'X',
-      icon: (
-        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
-        </svg>
-      ),
-      color: 'text-gray-500 hover:text-black hover:border-black',
-      href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(absoluteUrl)}`,
-    },
-    {
       name: 'WhatsApp',
       icon: (
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -57,6 +65,17 @@ const ShareButtons = ({ title, url }) => {
       color: 'text-gray-500 hover:text-[#25D366] hover:border-[#25D366]',
       href: `https://api.whatsapp.com/send?text=${encodeURIComponent(title + ' ' + absoluteUrl)}`,
     },
+    {
+      name: 'X',
+      icon: (
+        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+        </svg>
+      ),
+      color: 'text-gray-500 hover:text-black hover:border-black',
+      href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(absoluteUrl)}`,
+    },
+
   ];
 
   return (

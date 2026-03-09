@@ -25,8 +25,8 @@ const TrendingBar = ({ trendingTags }) => {
         <div className="flex items-center gap-4">
 
           {/* Left Title */}
-          <div className="flex items-center gap-2 shrink-0 bg-red-100 px-3 md:px-4 py-0.5">
-            <span className="text-[#EE1D23] font-black text-[15px] sm:text-base md:text-lg ">
+          <div className="flex items-center gap-2 shrink-0 bg-red-100 px-3 md:px-4 py-0.5 w-25">
+            <span className="text-[#EE1D23]  font-black text-[15px] sm:text-base md:text-lg ">
               ট্রেন্ডিং
             </span>
             <TrendingUp

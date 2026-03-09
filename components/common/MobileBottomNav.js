@@ -145,7 +145,7 @@ export default function MobileBottomNav({ news_categories }) {
                         <div className={`${isMenuOpen ? 'scale-110 rotate-90' : ''} transition-transform`}>
                             <Menu size={22} />
                         </div>
-                        <span className="text-[10px] font-black tracking-tight opacity-80">
+                        <span className="text-[12px] font-black tracking-tight opacity-80">
                             মেনু
                         </span>
                     </button>
