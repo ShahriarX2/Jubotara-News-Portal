@@ -120,7 +120,7 @@ export default async function NewsDetailPage({ params }) {
     const reletedNews = await getNewsByCat(category?.slug, 5);
 
 
-    // console.log("reletedNews details page", reletedNews,)
+    // console.log("news details page", news,)
 
     const formattedPublishedDate = formatBengaliDate(news?.created_at);
 
@@ -194,8 +194,18 @@ export default async function NewsDetailPage({ params }) {
                                 <div className="flex flex-wrap items-center justify-between gap-4 border-y border-gray-100 py-3">
                                     <div className="flex items-center gap-3">
                                         <div>
-                                            <p className="text-base md:text-xl font-bold text-gray-800">নিজস্ব প্রতিবেদক</p>
-                                            <span className="text-gray-500 font-medium">{formattedPublishedDate}</span>
+                                            <div className='flex gap-2'>
+                                                {/* <Image
+                                                src={news?.author?.avatar}
+                                                alt={news?.name || "news image"}
+                                                width={40}
+                                                height={60}
+                                                className="object-fit rounded-full"
+                                                 /> */}
+                                                <p className="text-base md:text-xl font-bold text-gray-800">{news?.author?.full_name || "নিজস্ব প্রতিবেদক"}</p>
+                                            </div>
+
+                                            <span className="text-base md:text-lg text-gray-600 font-medium">{formattedPublishedDate}</span>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-3">

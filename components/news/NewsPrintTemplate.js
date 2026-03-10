@@ -27,7 +27,8 @@ const NewsPrintTemplate = ({ news, category }) => {
             {/* Meta Info */}
             <div className="flex items-center justify-between border-y border-gray-300 py-3 mb-6">
                 <div>
-                    <span className="font-bold text-gray-800">নিজস্ব প্রতিবেদক</span>
+                     
+                    <span className="font-bold text-gray-800">{news?.author?.full_name || "নিজস্ব প্রতিবেদক"}</span>
                     <span className="mx-2 text-gray-400">|</span>
                     <span className="text-gray-600">{category?.name}</span>
                 </div>
