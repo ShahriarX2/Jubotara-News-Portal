@@ -291,7 +291,7 @@ export default async function NewsDetailPage({ params }) {
                             </div>
 
                             {/* Facebook Comments */}
-                            <FacebookComments url={fullUrl} />
+                            {/* <FacebookComments url={fullUrl} /> */}
                         </article>
 
                         {/* Sidebar */}
