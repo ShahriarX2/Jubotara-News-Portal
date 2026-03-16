@@ -72,6 +72,9 @@ const LocationSearch = () => {
     }
   }, [selectedDivision]);
 
+
+// console.log("divisions",divisions)
+
   const handleSearch = () => {
     if (!selectedDivision) return;
 
