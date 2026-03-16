@@ -14,6 +14,7 @@ const Footer = async () => {
     const email = getMetaValueByMetaName(settings, "company_email") || "nfo@banglastar.com";
     const phone = getMetaValueByMetaName(settings, "company_phone");
     const phone_2 = getMetaValueByMetaName(settings, "phone_2");
+    const office_location = getMetaValueByMetaName(settings, "office_location");
     const facebook_url = getMetaValueByMetaName(settings, "facebook_url") || "#";
     const instagram_url = getMetaValueByMetaName(settings, "instagram_url") || "#";
     const twitter_url = getMetaValueByMetaName(settings, "twitter_url") || "#";
@@ -87,7 +88,7 @@ const Footer = async () => {
                     <div className="space-y-3 md:space-y-6">
                         <h3 className="text-base md:text-xl font-bold border-l-4 border-primary pl-3 text-gray-100">যোগাযোগ</h3>
                         <div className="text-base md:text-lg lg:text-xl text-gray-200 space-y-2">
-                            <p>১২৩ স্টার ভিলা, সেক্টর ৭, উত্তরা, ঢাকা-১২৩০</p>
+                            <p>{office_location}</p>
                             <p>ফোন: {phone}</p>
                             <p>ইমেইল: {email}</p>
                         </div>
