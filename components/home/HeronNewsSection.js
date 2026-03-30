@@ -12,6 +12,7 @@ const HeronNewsSection = async () => {
     const featuredNews = await getTrandingNews();
     const featuredNewsFirst = featuredNews[0];
     const newsCategories = featuredNewsFirst?.categories || []
+    // console.log('featuredNews', featuredNews)
 
     return (
         <Container className=" ">
