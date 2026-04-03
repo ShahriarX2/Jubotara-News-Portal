@@ -1,299 +1,336 @@
+import Container from "@/components/common/Container";
+import {
+  getCategoryNews,
+  getMenus,
+  getNews,
+  getSingleCategories,
+} from "@/lib/fetchData";
+import { FRONT_END_URL } from "@/utils/baseUrl";
+import truncate from "@/utils/truncate";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
-import { getNews, getCategoryNews, getMenus, getSingleCategories } from '@/lib/fetchData';
-import Container from '@/components/common/Container';
-import Link from 'next/link';
-import Image from 'next/image';
-import truncate from '@/utils/truncate';
-import { FRONT_END_URL } from '@/utils/baseUrl';
+const BANGLA_DIGITS = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
 
-const toBanglaNumber = (n) => {
-    const banglaNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-    return n.toString().split('').map(digit => banglaNumbers[digit] || digit).join('');
+const decodeSlug = (value = "") => {
+  try {
+    return decodeURIComponent(value).trim();
+  } catch {
+    return String(value).trim();
+  }
 };
 
+const toBanglaNumber = (value) =>
+  String(value)
+    .split("")
+    .map((digit) => BANGLA_DIGITS[Number(digit)] ?? digit)
+    .join("");
+
+const resolveCategoryName = (slug, category, menus, categoryNews = []) => {
+  const decodedSlug = decodeSlug(slug);
+
+  const menuMatch = menus.find((item) => {
+    const hrefSlug = item?.href?.replace("/category/", "");
+    return item?.slug === decodedSlug || item?.link === decodedSlug || hrefSlug === decodedSlug;
+  });
+
+  const newsMatch = categoryNews[0]?.categories?.find((item) => item?.slug === decodedSlug);
+
+  return (
+    category?.name ||
+    menuMatch?.label ||
+    menuMatch?.name ||
+    newsMatch?.name ||
+    decodedSlug ||
+    "বিভাগ"
+  );
+};
 
 export async function generateMetadata({ params }) {
-    const { slug } = await params;
-    const category = await getSingleCategories(slug);
-    const menus = await getMenus();
+  const { slug } = await params;
+  const decodedSlug = decodeSlug(slug);
 
-    // Robust category detection
-    const categoryFromMenu = menus.find(c => c.link === slug || c.slug === slug);
-    const categoryName = category?.name || categoryFromMenu?.label || categoryFromMenu?.name || 'বিভাগ';
+  const [category, menus] = await Promise.all([
+    getSingleCategories(decodedSlug),
+    getMenus(),
+  ]);
 
-    const title = `${categoryName} | বাংলা স্টার নিউজ`;
-    const description = `${categoryName} বিভাগের সর্বশেষ সংবাদ, ব্রেকিং নিউজ এবং বিশেষ প্রতিবেদন দেখুন বাংলা স্টার নিউজে।`;
-    const siteUrl = FRONT_END_URL;
-    const pageUrl = `${siteUrl}/category/${slug}`;
+  const categoryName = resolveCategoryName(decodedSlug, category, menus);
+  const title = `${categoryName} | যুবতারা নিউজ`;
+  const description = `${categoryName} বিভাগের সর্বশেষ সংবাদ, ব্রেকিং নিউজ এবং বিশেষ প্রতিবেদন দেখুন যুবতারা নিউজে।`;
+  const pageUrl = `${FRONT_END_URL}/category/${encodeURIComponent(decodedSlug)}`;
 
-    return {
-        title,
-        description,
-        metadataBase: new URL(siteUrl),
-        alternates: {
-            canonical: pageUrl,
-        },
-        openGraph: {
-            title,
-            description,
-            url: pageUrl,
-            siteName: 'বাংলা স্টার নিউজ',
-            locale: 'bn_BD',
-            type: 'website',
-        },
-        twitter: {
-            card: 'summary_large_image',
-            title,
-            description,
-            site: '@banglastar',
-        },
-        robots: {
-            index: true,
-            follow: true,
-        },
-    };
+  return {
+    title,
+    description,
+    metadataBase: new URL(FRONT_END_URL),
+    alternates: {
+      canonical: pageUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: pageUrl,
+      siteName: "যুবতারা নিউজ",
+      locale: "bn_BD",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      site: "@jubotaranews",
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
 }
 
+export const revalidate = 300;
+
 export default async function CategoryPage({ params, searchParams }) {
-    const { slug } = await params;
+  const { slug } = await params;
+  const decodedSlug = decodeSlug(slug);
+  const resolvedSearchParams = await searchParams;
+  const currentPage = Number.parseInt(resolvedSearchParams.page, 10) || 1;
+  const perPage = 10;
 
-    const category = await getSingleCategories(slug);
-    // console.log("category", category)
+  const [category, menus, newsResponse, allNews] = await Promise.all([
+    getSingleCategories(decodedSlug),
+    getMenus(),
+    getCategoryNews(decodedSlug, currentPage, perPage),
+    getNews(15),
+  ]);
 
-    const sParams = await searchParams;
-    const currentPage = parseInt(sParams.page) || 1;
-    const perPage = 10;
+  const categoryNews = newsResponse?.data || [];
+  const latestNews = allNews.slice(0, 7);
+  const categoryName = resolveCategoryName(decodedSlug, category, menus, categoryNews);
+  const totalPages = newsResponse?.meta?.last_page || 1;
+  const featuredNews = categoryNews[0];
+  const otherNews = categoryNews.slice(1);
+  const subCategories = category?.child || [];
+  const hasKnownCategory =
+    Boolean(category?.id) ||
+    menus.some((item) => {
+      const hrefSlug = item?.href?.replace("/category/", "");
+      return item?.slug === decodedSlug || item?.link === decodedSlug || hrefSlug === decodedSlug;
+    });
 
-    const menus = await getMenus();
+  if (!hasKnownCategory && categoryNews.length === 0) {
+    notFound();
+  }
 
-    // Fetch news by category from live API
-    const newsResponse = await getCategoryNews(slug, currentPage, perPage);
-    const categoryNews = newsResponse?.data || [];
-    const meta = newsResponse?.meta || {};
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "হোম",
+        item: FRONT_END_URL,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: categoryName,
+        item: `${FRONT_END_URL}/category/${encodeURIComponent(decodedSlug)}`,
+      },
+    ],
+  };
 
-    // Robust category detection
-    const categoryFromMenu = menus.find(c => c.link === slug || c.slug === slug);
-    const categoryFromNews = categoryNews[0]?.categories?.find(c => c.slug === slug);
-    const categoryName = category?.name || categoryFromMenu?.label || categoryFromMenu?.name || categoryFromNews?.name || 'বিভাগ';
+  return (
+    <div className="flex min-h-screen flex-col bg-[#eff3f6]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <main className="px-2 py-6">
+        <Container>
+          <div className="flex flex-col gap-2 md:gap-6 lg:flex-row">
+            <div className="lg:w-3/4">
+              <div className="mb-4">
+                <div className="mb-4 flex items-center gap-4">
+                  <h1 className="text-3xl font-bold text-[#003366]">{categoryName}</h1>
+                  <div className="mt-2 flex-1 border-t border-gray-300"></div>
+                </div>
 
-    // Fetch latest news for sidebar
-    const allNews = await getNews(15);
-    const latestNews = allNews.slice(0, 7);
+                {subCategories.length > 0 && (
+                  <div className="no-scrollbar flex gap-2 overflow-x-auto pb-2">
+                    {subCategories.map((sub) => (
+                      <Link
+                        href={`/category/${sub.slug}`}
+                        key={sub.slug}
+                        className="whitespace-nowrap border border-gray-300 bg-gray-100 px-3 py-1 text-sm font-medium transition-colors hover:bg-gray-200 md:text-base"
+                      >
+                        {sub.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-    const featuredNews = categoryNews[0];
-    const otherNews = categoryNews.slice(1);
-
-    const subCategories = category?.child
-    const totalPages = meta.last_page || 1;
-
-    // JSON-LD Breadcrumb
-    const jsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-            {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'হোম',
-                item: FRONT_END_URL,
-            },
-            {
-                '@type': 'ListItem',
-                position: 2,
-                name: categoryName,
-                item: `${FRONT_END_URL}/category/${slug}`,
-            },
-        ],
-    };
-
-    return (
-        <div className="flex flex-col min-h-screen bg-[#eff3f6]">
-            {/* Add Structured Data */}
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            />
-            <main className="py-6 px-2">
-                <Container>
-                    <div className="flex flex-col lg:flex-row gap-2 md:gap-6 ">
-                        <div className="lg:w-3/4 ">
-                            {/* Category Title */}
-                            <div className="">
-                                <div className="flex items-center gap-4 mt-2.5  mb-4">
-                                    <h1 className="text-2xl font-bold text-[#003366] ">
-                                        {categoryName}
-                                    </h1>
-                                    <div className="flex-1 border-t border-gray-300 mt-2"></div>
-                                </div>
-
-                                {/* Sub-categories Bar */}
-                                <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-                                    {subCategories?.map((sub, i) => (
-                                        <Link
-                                            href={`/category/${sub?.slug}`}
-                                            key={i}
-                                            className="whitespace-nowrap px-3 py-1 bg-gray-100 hover:bg-gray-200 text-sm md:text-base font-medium border border-gray-300 transition-colors">
-                                            {sub?.name}
-                                        </Link>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col lg:flex-row gap-4">
-                                {/* Main Content */}
-                                <div className="w-full">
-                                    {featuredNews ? (
-                                        <div className="mb-2 md:mb-4 border-b border-gray-300 pb-2 md:pb-4">
-                                            <Link href={`/news/${featuredNews.slug}`} className="flex flex-col md:flex-row gap-4">
-                                                <div className="md:w-1/2">
-                                                    <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight hover:text-red-600 transition-colors mb-4">
-                                                        {featuredNews.name}
-                                                    </h2>
-                                                    <p className="text-gray-600 text-base md:text-xl line-clamp-3 lg:line-clamp-6">
-                                                        {truncate(featuredNews?.description, 1000)}
-                                                    </p>
-
-
-                                                </div>
-                                                <div className="md:w-1/2 relative h-[250px] md:h-auto min-h-[250px] md:min-h-[300px]">
-                                                    <Image
-                                                        src={featuredNews.featured_image}
-                                                        alt={featuredNews.name}
-                                                        fill
-                                                        priority
-                                                        className="object-cover rounded-md"
-                                                    />
-                                                </div>
-                                            </Link>
-                                        </div>
-                                    )
-                                        :
-                                        <>
-                                            <p className='text-center text-sm md:text-base py-4 md:py-10'>No News Found </p>
-                                        </>
-
-                                    }
-
-                                    {/* News Grid */}
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4">
-                                        {otherNews?.map((news) => (
-                                            <Link key={news.id} href={`/news/${news.slug}`} className="flex gap-3 group border border-gray-300 p-3 hover:bg-gray-50 transition-colors rounded-lg shadow-sm">
-                                                <div className="flex-1">
-                                                    <h3 className="text-base md:text-xl font-bold text-gray-800 leading-snug group-hover:text-red-600 
-                                                    transition-colors line-clamp-2">
-                                                        {news.name}
-                                                    </h3>
-                                                    <p className="text-gray-600 text-base md:text-xl line-clamp-1">
-                                                        {truncate(news?.description)}
-                                                    </p>
-                                                </div>
-                                                <div className="relative w-24 h-24 flex-shrink-0">
-                                                    <Image
-                                                        src={news.featured_image}
-                                                        alt={news.name}
-                                                        fill
-                                                        className="object-cover rounded-md"
-                                                    />
-                                                </div>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                    {/* Pagination */}
-                                    {
-                                        otherNews?.length > 0 && (
-                                            <div className="mt-8 flex justify-center items-center gap-2">
-                                                {currentPage > 1 && (
-                                                    <Link
-                                                        href={`/category/${slug}?page=${currentPage - 1}`}
-                                                        className="px-4 py-2 bg-white border border-gray-300 rounded hover:bg-gray-100 text-[#003366] font-bold"
-                                                    >
-                                                        পূর্ববর্তী
-                                                    </Link>
-                                                )}
-
-                                                <div className="flex gap-1">
-                                                    {[...Array(totalPages)].map((_, i) => {
-                                                        const pageNum = i + 1;
-                                                        // Show only first, last, and pages around current
-                                                        if (
-                                                            pageNum === 1 ||
-                                                            pageNum === totalPages ||
-                                                            (pageNum >= currentPage - 2 && pageNum <= currentPage + 2)
-                                                        ) {
-                                                            return (
-                                                                <Link
-                                                                    key={pageNum}
-                                                                    href={`/category/${slug}?page=${pageNum}`}
-                                                                    className={`w-10 h-10 flex items-center justify-center border rounded font-bold 
-                                                                                                        text-base md:text-xl ${currentPage === pageNum
-                                                                            ? 'bg-red-700 text-white border-red-700'
-                                                                            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
-                                                                        }`}
-                                                                >
-                                                                    {toBanglaNumber(pageNum)}
-                                                                </Link>
-                                                            );
-                                                        }
-                                                        // Show ellipsis
-                                                        if (
-                                                            (pageNum === currentPage - 3 && pageNum > 1) ||
-                                                            (pageNum === currentPage + 3 && pageNum < totalPages)
-                                                        ) {
-                                                            return <span key={pageNum} className="px-2">...</span>;
-                                                        }
-                                                        return null;
-                                                    })}
-                                                </div>
-
-                                                {currentPage < totalPages && (
-                                                    <Link
-                                                        href={`/category/${slug}?page=${currentPage + 1}`}
-                                                        className="px-4 py-2 bg-white border border-gray-300 rounded hover:bg-gray-100 text-[#003366] font-bold"
-                                                    >
-                                                        পরবর্তী
-                                                    </Link>
-                                                )}
-                                            </div>
-                                        )
-                                    }
-
-
-                                </div>
-                            </div>
+              <div className="flex flex-col gap-4 lg:flex-row">
+                <div className="w-full">
+                  {featuredNews ? (
+                    <div className="mb-2 border-b border-gray-300 pb-2 md:mb-4 md:pb-4">
+                      <Link href={`/news/${featuredNews.slug}`} className="flex flex-col gap-4 md:flex-row">
+                        <div className="md:w-1/2">
+                          <h2 className="mb-4 text-3xl font-extrabold leading-tight text-gray-900 transition-colors hover:text-red-600 md:text-4xl">
+                            {featuredNews.name}
+                          </h2>
+                          <p className="line-clamp-3 text-base text-gray-600 md:text-xl lg:line-clamp-6">
+                            {truncate(featuredNews.description, 1000)}
+                          </p>
                         </div>
-                        <div className="lg:w-1/4 ">
-                            <div className="sticky top-6">
-                                <h2 className="text-2xl font-bold text-red-600 border-b-2 border-red-600 pb-1 mb-4">
-                                    সর্বশেষ
-                                </h2>
-                                <div className="flex flex-col gap-4">
-                                    {latestNews?.map((news) => (
-                                        <Link key={news.id} href={`/news/${news.slug}`} className="flex gap-3 group border-b border-gray-200 pb-4 last:border-0">
-                                            <div className="flex-1">
-                                                <h4 className="text-base md:text-xl font-bold text-gray-800 leading-tight group-hover:text-red-600
-                                                 transition-colors line-clamp-2">
-                                                    {news?.name}
-                                                </h4>
-                                                <p className="text-base md:text-xl text-gray-500 mt-1 line-clamp-1">
-                                                    {truncate(news?.description)}
-                                                </p>
-                                            </div>
-                                            <div className="relative w-16 h-16 flex-shrink-0">
-                                                <Image
-                                                    src={news?.featured_image || news.image}
-                                                    alt={news?.name || "news image"}
-                                                    fill
-                                                    className="object-cover rounded shadow-sm"
-                                                />
-                                            </div>
-                                        </Link>
-                                    ))}
-                                </div>
-                            </div>
+                        <div className="relative min-h-[250px] h-[250px] md:min-h-[300px] md:w-1/2 md:h-auto">
+                          <Image
+                            src={featuredNews.featured_image}
+                            alt={featuredNews.name}
+                            fill
+                            priority
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            className="rounded-md object-cover"
+                          />
                         </div>
+                      </Link>
                     </div>
-                </Container>
-            </main>
-        </div>
-    );
+                  ) : (
+                    <p className="py-10 text-center text-sm md:text-base">No News Found</p>
+                  )}
+
+                  <div className="grid grid-cols-1 gap-2 md:grid-cols-3 md:gap-4">
+                    {otherNews.map((news) => (
+                      <Link
+                        key={news.id}
+                        href={`/news/${news.slug}`}
+                        className="group flex gap-3 rounded-lg border border-gray-300 p-3 shadow-sm transition-colors hover:bg-gray-50"
+                      >
+                        <div className="flex-1">
+                          <h3 className="line-clamp-2 text-base font-bold leading-snug text-gray-800 transition-colors group-hover:text-red-600 md:text-xl">
+                            {news.name}
+                          </h3>
+                          <p className="line-clamp-1 text-base text-gray-600 md:text-xl">
+                            {truncate(news.description)}
+                          </p>
+                        </div>
+                        <div className="relative h-24 w-24 shrink-0">
+                          <Image
+                            src={news.featured_image}
+                            alt={news.name}
+                            fill
+                            sizes="96px"
+                            className="rounded-md object-cover"
+                          />
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+
+                  {otherNews.length > 0 && (
+                    <div className="mt-8 flex items-center justify-center gap-2">
+                      {currentPage > 1 && (
+                        <Link
+                          href={`/category/${encodeURIComponent(decodedSlug)}?page=${currentPage - 1}`}
+                          className="rounded border border-gray-300 bg-white px-4 py-2 font-bold text-[#003366] hover:bg-gray-100"
+                        >
+                          পূর্ববর্তী
+                        </Link>
+                      )}
+
+                      <div className="flex gap-1">
+                        {[...Array(totalPages)].map((_, index) => {
+                          const pageNumber = index + 1;
+
+                          if (
+                            pageNumber === 1 ||
+                            pageNumber === totalPages ||
+                            (pageNumber >= currentPage - 2 && pageNumber <= currentPage + 2)
+                          ) {
+                            return (
+                              <Link
+                                key={pageNumber}
+                                href={`/category/${encodeURIComponent(decodedSlug)}?page=${pageNumber}`}
+                                className={`flex h-10 w-10 items-center justify-center rounded border text-base font-bold md:text-xl ${
+                                  currentPage === pageNumber
+                                    ? "border-red-700 bg-red-700 text-white"
+                                    : "border-gray-300 bg-white text-gray-700 hover:bg-gray-100"
+                                }`}
+                              >
+                                {toBanglaNumber(pageNumber)}
+                              </Link>
+                            );
+                          }
+
+                          if (
+                            (pageNumber === currentPage - 3 && pageNumber > 1) ||
+                            (pageNumber === currentPage + 3 && pageNumber < totalPages)
+                          ) {
+                            return (
+                              <span key={pageNumber} className="px-2">
+                                ...
+                              </span>
+                            );
+                          }
+
+                          return null;
+                        })}
+                      </div>
+
+                      {currentPage < totalPages && (
+                        <Link
+                          href={`/category/${encodeURIComponent(decodedSlug)}?page=${currentPage + 1}`}
+                          className="rounded border border-gray-300 bg-white px-4 py-2 font-bold text-[#003366] hover:bg-gray-100"
+                        >
+                          পরবর্তী
+                        </Link>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:w-1/4">
+              <div className="sticky top-6">
+                <h2 className="mb-4 border-b-2 border-red-600 pb-1 text-xl font-bold text-red-600">
+                  সর্বশেষ
+                </h2>
+                <div className="flex flex-col gap-4">
+                  {latestNews.map((news) => (
+                    <Link
+                      key={news.id}
+                      href={`/news/${news.slug}`}
+                      className="group flex gap-3 border-b border-gray-200 pb-4 last:border-0"
+                    >
+                      <div className="flex-1">
+                        <h4 className="line-clamp-2 text-base font-bold leading-tight text-gray-800 transition-colors group-hover:text-red-600 md:text-xl">
+                          {news.name}
+                        </h4>
+                        <p className="mt-1 line-clamp-1 text-base text-gray-500 md:text-xl">
+                          {truncate(news.description)}
+                        </p>
+                      </div>
+                      <div className="relative h-16 w-16 shrink-0">
+                        <Image
+                          src={news.featured_image || news.image}
+                          alt={news.name || "news image"}
+                          fill
+                          sizes="64px"
+                          className="rounded object-cover shadow-sm"
+                        />
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </main>
+    </div>
+  );
 }

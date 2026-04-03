@@ -61,6 +61,7 @@ const HeronNewsSection = async () => {
                                 alt={featuredNewsFirst?.name}
                                 fill
                                 priority
+                                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 42vw, 40vw"
                                 className="object-cover transition-transform duration-700 hover:scale-105"
                             />
                         </Link>

@@ -1,20 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Share2, Link2, Check } from 'lucide-react';
+import { useState } from 'react';
+import { Link2, Check } from 'lucide-react';
 
 const ShareButtons = ({ title, url }) => {
   const [copied, setCopied] = useState(false);
-  const [absoluteUrl, setAbsoluteUrl] = useState('');
-
-  useEffect(() => {
-    // Check if the URL is already absolute
-    if (url.startsWith('http')) {
-      setAbsoluteUrl(url);
-    } else {
-      setAbsoluteUrl(`${window.location.origin}${url}`);
-    }
-  }, [url]);
+  const absoluteUrl = url.startsWith('http')
+    ? url
+    : typeof window === 'undefined'
+      ? url
+      : `${window.location.origin}${url}`;
 
   const handleCopy = async () => {
     try {

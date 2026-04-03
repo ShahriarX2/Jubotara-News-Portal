@@ -1,21 +1,73 @@
-
-import ShareButtons from '@/components/news/ShareButtons';
-import PrintButton from '@/components/news/PrintButton';
-import NewsPrintTemplate from '@/components/news/NewsPrintTemplate';
-import HorizontalCard from '@/components/news/HorizontalCard';
-import { getNews } from '@/lib/api';
-import Image from 'next/image';
-import { notFound } from 'next/navigation';
 import Container from '@/components/common/Container';
-import Link from 'next/link';
 import ThumbnailNewsSection from '@/components/home/ThumbnailNewsSection';
-import { FaGoogle, FaWhatsapp } from "react-icons/fa";
-import { getNewsByCat, getSingleNews, getTrandingNews, getSettings } from '@/lib/fetchData';
-import { formatBengaliDate } from '@/utils/formatDate';
+import HorizontalCard from '@/components/news/HorizontalCard';
+import NewsPrintTemplate from '@/components/news/NewsPrintTemplate';
+import PrintButton from '@/components/news/PrintButton';
+import ShareButtons from '@/components/news/ShareButtons';
+import {
+    getNewsByCat,
+    getSettings,
+    getSingleNews,
+    getTrandingNews,
+} from '@/lib/fetchData';
 import { FRONT_END_URL } from '@/utils/baseUrl';
-import FacebookComments from '@/components/news/FacebookComments';
+import { formatBengaliDate } from '@/utils/formatDate';
 import { getMetaValueByMetaName } from '@/utils/metaHelpers';
+import Image from 'next/image';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { FaGoogle, FaWhatsapp } from 'react-icons/fa';
 
+const DEFAULT_AUTHOR = 'নিজস্ব প্রতিবেদক';
+
+function escapeHtml(value = '') {
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function formatArticleContent(content = '') {
+    const trimmed = String(content || '').trim();
+
+    if (!trimmed) {
+        return '<p>No content available.</p>';
+    }
+
+    if (/<[a-z][\s\S]*>/i.test(trimmed)) {
+        return trimmed;
+    }
+
+    return trimmed
+        .split(/\n{2,}/)
+        .map((paragraph) => `<p>${escapeHtml(paragraph).replace(/\n/g, '<br />')}</p>`)
+        .join('');
+}
+
+async function getRelatedNews(news) {
+    const currentId = news?.id;
+    const categorySlug = news?.categories?.[0]?.slug;
+    const categoryName = news?.categories?.[0]?.name;
+
+    if (!categorySlug && !categoryName) {
+        return [];
+    }
+
+    const candidateKeys = [categorySlug, categoryName].filter(Boolean);
+
+    for (const key of candidateKeys) {
+        const categoryNews = await getNewsByCat(key, 16);
+        const relatedItems = categoryNews.filter((item) => item.id !== currentId);
+
+        if (relatedItems.length > 0) {
+            return relatedItems.slice(0, 4);
+        }
+    }
+
+    return [];
+}
 
 export async function generateMetadata({ params }) {
     const { slug } = await params;
@@ -23,37 +75,32 @@ export async function generateMetadata({ params }) {
 
     if (!news || Object.keys(news).length === 0) {
         return {
-            title: 'সংবাদ পাওয়া যায়নি | বাংলা স্টার নিউজ',
-        }
+            title: 'সংবাদ পাওয়া যায়নি | যুবতারা নিউজ',
+        };
     }
 
-    //  title/description 
-    const newsTitle = news?.meta_title || news?.name || news.title;
-    const title = `${newsTitle} | বাংলা স্টার নিউজ`;
-
-    // Strip HTML and trim for description
+    const newsTitle = news?.meta_title || news?.name || news?.title;
+    const title = `${newsTitle} | যুবতারা নিউজ`;
     const plainDescription = (news.meta_description || news.summary || news.description || '')
         .replace(/<[^>]*>/g, '')
         .split('\n')[0]
         .slice(0, 160)
         .trim();
-
     const imageUrl = news?.featured_image || '';
-    const siteUrl = FRONT_END_URL;
-    const postUrl = `${siteUrl}/news/${slug}`;
+    const postUrl = `${FRONT_END_URL}/news/${slug}`;
     const categoryName = news?.categories?.[0]?.name || 'সংবাদ';
 
     return {
         title,
         description: plainDescription,
-        metadataBase: new URL(siteUrl),
+        metadataBase: new URL(FRONT_END_URL),
         keywords: [
             categoryName,
             'বাংলাদেশ সংবাদ',
-            'বাংলা স্টার নিউজ',
-            'Bangla Star News',
+            'যুবতারা নিউজ',
+            'Jubotara News',
             'সর্বশেষ খবর',
-            ...(newsTitle.split(' ')),
+            ...newsTitle.split(' '),
         ].slice(0, 15),
         alternates: {
             canonical: postUrl,
@@ -62,19 +109,21 @@ export async function generateMetadata({ params }) {
             title,
             description: plainDescription,
             url: postUrl,
-            siteName: 'বাংলা স্টার নিউজ',
-            images: imageUrl ? [
-                {
-                    url: imageUrl,
-                    width: 1200,
-                    height: 630,
-                    alt: newsTitle,
-                },
-            ] : [],
+            siteName: 'যুবতারা নিউজ',
+            images: imageUrl
+                ? [
+                      {
+                          url: imageUrl,
+                          width: 1200,
+                          height: 630,
+                          alt: newsTitle,
+                      },
+                  ]
+                : [],
             locale: 'bn_BD',
             type: 'article',
             publishedTime: news?.created_at,
-            authors: ['নিজস্ব প্রতিবেদক'],
+            authors: [DEFAULT_AUTHOR],
             section: categoryName,
         },
         twitter: {
@@ -82,7 +131,7 @@ export async function generateMetadata({ params }) {
             title,
             description: plainDescription,
             images: imageUrl ? [imageUrl] : [],
-            site: '@banglastar',
+            site: '@jubotaranews',
         },
         robots: {
             index: true,
@@ -100,40 +149,25 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function NewsDetailPage({ params }) {
-    const trendingNews = await getTrandingNews();
     const { slug } = await params;
+    const [trendingNews, news, settings] = await Promise.all([
+        getTrandingNews(),
+        getSingleNews(slug),
+        getSettings(),
+    ]);
 
-    const news = await getSingleNews(slug);
-    if (!news) {
+    if (!news || Object.keys(news).length === 0) {
         notFound();
     }
-    const settings = await getSettings();
-    const googleNewsUrl = getMetaValueByMetaName(settings, "google_news_channle_link") || "#";
-    const whatsappChannelUrl = getMetaValueByMetaName(settings, "whats_app_channle_link") || "#";
 
-    let category
-    if (news?.categories) {
-        category = news?.categories[0]
-    }
-
-
-    const reletedNews = await getNewsByCat(category?.slug, 5);
-
-
-    // console.log("news details page", news,)
-
+    const [relatedNews] = await Promise.all([getRelatedNews(news)]);
+    const googleNewsUrl = getMetaValueByMetaName(settings, 'google_news_channle_link') || '#';
+    const whatsappChannelUrl = getMetaValueByMetaName(settings, 'whats_app_channle_link') || '#';
+    const category = news?.categories?.[0];
     const formattedPublishedDate = formatBengaliDate(news?.created_at);
-
-
-    const allNews = await getNews();
-
-
-
-
-    // Get current URL for sharing
+    const articleContent = formatArticleContent(news.description);
     const fullUrl = `${FRONT_END_URL}/news/${slug}`;
 
-    // JSON-LD Structured Data
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'NewsArticle',
@@ -141,71 +175,59 @@ export default async function NewsDetailPage({ params }) {
         image: [news.featured_image || ''],
         datePublished: news.created_at,
         dateModified: news.updated_at || news.created_at,
-        author: [{
-            '@type': 'Person',
-            name: 'নিজস্ব প্রতিবেদক',
-            url: FRONT_END_URL,
-        }],
+        author: [
+            {
+                '@type': 'Person',
+                name: DEFAULT_AUTHOR,
+                url: FRONT_END_URL,
+            },
+        ],
         publisher: {
             '@type': 'Organization',
-            name: 'বাংলা স্টার নিউজ',
+            name: 'যুবতারা নিউজ',
             logo: {
                 '@type': 'ImageObject',
                 url: `${FRONT_END_URL}/logo.png`,
-            }
+            },
         },
         description: news.summary || news.description?.replace(/<[^>]*>/g, '').slice(0, 160).trim(),
         mainEntityOfPage: {
             '@type': 'WebPage',
             '@id': fullUrl,
-        }
+        },
     };
 
     return (
         <>
-            {/* Dedicated Print Template - Only visible when printing */}
             <NewsPrintTemplate news={news} category={category} />
 
-            {/* Screen UI - Hidden when printing */}
-            <div className="flex flex-col min-h-screen bg-[#eff3f6] print:hidden">
-                {/* Add Structured Data */}
+            <div className="flex min-h-screen flex-col bg-[#eff3f6] print:hidden">
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
 
-
                 <main className="py-2">
-                    <Container className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                        {/* Main Content */}
-                        <article className="lg:col-span-9 p-3 md:p-6 border border-slate-300 bg-white">
+                    <Container className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+                        <article className="lg:col-span-9 border border-slate-300 bg-white p-3 md:p-6">
                             <div className="space-y-6">
-                                {/* Category and Date */}
                                 <div className="flex items-center gap-4 text-base md:text-xl">
-                                    <span className="bg-primary text-white px-3 py-1 font-bold">{category?.name}</span>
+                                    <span className="bg-primary px-3 py-1 font-bold text-white">{category?.name}</span>
                                 </div>
 
-                                {/* Title */}
-                                <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 leading-[1] md:leading-6">
+                                <h1 className="text-3xl font-semibold leading-tight text-gray-900 md:text-4xl">
                                     {news?.name}
                                 </h1>
 
-                                {/* Author and Toolbar */}
                                 <div className="flex flex-wrap items-center justify-between gap-4 border-y border-gray-100 py-3">
                                     <div className="flex items-center gap-3">
                                         <div>
-                                            <div className='flex gap-2'>
-                                                {/* <Image
-                                                src={news?.author?.avatar}
-                                                alt={news?.name || "news image"}
-                                                width={40}
-                                                height={60}
-                                                className="object-fit rounded-full"
-                                                 /> */}
-                                                <p className="text-base md:text-xl font-bold text-gray-800">{news?.author?.full_name || "নিজস্ব প্রতিবেদক"}</p>
-                                            </div>
-
-                                            <span className="text-base md:text-lg text-gray-600 font-medium">{formattedPublishedDate}</span>
+                                            <p className="text-base font-bold text-gray-800 md:text-xl">
+                                                {news?.author?.full_name || DEFAULT_AUTHOR}
+                                            </p>
+                                            <span className="text-base font-medium text-gray-600 md:text-lg">
+                                                {formattedPublishedDate}
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-3">
@@ -214,114 +236,87 @@ export default async function NewsDetailPage({ params }) {
                                     </div>
                                 </div>
 
-                                {/* Main Image */}
-                                <div className="relative h-[300px] md:h-[500px] w-full overflow-hidden shadow-inner">
+                                <div className="relative h-[300px] w-full overflow-hidden shadow-inner md:h-[500px]">
                                     <Image
                                         src={news?.featured_image}
-                                        alt={news?.name || "news image"}
+                                        alt={news?.name || 'news image'}
                                         fill
                                         priority
+                                        sizes="100vw"
                                         className="object-cover"
                                     />
                                 </div>
 
-                                {/* Content */}
-                                <div>
-                                    <div
-                                        className='text-base md:text-xl lg:md:text-[22px] text-gray-800 font-medium'
-                                        dangerouslySetInnerHTML={{
-                                            __html: news.description || '<p>No content available.</p>'
-                                        }}
-                                    ></div>
-                                </div>
+                                <div
+                                    className="article-content text-gray-800"
+                                    dangerouslySetInnerHTML={{ __html: articleContent }}
+                                ></div>
                             </div>
 
-                            {/* Share and Tags */}
-                            <div className="pt-10 border-t border-slate-300 mt-10">
-                                <div className="bg-gradient-to-r from-blue-50 to-gray-50 rounded-sm p-6 md:p-8 shadow-sm">
-
-                                    <h3 className="text-lg md:text-2xl font-semibold text-gray-800 mb-6">
+                            <div className="mt-10 border-t border-slate-300 pt-10">
+                                <div className="rounded-sm bg-gradient-to-r from-blue-50 to-gray-50 p-6 shadow-sm md:p-8">
+                                    <h3 className="mb-6 text-lg font-semibold text-gray-800 md:text-2xl">
                                         আপডেটেড খবর পেতে আমাদের সাথে যুক্ত থাকুন
                                     </h3>
 
-                                    <div className="flex flex-col md:flex-row gap-4">
-
-                                        {/* Google News */}
+                                    <div className="flex flex-col gap-4 md:flex-row">
                                         <Link
                                             href={googleNewsUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex items-center gap-4 bg-white hover:bg-blue-50 border border-slate-300 rounded-xl px-5 py-4 transition-all duration-300 hover:shadow-md group"
+                                            className="group flex items-center gap-4 rounded-xl border border-slate-300 bg-white px-5 py-4 transition-all duration-300 hover:bg-blue-50 hover:shadow-md"
                                         >
-                                            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-100 text-blue-700 text-xl group-hover:scale-110 transition">
+                                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-xl text-blue-700 transition group-hover:scale-110">
                                                 <FaGoogle />
                                             </div>
                                             <div>
-                                                <p className="text-base font-semibold text-gray-800">
-                                                    গুগল নিউজ চ্যানেল
-                                                </p>
-                                                <p className="text-sm text-gray-500">
-                                                    ফলো করুন সর্বশেষ আপডেট পেতে
-                                                </p>
+                                                <p className="text-base font-semibold text-gray-800">গুগল নিউজ চ্যানেল</p>
+                                                <p className="text-sm text-gray-500">ফলো করুন সর্বশেষ আপডেট পেতে</p>
                                             </div>
                                         </Link>
 
-                                        {/* WhatsApp Channel */}
                                         <Link
                                             href={whatsappChannelUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex items-center gap-4 bg-white hover:bg-green-50 border border-slate-300 rounded-xl px-5 py-4 transition-all duration-300 hover:shadow-md group"
+                                            className="group flex items-center gap-4 rounded-xl border border-slate-300 bg-white px-5 py-4 transition-all duration-300 hover:bg-green-50 hover:shadow-md"
                                         >
-                                            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-green-100 text-green-600 text-xl group-hover:scale-110 transition">
+                                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-xl text-green-600 transition group-hover:scale-110">
                                                 <FaWhatsapp />
                                             </div>
                                             <div>
-                                                <p className="text-base font-semibold text-gray-800">
-                                                    হোয়াটসঅ্যাপ চ্যানেল
-                                                </p>
-                                                <p className="text-sm text-gray-500">
-                                                    সরাসরি নোটিফিকেশন পেতে যুক্ত থাকুন
-                                                </p>
+                                                <p className="text-base font-semibold text-gray-800">হোয়াটসঅ্যাপ চ্যানেল</p>
+                                                <p className="text-sm text-gray-500">সরাসরি নোটিফিকেশন পেতে যুক্ত থাকুন</p>
                                             </div>
                                         </Link>
-
                                     </div>
                                 </div>
                             </div>
-
-                            {/* Facebook Comments */}
-                            {/* <FacebookComments url={fullUrl} /> */}
                         </article>
 
-                        {/* Sidebar */}
-                        <aside className="lg:col-span-3 space-y-6">
-                            {/* Ad Placeholder */}
-                            <div className="bg-gray-100 h-64 flex items-center justify-center border-2 border-dashed border-slate-300">
-                                <span className="text-gray-400 font-bold uppercase tracking-widest text-xs">বিজ্ঞাপন / Advertisement</span>
+                        <aside className="space-y-6 lg:col-span-3">
+                            <div className="flex h-64 items-center justify-center border-2 border-dashed border-slate-300 bg-gray-100">
+                                <span className="text-xs font-bold uppercase tracking-widest text-gray-400">
+                                    বিজ্ঞাপন / Advertisement
+                                </span>
                             </div>
-                            {/* Latest News */}
-                            <div className="p-3 md:p-6  border border-slate-300 bg-white">
-                                <h2 className="text-xl font-bold mb-6 border-b-2 border-primary pb-2 flex items-center gap-2">
-                                    <span className="w-2 h-6 bg-primary inline-block"></span>
+
+                            <div className="border border-slate-300 bg-white p-3 md:p-6">
+                                <h2 className="mb-6 flex items-center gap-2 border-b-2 border-primary pb-2 text-xl font-bold">
+                                    <span className="inline-block h-6 w-2 bg-primary"></span>
                                     ট্রেন্ডিং সংবাদ
                                 </h2>
                                 <div className="space-y-2">
-                                    {trendingNews?.slice(0, 11)?.map(item => (
+                                    {trendingNews?.slice(0, 11)?.map((item) => (
                                         <HorizontalCard key={item.id} news={item} />
                                     ))}
                                 </div>
                             </div>
-
-
                         </aside>
                     </Container>
                 </main>
-                <ThumbnailNewsSection
-                    title={"আরও খবর"}
-                    news={reletedNews}
-                    slug={category?.slug}
-                />
+
+                <ThumbnailNewsSection title="আরও খবর" news={relatedNews} slug={category?.slug || 'সারাদেশ'} />
             </div>
         </>
     );

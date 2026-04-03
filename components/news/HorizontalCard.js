@@ -13,6 +13,7 @@ const HorizontalCard = ({ news }) => {
                     src={news?.featured_image}
                     alt={news?.name}
                     fill
+                    sizes="112px"
                     className="object-cover"
                 />
             </Link>

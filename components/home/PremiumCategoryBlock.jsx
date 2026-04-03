@@ -32,7 +32,13 @@ export default function PremiumCategoryBlock({ title, news, vertical = false, sl
         {/* Main Item in Category */}
         <div className="space-y-2 group">
           <div className="relative h-48 md:h-60 w-full overflow-hidden">
-            <Image src={firstNews?.featured_image} alt={firstNews?.name} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+            <Image
+              src={firstNews?.featured_image}
+              alt={firstNews?.name}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover group-hover:scale-110 transition-transform duration-700"
+            />
           </div>
           <a href={`/news/${main.slug}`} className="block">
             <h3 className="text-gray-600 text-lg md:text-[22px] leading-[24px] md:leading-[26px] group-hover:text-primary font-semibold transition-colors line-clamp-2">
@@ -56,7 +62,13 @@ export default function PremiumCategoryBlock({ title, news, vertical = false, sl
               <Link
                 href={`/news/${item?.slug}`} className="flex gap-2 md:gap-4 py-3 group first:pt-0">
                 <div className="relative h-16 w-24 flex-shrink-0 overflow-hidden">
-                  <Image src={item?.featured_image} alt={item?.name} fill className="object-cover" />
+                  <Image
+                    src={item?.featured_image}
+                    alt={item?.name}
+                    fill
+                    sizes="96px"
+                    className="object-cover"
+                  />
                 </div>
                 <div className='space-y-1'>
                   <h4 className="text-gray-600 text-lg md:text-[22px] leading-[24px] md:leading-[26px] group-hover:text-primary font-semibold transition-colors line-clamp-2 ">

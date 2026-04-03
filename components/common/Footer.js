@@ -1,123 +1,104 @@
-
-import Link from 'next/link';
-import Logo from './Header/Logo';
-import Container from './Container';
-import { getSettings } from '@/lib/fetchData';
-import { getImageUrl, getMediaLinkByMetaName, getMetaValueByMetaName } from '@/utils/metaHelpers';
-import { FaFacebook, FaInstagram, FaPinterest, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { getSettings } from "@/lib/fetchData";
+import { getMediaLinkByMetaName, getMetaValueByMetaName } from "@/utils/metaHelpers";
+import Link from "next/link";
+import { FaFacebookF, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
+import Container from "./Container";
+import Logo from "./Header/Logo";
 
 const Footer = async () => {
-    const currentYear = new Date().getFullYear();
-    const settings = await getSettings()
+  const currentYear = new Date().getFullYear();
+  const settings = await getSettings();
+  const logoUrl = getMediaLinkByMetaName(settings, "site_logoimg_id");
+  const aboutText = getMetaValueByMetaName(settings, "footer_content");
+  const address = getMetaValueByMetaName(settings, "office_location");
+  const phone = getMetaValueByMetaName(settings, "company_phone");
+  const email = getMetaValueByMetaName(settings, "company_email");
+  const facebookUrl = getMetaValueByMetaName(settings, "facebook_url");
+  const twitterUrl = getMetaValueByMetaName(settings, "twitter_url");
+  const youtubeUrl = getMetaValueByMetaName(settings, "youtube_url");
+  const instagramUrl = getMetaValueByMetaName(settings, "instagram_url");
 
-    const logo = getMediaLinkByMetaName(settings, "site_logoimg_id");
-    const email = getMetaValueByMetaName(settings, "company_email") || "nfo@banglastar.com";
-    const phone = getMetaValueByMetaName(settings, "company_phone");
-    const phone_2 = getMetaValueByMetaName(settings, "phone_2");
-    const office_location = getMetaValueByMetaName(settings, "office_location");
-    const facebook_url = getMetaValueByMetaName(settings, "facebook_url") || "#";
-    const instagram_url = getMetaValueByMetaName(settings, "instagram_url") || "#";
-    const twitter_url = getMetaValueByMetaName(settings, "twitter_url") || "#";
-    const youtube_url = getMetaValueByMetaName(settings, "youtube_url") || "#";
-    const footer_content = getMetaValueByMetaName(settings, "footer_content") || "#"
-    const bottom_footer_content = getMetaValueByMetaName(settings, "bottom_footer_content");
+  const socialLinkClass =
+    "w-10 h-10 border border-gray-300 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 rounded-full text-gray-700";
 
-    const logoUrl = getImageUrl(logo)
-    // console.log({ instagram_url, facebook_url, twitter_url, youtube_url })
+  return (
+    <footer className="mt-12 border-t border-gray-100 bg-white pb-8 pt-16 text-black transition-colors">
+      <Container>
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10 lg:grid-cols-4 xl:gap-12">
+          <div className="space-y-3 md:space-y-6">
+            <div className="flex w-fit p-1.5">
+              <Logo logoUrl={logoUrl} />
+            </div>
+            <div className="whitespace-pre-line text-base leading-relaxed text-gray-700 md:text-lg lg:text-xl">
+              {aboutText || "যুবতারা নিউজ বাংলাদেশের অন্যতম নির্ভরযোগ্য অনলাইন সংবাদ মাধ্যম।"}
+            </div>
+            <div className="flex items-center gap-4">
+              {facebookUrl && (
+                <a href={facebookUrl} target="_blank" rel="noopener noreferrer" className={socialLinkClass}>
+                  <FaFacebookF size={18} />
+                </a>
+              )}
+              {twitterUrl && (
+                <a href={twitterUrl} target="_blank" rel="noopener noreferrer" className={socialLinkClass}>
+                  <FaTwitter size={18} />
+                </a>
+              )}
+              {youtubeUrl && (
+                <a href={youtubeUrl} target="_blank" rel="noopener noreferrer" className={socialLinkClass}>
+                  <FaYoutube size={18} />
+                </a>
+              )}
+              {instagramUrl && (
+                <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className={socialLinkClass}>
+                  <FaInstagram size={18} />
+                </a>
+              )}
+            </div>
+          </div>
 
-    const socialLinks = [
-        { icon: FaFacebook, color: "hover:text-[#1877F2]", href: facebook_url },
-        { icon: FaYoutube, color: "hover:text-[#FF0000]", href: youtube_url },
-        { icon: FaInstagram, color: "hover:text-[#E4405F]", href: instagram_url },
-        { icon: FaTwitter, color: "hover:text-[#1DA1F2]", href: twitter_url },
-        // { icon: FaPinterest, color: "hover:text-[#BD081C]", href: "https://www.pinterest.com" },
-    ];
+          <div className="space-y-3 md:space-y-6">
+            <h3 className="border-l-4 border-primary pl-3 text-base font-bold text-gray-800 md:text-xl">
+              বিভাগসমূহ
+            </h3>
+            <ul className="grid grid-cols-2 gap-2 text-base text-gray-700 md:text-lg lg:text-xl">
+              <li><Link href="/category/জাতীয়" className="transition-colors hover:text-primary">জাতীয়</Link></li>
+              <li><Link href="/category/রাজনীতি" className="transition-colors hover:text-primary">রাজনীতি</Link></li>
+              <li><Link href="/category/আন্তর্জাতিক" className="transition-colors hover:text-primary">আন্তর্জাতিক</Link></li>
+              <li><Link href="/category/খেলা" className="transition-colors hover:text-primary">খেলা</Link></li>
+              <li><Link href="/category/বিনোদন" className="transition-colors hover:text-primary">বিনোদন</Link></li>
+              <li><Link href="/category/জীবনযাপন" className="transition-colors hover:text-primary">জীবনযাপন</Link></li>
+            </ul>
+          </div>
 
-    // console.log("logo", logoUrl)
+          <div className="space-y-3 md:space-y-6">
+            <h3 className="border-l-4 border-primary pl-3 text-base font-bold text-gray-800 md:text-xl">
+              প্রতিষ্ঠান
+            </h3>
+            <ul className="space-y-2 text-base text-gray-700 md:text-lg lg:text-xl">
+              <li><Link href="/team" className="transition-colors hover:text-primary">আমাদের টিম</Link></li>
+              <li><Link href="/privacy" className="transition-colors hover:text-primary">গোপনীয়তা নীতি</Link></li>
+              <li><Link href="/terms" className="transition-colors hover:text-primary">ব্যবহারের শর্তাবলী</Link></li>
+            </ul>
+          </div>
 
-    return (
-        <footer className="bg-secondary text-white pt-16 pb-4 mt-12">
-            <Container>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 xl:gap-12">
-                    {/* About */}
-                    <div className="space-y-3 md:space-y-6">
-                        <div className="flex bg-white p-1.5 w-fit">
-                            <Logo logoUrl={logoUrl} />
-                        </div>
-                        <div className="text-gray-200 text-base md:text-xl lg:text-xl leading-relaxed">
+          <div className="space-y-3 md:space-y-6">
+            <h3 className="border-l-4 border-primary pl-3 text-base font-bold text-gray-800 md:text-xl">
+              যোগাযোগ
+            </h3>
+            <div className="space-y-2 text-base text-gray-700 md:text-lg lg:text-xl">
+              <p>{address || "পশ্চিম পাড়া, গাইবান্ধা সদর, গাইবান্ধা।"}</p>
+              <p>ফোন: {phone || "০১৩১৫-০৪৩৩৬১"}</p>
+              <p>ইমেইল: {email || "jubotaranews@gmail.com"}</p>
+            </div>
+          </div>
+        </div>
 
-                            <div dangerouslySetInnerHTML={{ __html: footer_content }} />
-                        </div>
-                        <div className="flex items-center gap-4">
-                            {/* {['facebook', 'twitter', 'youtube', 'instagram'].map((social) => (
-                                <a key={social} href="#" className="w-8 h-8 border border-gray-700 flex items-center justify-center hover:bg-primary hover:border-primary transition-all duration-300">
-                                    <span className="sr-only">{social}</span>
-                                    
-                                    <div className="w-4 h-4 bg-white/20"></div>
-                                </a>
-                            ))} */}
-                        </div>
-                    </div>
-
-                    {/* Quick Links */}
-                    <div className="space-y-3 md:space-y-6">
-                        <h3 className="text-base md:text-xl  font-bold border-l-4 border-primary pl-3 text-gray-100 ">বিভাগসমূহ</h3>
-                        <ul className="grid grid-cols-2 gap-2 text-base md:text-lg lg:text-xl text-gray-200 ">
-                            <li><Link href="/category/national" className="hover:text-white transition-colors">জাতীয়</Link></li>
-                            <li><Link href="/category/politics" className="hover:text-white transition-colors">রাজনীতি</Link></li>
-                            <li><Link href="/category/international" className="hover:text-white transition-colors">আন্তর্জাতিক</Link></li>
-                            <li><Link href="/category/sports" className="hover:text-white transition-colors">খেলা</Link></li>
-                            <li><Link href="/category/entertainment" className="hover:text-white transition-colors">বিনোদন</Link></li>
-                            <li><Link href="/category/lifestyle" className="hover:text-white transition-colors">লাইফস্টাইল</Link></li>
-                        </ul>
-                    </div>
-
-                    {/* Company */}
-                    <div className="space-y-3 md:space-y-6">
-                        <h3 className="text-base md:text-xl font-bold border-l-4 border-primary pl-3 text-gray-100">প্রতিষ্ঠান</h3>
-                        <ul className="space-y-2 text-base md:text-lg lg:text-xl text-gray-200 ">
-                            {/* <li><Link href="/about" className="hover:text-white transition-colors">আমাদের সম্পর্কে</Link></li> */}
-                            <li><Link href="/team" className="hover:text-white transition-colors">আমাদের টিম</Link></li>
-                            {/* <li><Link href="/contact" className="hover:text-white transition-colors">যোগাযোগ</Link></li> */}
-                            <li><Link href="/privacy" className="hover:text-white transition-colors">গোপনীয়তা নীতি</Link></li>
-                            <li><Link href="/terms" className="hover:text-white transition-colors">ব্যবহারের শর্তাবলী</Link></li>
-                        </ul>
-                    </div>
-
-                    {/* Contact Info */}
-                    <div className="space-y-3 md:space-y-6">
-                        <h3 className="text-base md:text-xl font-bold border-l-4 border-primary pl-3 text-gray-100">যোগাযোগ</h3>
-                        <div className="text-base md:text-lg lg:text-xl text-gray-200 space-y-2">
-                            <p>{office_location}</p>
-                            <p>ফোন: {phone}</p>
-                            <p>ইমেইল: {email}</p>
-                        </div>
-                        {/* <p className="font-semibold mb-3 text-sm tracking-wide text-white">SOCIAL LINKS</p> */}
-                        <div className="flex items-center gap-4 text-xl">
-                            {socialLinks.map((social, idx) => (
-                                <Link
-                                    key={idx}
-                                    href={social.href}
-                                    target="_blank"
-                                    className={`${social.color} text-white transition`}
-                                >
-                                    <social.icon />
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
-
-                </div>
-
-                {/* Bottom Bar */}
-                <div className="mt-3 pt-4 border-t border-gray-600 text-center text-base md:text-lg text-gray-200 ">
-                    {/* <p>© {currentYear} বাংলা স্টার নিউজ | সর্বস্বত্ব সংরক্ষিত।</p> */}
-                    <p dangerouslySetInnerHTML={{ __html: bottom_footer_content }} />
-
-                </div>
-            </Container>
-        </footer>
-    );
+        <div className="mt-12 border-t border-gray-200 pt-8 text-center text-base text-gray-700 md:text-lg">
+          <p>© {currentYear} যুবতারা নিউজ | সর্বস্বত্ব সংরক্ষিত।</p>
+        </div>
+      </Container>
+    </footer>
+  );
 };
 
 export default Footer;

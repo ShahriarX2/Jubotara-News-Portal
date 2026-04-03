@@ -1,35 +1,33 @@
-
-import Header from '@/components/common/Header/Header';
-import Footer from '@/components/common/Footer';
-import BreakingNews from '@/components/common/Header/BreakingNews';
-import { searchNews, getNews, getTrandingNews } from '@/lib/fetchData';
 import Container from '@/components/common/Container';
-import Link from 'next/link';
-import Image from 'next/image';
-import truncate from '@/utils/truncate';
+import { getTrandingNews, searchNews } from '@/lib/fetchData';
 import { FRONT_END_URL } from '@/utils/baseUrl';
+import truncate from '@/utils/truncate';
+import Image from 'next/image';
+import Link from 'next/link';
 
-const toBanglaNumber = (n) => {
-    const banglaNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-    return n.toString().split('').map(digit => banglaNumbers[digit] || digit).join('');
-};
+const BANGLA_DIGITS = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+
+const toBanglaNumber = (value) =>
+    String(value)
+        .split('')
+        .map((digit) => BANGLA_DIGITS[Number(digit)] ?? digit)
+        .join('');
 
 export async function generateMetadata({ searchParams }) {
     const sParams = await searchParams;
     const query = sParams.q || '';
-    const siteUrl = FRONT_END_URL;
-    const title = `অনুসন্ধান: ${query} | বাংলা স্টার নিউজ`;
-    const description = `বাংলা স্টার নিউজে "${query}" অনুসন্ধান করুন। ব্রেকিং নিউজ এবং সর্বশেষ সংবাদ।`;
+    const title = `অনুসন্ধান: ${query} | যুবতারা নিউজ`;
+    const description = `যুবতারা নিউজে "${query}" অনুসন্ধান করুন। ব্রেকিং নিউজ এবং সর্বশেষ সংবাদ।`;
 
     return {
         title,
         description,
-        metadataBase: new URL(siteUrl),
+        metadataBase: new URL(FRONT_END_URL),
         openGraph: {
             title,
             description,
-            url: `${siteUrl}/search?q=${query}`,
-            siteName: 'বাংলা স্টার নিউজ',
+            url: `${FRONT_END_URL}/search?q=${query}`,
+            siteName: 'যুবতারা নিউজ',
             locale: 'bn_BD',
             type: 'website',
         },
@@ -39,37 +37,36 @@ export async function generateMetadata({ searchParams }) {
 export default async function SearchPage({ searchParams }) {
     const sParams = await searchParams;
     const query = sParams.q || '';
-    const results = await searchNews(query);
-    const trendingNews = await getTrandingNews();
+    const [results, trendingNews] = await Promise.all([
+        searchNews(query),
+        getTrandingNews(),
+    ]);
 
     return (
         <div className="flex flex-col min-h-screen bg-[#eff3f6]">
-
-
             <main className="py-6 px-2">
                 <Container>
                     <div className="flex flex-col lg:flex-row gap-6">
                         <div className="lg:w-3/4">
                             <div className="mb-4 p-6 bg-white/70 border border-gray-200 shadow-sm rounded-lg">
                                 <h1 className="text-2xl md:text-3xl font-bold text-[#003366]">
-                                    অনুসন্ধান ফলাফল: <span className="text-red-600">"{query}"</span>
+                                    অনুসন্ধান ফলাফল: <span className="text-red-600">&quot;{query}&quot;</span>
                                 </h1>
                                 <p className="text-gray-500 mt-2 text-base md:text-xl font-medium">
                                     মোট <span className="text-red-600 font-bold">{toBanglaNumber(results.length)}</span> টি সংবাদ পাওয়া গেছে।
                                 </p>
                             </div>
 
-                            {results?.length > 0 ? (
+                            {results.length > 0 ? (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2 md:gap-4">
-                                    {results?.map((news) => (
+                                    {results.map((news) => (
                                         <Link
                                             key={news.id}
                                             href={`/news/${news.slug}`}
                                             className="flex gap-4 group bg-white/70 border border-gray-200 p-4 hover:bg-gray-50 transition-all rounded-lg shadow-sm"
                                         >
                                             <div className="flex-1">
-                                                <h3 className="text-base md:text-xl font-bold text-gray-800 leading-tight group-hover:text-red-600
-                                                 transition-colors line-clamp-2">
+                                                <h3 className="text-base md:text-xl font-bold text-gray-800 leading-tight group-hover:text-red-600 transition-colors line-clamp-2">
                                                     {news.name}
                                                 </h3>
                                                 <p className="text-base md:text-xl text-gray-500 mt-1 line-clamp-2">
@@ -81,6 +78,7 @@ export default async function SearchPage({ searchParams }) {
                                                     src={news?.featured_image || '/placeholder.png'}
                                                     alt={news?.name}
                                                     fill
+                                                    sizes="(max-width: 768px) 96px, 128px"
                                                     className="object-cover rounded-md"
                                                 />
                                             </div>
@@ -108,8 +106,7 @@ export default async function SearchPage({ searchParams }) {
                                     {trendingNews?.slice(0, 5).map((news) => (
                                         <Link key={news.id} href={`/news/${news.slug}`} className="flex gap-3 group border-b border-gray-100 pb-4 last:border-0">
                                             <div className="flex-1">
-                                                <h4 className="text-base md:text-xl font-bold text-gray-600 leading-tight group-hover:text-red-600
-                                                 transition-colors line-clamp-2">
+                                                <h4 className="text-base md:text-xl font-bold text-gray-600 leading-tight group-hover:text-red-600 transition-colors line-clamp-2">
                                                     {news.name}
                                                 </h4>
                                             </div>
@@ -118,6 +115,7 @@ export default async function SearchPage({ searchParams }) {
                                                     src={news.featured_image || news.image}
                                                     alt={news.name}
                                                     fill
+                                                    sizes="64px"
                                                     className="object-cover rounded shadow-sm"
                                                 />
                                             </div>

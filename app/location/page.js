@@ -1,15 +1,14 @@
-
-import { getNews, getNewsByLocation, getDivisions, getDistricts } from '@/lib/fetchData';
 import Container from '@/components/common/Container';
-import Link from 'next/link';
-import Image from 'next/image';
-import truncate from '@/utils/truncate';
+import { getDistricts, getDivisions, getNews, getNewsByLocation } from '@/lib/fetchData';
 import { FRONT_END_URL } from '@/utils/baseUrl';
+import truncate from '@/utils/truncate';
+import Image from 'next/image';
+import Link from 'next/link';
 
-const toBanglaNumber = (n) => {
-    const banglaNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-    return n?.toString().split('').map(digit => banglaNumbers[digit] || digit).join('');
-};
+const BANGLA_DIGITS = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+
+const toBanglaNumber = (value) =>
+    value?.toString().split('').map((digit) => BANGLA_DIGITS[Number(digit)] ?? digit).join('');
 
 export async function generateMetadata({ searchParams }) {
     const sParams = await searchParams;
@@ -20,7 +19,7 @@ export async function generateMetadata({ searchParams }) {
 
     if (divisionId) {
         const divisions = await getDivisions();
-        const division = divisions.find(d => d.id.toString() === divisionId.toString());
+        const division = divisions.find((item) => item.id.toString() === divisionId.toString());
         if (division) {
             locationName = division.bn_name || division.name;
         }
@@ -28,20 +27,16 @@ export async function generateMetadata({ searchParams }) {
 
     if (districtId) {
         const districts = await getDistricts(divisionId);
-        const district = districts.find(d => d.id.toString() === districtId.toString());
+        const district = districts.find((item) => item.id.toString() === districtId.toString());
         if (district) {
             locationName = district.bn_name || district.name;
         }
     }
 
-    const title = `${locationName} এর খবর | বাংলা স্টার নিউজ`;
-    const description = `${locationName} এর সর্বশেষ সংবাদ, ব্রেকিং নিউজ এবং বিশেষ প্রতিবেদন দেখুন বাংলা স্টার নিউজে।`;
-    const siteUrl = FRONT_END_URL;
-
     return {
-        title,
-        description,
-        metadataBase: new URL(siteUrl),
+        title: `${locationName} এর খবর | যুবতারা নিউজ`,
+        description: `${locationName} এর সর্বশেষ সংবাদ, ব্রেকিং নিউজ এবং বিশেষ প্রতিবেদন দেখুন যুবতারা নিউজে।`,
+        metadataBase: new URL(FRONT_END_URL),
     };
 }
 
@@ -49,7 +44,7 @@ export default async function LocationNewsPage({ searchParams }) {
     const sParams = await searchParams;
     const divisionId = sParams.division_id;
     const districtId = sParams.district_id;
-    const currentPage = parseInt(sParams.page) || 1;
+    const currentPage = Number.parseInt(sParams.page, 10) || 1;
     const perPage = 12;
 
     const newsResponse = await getNewsByLocation(divisionId, districtId, currentPage, perPage);
@@ -57,28 +52,24 @@ export default async function LocationNewsPage({ searchParams }) {
     const meta = newsResponse?.meta || {};
     const totalPages = meta.last_page || 1;
 
-    // Get location names for UI
     let divisionName = '';
     let districtName = '';
 
     if (divisionId) {
         const divisions = await getDivisions();
-        const division = divisions.find(d => d.id.toString() === divisionId.toString());
+        const division = divisions.find((item) => item.id.toString() === divisionId.toString());
         divisionName = division?.bn_name || division?.name || '';
     }
 
     if (districtId) {
         const districts = await getDistricts(divisionId);
-        const district = districts.find(d => d.id.toString() === districtId.toString());
+        const district = districts.find((item) => item.id.toString() === districtId.toString());
         districtName = district?.bn_name || district?.name || '';
     }
 
     const displayTitle = districtName || divisionName || 'সারাদেশ';
-
-    // Fetch latest news for sidebar
     const allNews = await getNews(15);
     const latestNews = allNews.slice(0, 7);
-
     const featuredNews = locationNews[0];
     const otherNews = locationNews.slice(1);
 
@@ -88,23 +79,17 @@ export default async function LocationNewsPage({ searchParams }) {
                 <Container>
                     <div className="flex flex-col lg:flex-row gap-2 md:gap-6">
                         <div className="lg:w-3/4">
-                            {/* Title */}
                             <div className="mb-6">
                                 <div className="flex items-center gap-4 mb-4">
-                                    <h1 className="text-3xl font-bold text-[#003366]">
-                                        {displayTitle}
-                                    </h1>
+                                    <h1 className="text-3xl font-bold text-[#003366]">{displayTitle}</h1>
                                     <div className="flex-1 border-t border-gray-300 mt-2"></div>
                                 </div>
                                 {divisionName && districtName && (
-                                    <div className="text-gray-600 font-medium text-base md:text-lg">
-                                        {districtName}
-                                    </div>
+                                    <div className="text-gray-600 font-medium text-base md:text-lg">{districtName}</div>
                                 )}
                             </div>
 
                             <div className="flex flex-col gap-4">
-                                {/* Main Content */}
                                 <div className="w-full">
                                     {featuredNews ? (
                                         <div className="mb-6 border-b border-gray-300 pb-6">
@@ -123,6 +108,7 @@ export default async function LocationNewsPage({ searchParams }) {
                                                         alt={featuredNews.name}
                                                         fill
                                                         priority
+                                                        sizes="(max-width: 768px) 100vw, 50vw"
                                                         className="object-cover rounded-md shadow-md"
                                                     />
                                                 </div>
@@ -134,15 +120,15 @@ export default async function LocationNewsPage({ searchParams }) {
                                         </div>
                                     )}
 
-                                    {/* News Grid */}
                                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                                        {otherNews?.map((news) => (
+                                        {otherNews.map((news) => (
                                             <Link key={news.id} href={`/news/${news.slug}`} className="flex flex-col group bg-white border border-gray-200 overflow-hidden hover:shadow-md transition-all rounded-lg">
                                                 <div className="relative aspect-video">
                                                     <Image
                                                         src={news.featured_image}
                                                         alt={news.name}
                                                         fill
+                                                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                                                         className="object-cover transition-transform group-hover:scale-105 duration-300"
                                                     />
                                                 </div>
@@ -158,7 +144,6 @@ export default async function LocationNewsPage({ searchParams }) {
                                         ))}
                                     </div>
 
-                                    {/* Pagination */}
                                     {locationNews.length > 0 && totalPages > 1 && (
                                         <div className="mt-12 flex justify-center items-center gap-2">
                                             {currentPage > 1 && (
@@ -182,21 +167,24 @@ export default async function LocationNewsPage({ searchParams }) {
                                                             <Link
                                                                 key={pageNum}
                                                                 href={`/location?division_id=${divisionId || ''}&district_id=${districtId || ''}&page=${pageNum}`}
-                                                                className={`w-10 h-10 flex-shrink-0 flex items-center justify-center border rounded font-bold text-base md:text-lg ${currentPage === pageNum
-                                                                    ? 'bg-red-700 text-white border-red-700'
-                                                                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
-                                                                    }`}
+                                                                className={`w-10 h-10 flex-shrink-0 flex items-center justify-center border rounded font-bold text-base md:text-lg ${
+                                                                    currentPage === pageNum
+                                                                        ? 'bg-red-700 text-white border-red-700'
+                                                                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                                                                }`}
                                                             >
                                                                 {toBanglaNumber(pageNum)}
                                                             </Link>
                                                         );
                                                     }
+
                                                     if (
                                                         (pageNum === currentPage - 3 && pageNum > 1) ||
                                                         (pageNum === currentPage + 3 && pageNum < totalPages)
                                                     ) {
                                                         return <span key={pageNum} className="px-2 self-center">...</span>;
                                                     }
+
                                                     return null;
                                                 })}
                                             </div>
@@ -215,14 +203,13 @@ export default async function LocationNewsPage({ searchParams }) {
                             </div>
                         </div>
 
-                        {/* Sidebar */}
                         <div className="lg:w-1/4">
                             <div className="sticky top-6">
                                 <h2 className="text-xl md:text-2xl font-bold text-red-600 border-b-2 border-red-600 pb-1 mb-4">
                                     সর্বশেষ
                                 </h2>
                                 <div className="flex flex-col gap-4">
-                                    {latestNews?.map((news) => (
+                                    {latestNews.map((news) => (
                                         <Link key={news.id} href={`/news/${news.slug}`} className="flex gap-3 group border-b border-gray-200 pb-4 last:border-0 hover:bg-gray-50 p-2 rounded transition-colors">
                                             <div className="flex-1">
                                                 <h4 className="text-base md:text-xl font-bold text-gray-800 leading-tight group-hover:text-red-600 transition-colors line-clamp-2">
@@ -237,6 +224,7 @@ export default async function LocationNewsPage({ searchParams }) {
                                                     src={news?.featured_image}
                                                     alt={news?.name}
                                                     fill
+                                                    sizes="64px"
                                                     className="object-cover rounded shadow-sm"
                                                 />
                                             </div>

@@ -1,20 +1,17 @@
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 import logoImg from '@/public/images/logo.png';
 
 const Logo = ({ logoUrl }) => {
-
-
-  // console.log('logoUrl', logoUrl)
   return (
-    <Link href="/" className="hidden md:block relative z-[60] ">
-      <div className="w-25 h-22.5 flex items-center justify-center transition-transform duration-200 hover:scale-105">
+    <Link href="/" className="relative z-[60] flex items-center shrink-0">
+      <div className="relative h-[60px] w-[88px] md:h-[72px] md:w-[110px] transition-transform duration-200 hover:scale-105">
         <Image
-          src={logoUrl}
-          alt="Bangla Star Logo"
-          width={97}
-          height={80}
+          src={logoUrl || logoImg}
+          alt="Jubotara News Logo"
+          fill
           priority
+          sizes="(max-width: 768px) 88px, 110px"
           className="object-contain"
         />
       </div>

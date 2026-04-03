@@ -1,137 +1,156 @@
+﻿import CountryWideSection from "@/components/home/CountryWideSection";
+import SpecialCategorySection from "@/components/home/SpecialCategorySection";
+import Container from "@/components/common/Container";
+import PremiumCategoryBlock from "@/components/home/PremiumCategoryBlock";
+import TrendingNewsSection from "@/components/home/TrendingNewsSection";
+import ThumbnailNewsSection from "@/components/home/ThumbnailNewsSection";
+import TrendingBar from "@/components/common/Header/TrendingBar";
+import HeronNewsSection from "@/components/home/HeronNewsSection";
+import VideoSection from "@/components/home/VideoSection";
+import { getNewsByCat, getTrendingTags, getVideoNews } from "@/lib/fetchData";
 
-import CountryWideSection from '@/components/home/CountryWideSection';
-import SpecialCategorySection from '@/components/home/SpecialCategorySection';
-import { getTrendingNews } from '@/lib/api';
-import Container from '@/components/common/Container';
-import PremiumCategoryBlock from '@/components/home/PremiumCategoryBlock';
-import TrendingNewsSection from '@/components/home/TrendingNewsSection';
-import ThumbnailNewsSection from '@/components/home/ThumbnailNewsSection';
-import TrendingBar from '@/components/common/Header/TrendingBar';
-import HeronNewsSection from '@/components/home/HeronNewsSection';
-import VideoSection from '@/components/home/VideoSection';
-import { getNewsByCat, getTrendingTags, getVideoNews } from '@/lib/fetchData';
+const CATEGORY_SLUGS = {
+  politics: "রাজনীতি",
+  national: "জাতীয়",
+  crime: "অপরাধ",
+  lifestyle: "জীবনযাপন",
+  sports: "খেলা",
+  countrywide: "সারাদেশ",
+  international: "আন্তর্জাতিক",
+  entertainment: "বিনোদন",
+  economy: "অর্থনীতি",
+};
 
 export default async function Home() {
+  const [
+    trendingTags,
+    politicsNews,
+    nationalNews,
+    crimeNews,
+    lifestyleNews,
+    sportsNews,
+    saraDeshNews,
+    videoNewsResponse,
+    internationalNews,
+    entertainmentNews,
+    economyNews,
+  ] = await Promise.all([
+    getTrendingTags(),
+    getNewsByCat(CATEGORY_SLUGS.politics, 7),
+    getNewsByCat(CATEGORY_SLUGS.national, 10),
+    getNewsByCat(CATEGORY_SLUGS.crime, 10),
+    getNewsByCat(CATEGORY_SLUGS.lifestyle, 10),
+    getNewsByCat(CATEGORY_SLUGS.sports, 7),
+    getNewsByCat(CATEGORY_SLUGS.countrywide, 7),
+    getVideoNews(1, 4),
+    getNewsByCat(CATEGORY_SLUGS.international, 10),
+    getNewsByCat(CATEGORY_SLUGS.entertainment, 10),
+    getNewsByCat(CATEGORY_SLUGS.economy, 10),
+  ]);
 
-  const trendingTags = await getTrendingTags();
-  const politicsNews = await getNewsByCat("politics", 20)
   const politicsFirstNews = politicsNews[0];
-  const politicsSideNews = politicsNews.slice(1, 7)
-
-  const nationalNews = await getNewsByCat("national", 20)
-  const crimeNews = await getNewsByCat("অপরাধ", 20);
-
-  const lifestyleNews = await getNewsByCat("lifestyle", 20)
-
-
-  const sportsNews = await getNewsByCat("sports", 20)
-  const sportsFirstNews = sportsNews[0];
-  const sportsSideNews = sportsNews.slice(1, 7)
-
-
-  const saraDeshNews = await getNewsByCat("town_village", 9)
+  const politicsSideNews = politicsNews.slice(1, 7);
+  const nationalFirstNews = nationalNews[0];
+  const nationalSideNews = nationalNews.slice(1, 7);
   const saradeshFirstNews = saraDeshNews[0];
-  const saradeshSideNews = saraDeshNews.slice(1, 7)
-  // console.log("saraDeshNews", saraDeshNews)
-
-  const trendingNews = await getTrendingNews();
-  const videoNewsResponse = await getVideoNews(1, 4);
+  const saradeshSideNews = saraDeshNews.slice(1, 7);
   const videoNews = videoNewsResponse?.data || [];
 
-  const internationalNews = await getNewsByCat("international", 20)
-  const entertainmentNews = await getNewsByCat("entertainment", 20)
-  const economyNews = await getNewsByCat("economy", 20)
-
-
-
-
   return (
-    <div className=" min-h-screen bg-[#eff3f6]">
-
-      {/* Ad Space  */}
-      <Container >
-        <div className=" h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400">
+    <div className="min-h-screen">
+      <Container>
+        <div className="h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400 mt-2">
           ADVERTISEMENT
         </div>
-
       </Container>
+
       <TrendingBar trendingTags={trendingTags} />
 
-
       <main className="pb-12 space-y-4">
-        {/* Dynamic Hero Row matching reference */}
         <HeronNewsSection />
         <TrendingNewsSection />
+
         <ThumbnailNewsSection
-          title={"এক্সক্লুসিভ"}
+          title="এক্সক্লুসিভ"
           news={lifestyleNews}
-          slug={'lifestyle'}
+          slug={CATEGORY_SLUGS.lifestyle}
         />
-        {/* Politics Section */}
+
         <SpecialCategorySection
           title="রাজনীতি"
           firstNews={politicsFirstNews}
           sideNews={politicsSideNews}
-          slug={'politics'}
+          slug={CATEGORY_SLUGS.politics}
         />
-        {/* Ad Space  */}
-        <Container >
-          <div className=" h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400">
+
+        <Container>
+          <div className="h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400">
             ADVERTISEMENT
           </div>
-
         </Container>
-        {/* Country Wide Section */}
+
         <CountryWideSection
           title="সারাদেশ"
           featureNews={saradeshFirstNews}
           gridNews={saradeshSideNews}
-          slug={'town_village'}
+          slug={CATEGORY_SLUGS.countrywide}
         />
 
-        {/* Video News Section */}
         <VideoSection videos={videoNews} />
 
-        {/* Sports Section */}
-        {sportsFirstNews && <SpecialCategorySection
-          title="খেলাধুলা"
-          firstNews={sportsFirstNews}
-          sideNews={sportsSideNews}
-          slug={'sports'}
+        {nationalFirstNews && (
+          <SpecialCategorySection
+            title="জাতীয়"
+            firstNews={nationalFirstNews}
+            sideNews={nationalSideNews}
+            slug={CATEGORY_SLUGS.national}
+          />
+        )}
 
-        />}
-
-
-
-
-        {/* Categories Section */}
-        <Container className="">
+        <Container>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-4 xl:gap-6">
-            <PremiumCategoryBlock title="জাতীয়" news={nationalNews} slug={'national'} />
-            <PremiumCategoryBlock title="আন্তর্জাতিক" news={internationalNews} slug={'international'} />
+            <PremiumCategoryBlock
+              title="আন্তর্জাতিক"
+              news={internationalNews}
+              slug={CATEGORY_SLUGS.international}
+            />
+            <PremiumCategoryBlock
+              title="খেলাধুলা"
+              news={sportsNews}
+              slug={CATEGORY_SLUGS.sports}
+            />
           </div>
         </Container>
 
-
-        {/* Ad Space  */}
-        <Container >
-          <div className=" h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400">
+        <Container>
+          <div className="h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400">
             ADVERTISEMENT
           </div>
-
         </Container>
 
-        <Container className="">
+        <Container>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <PremiumCategoryBlock title="অপরাধ" news={crimeNews} vertical={true} slug={'অপরাধ'} />
-            <PremiumCategoryBlock title="বিনোদন" news={entertainmentNews} vertical={true} slug={'entertainment'} />
-            <PremiumCategoryBlock title="অর্থনীতি" news={economyNews} vertical={true} slug={'economy'} />
+            <PremiumCategoryBlock
+              title="অপরাধ"
+              news={crimeNews}
+              vertical={true}
+              slug={CATEGORY_SLUGS.crime}
+            />
+            <PremiumCategoryBlock
+              title="বিনোদন"
+              news={entertainmentNews}
+              vertical={true}
+              slug={CATEGORY_SLUGS.entertainment}
+            />
+            <PremiumCategoryBlock
+              title="অর্থনীতি"
+              news={economyNews}
+              vertical={true}
+              slug={CATEGORY_SLUGS.economy}
+            />
           </div>
         </Container>
       </main>
-
-
     </div>
   );
 }
-

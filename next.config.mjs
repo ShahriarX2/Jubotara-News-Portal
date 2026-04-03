@@ -7,32 +7,12 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'images.unsplash.com',
+        hostname: 'res.cloudinary.com',
       },
       {
         protocol: 'https',
         hostname: 'img.youtube.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'admin.crimevision24.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'admin.banglastarnews.com',
-      },
-      {
-        protocol: 'http',
-        hostname: 'admin.banglastarnews.com',
-      },
-        {
-        protocol: 'https',
-        hostname: 'admin.banglastar.com',
-      },
-      {
-        protocol: 'http',
-        hostname: 'admin.banglastar.com',
-      },
+      }
 
     ],
   },

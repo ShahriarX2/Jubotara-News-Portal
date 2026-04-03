@@ -43,6 +43,10 @@ export const getMediaLinkByMetaName = (data, metaName) => {
     (dataItem) => dataItem.meta_name === metaName
   );
   // console.log("from utils", item)
+  if (typeof item?.meta_value === "string" && item.meta_value) {
+    return item.meta_value;
+  }
+
   if (item?.file_directory && item?.filename) {
     return item.file_directory + item.filename;
   }
@@ -53,6 +57,10 @@ export const getMediaLinkByMetaName = (data, metaName) => {
 
 
 export const getImageUrl = (url) => {
+  if (!url) return null;
+  if (/^https?:\/\//i.test(url)) {
+    return url;
+  }
   return `${BASE_URL}${url}`
 }
 

@@ -39,6 +39,7 @@ export default async function TrendingNews() {
                   src={news?.featured_image}
                   alt={news?.name}
                   fill
+                  sizes="(max-width: 1024px) 120px, 200px"
                   className="object-cover"
                 />
               </div>
