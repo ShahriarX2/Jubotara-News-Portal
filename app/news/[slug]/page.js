@@ -5,6 +5,7 @@ import NewsPrintTemplate from '@/components/news/NewsPrintTemplate';
 import PrintButton from '@/components/news/PrintButton';
 import ShareButtons from '@/components/news/ShareButtons';
 import {
+    getLegacyNewsSegmentResolution,
     getNewsByCat,
     getSettings,
     getSingleNews,
@@ -15,7 +16,7 @@ import { formatBengaliDate } from '@/utils/formatDate';
 import { getMetaValueByMetaName } from '@/utils/metaHelpers';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { FaGoogle, FaWhatsapp } from 'react-icons/fa';
 
 const DEFAULT_AUTHOR = 'নিজস্ব প্রতিবেদক';
@@ -71,6 +72,16 @@ async function getRelatedNews(news) {
 
 export async function generateMetadata({ params }) {
     const { slug } = await params;
+    const legacy = await getLegacyNewsSegmentResolution(slug);
+    if (legacy.isLegacyNumeric) {
+        if (legacy.resolvedSlug) {
+            permanentRedirect(`/news/${encodeURIComponent(legacy.resolvedSlug)}`);
+        }
+        return {
+            title: 'সংবাদ পাওয়া যায়নি | যুবতারা নিউজ',
+        };
+    }
+
     const news = await getSingleNews(slug);
 
     if (!news || Object.keys(news).length === 0) {
@@ -150,6 +161,14 @@ export async function generateMetadata({ params }) {
 
 export default async function NewsDetailPage({ params }) {
     const { slug } = await params;
+    const legacy = await getLegacyNewsSegmentResolution(slug);
+    if (legacy.isLegacyNumeric) {
+        if (legacy.resolvedSlug) {
+            permanentRedirect(`/news/${encodeURIComponent(legacy.resolvedSlug)}`);
+        }
+        notFound();
+    }
+
     const [trendingNews, news, settings] = await Promise.all([
         getTrandingNews(),
         getSingleNews(slug),

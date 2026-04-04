@@ -1,18 +1,36 @@
+import Image from 'next/image';
+
 import { FRONT_END_URL } from '@/utils/baseUrl';
 import { formatBengaliDate } from '@/utils/formatDate';
+
+/** Remote hosts allowed in next.config images.remotePatterns; others use unoptimized. */
+function imageSrcNeedsUnoptimized(src) {
+    if (!src || typeof src !== 'string') return true;
+    if (src.startsWith('/')) return false;
+    try {
+        const { hostname } = new URL(src);
+        return hostname !== 'res.cloudinary.com' && hostname !== 'img.youtube.com';
+    } catch {
+        return true;
+    }
+}
+
 const NewsPrintTemplate = ({ news, category }) => {
     const formattedPublishedDate = formatBengaliDate(news?.created_at);
+    const featuredSrc = news?.featured_image || '/images/img_avatar.png';
 
     return (
         <div className="hidden print:block w-full text-black p-4 min-h-screen">
             <div className="flex flex-col items-center justify-center border-b-2 border-red-600 pb-6 mb-8 text-center">
-                <img
+                <Image
                     src="/images/logo.png"
                     alt="Jubotara News"
-                    className="h-16 mb-2 object-contain"
+                    width={200}
+                    height={64}
+                    className="h-16 w-auto mb-2 object-contain"
                 />
-                <p className="text-sm font-bold text-gray-700">সত্যের সন্ধানে অবিচল</p>
-                <p className="text-xs text-gray-500 lowercase">{FRONT_END_URL}</p>
+                <p className="text-sm font-bold text-gray-700">উন্মোচনের লক্ষে, সত্যের পক্ষে</p>
+                <p className="text-xs text-gray-500 lowercase">www.jubotaranews.com</p>
             </div>
 
             <h1 className="text-3xl font-bold mb-4 leading-tight">{news?.name}</h1>
@@ -29,11 +47,14 @@ const NewsPrintTemplate = ({ news, category }) => {
             </div>
 
             <div className="mb-8">
-                <img
-                    src={news?.featured_image}
-                    alt={news?.name}
+                <Image
+                    src={featuredSrc}
+                    alt={news?.name || ''}
+                    width={1200}
+                    height={675}
                     className="w-full h-auto object-cover rounded-none"
                     style={{ maxHeight: '450px' }}
+                    unoptimized={imageSrcNeedsUnoptimized(featuredSrc)}
                 />
             </div>
 
