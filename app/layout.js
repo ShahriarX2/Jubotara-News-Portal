@@ -15,6 +15,11 @@ export const metadata = {
   title: "Jubotara News | সর্বশেষ সংবাদ ও ব্রেকিং নিউজ",
   description:
     "যুবতারা নিউজ বাংলাদেশের নির্ভরযোগ্য অনলাইন সংবাদমাধ্যম। সর্বশেষ জাতীয়, রাজনীতি, আন্তর্জাতিক, খেলাধুলা ও বিনোদনের খবর জানতে সঙ্গে থাকুন।",
+  alternates: {
+    types: {
+      "application/rss+xml": "/rss.xml",
+    },
+  },
 };
 
 export default async function RootLayout({ children }) {
