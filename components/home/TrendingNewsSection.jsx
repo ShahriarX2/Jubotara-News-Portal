@@ -17,8 +17,8 @@ export default async function TrendingNews() {
     <Container className="">
       <div className="   ">
         <div className="grid md:grid-cols-3 gap-2 md:gap-4">
-          {featuredOthers?.map((news, i) => (
-            <div key={i} className="flex justify-between gap-2 border-b pb-4 cursor-pointer group">
+          {featuredOthers?.map((news) => (
+            <div key={news.id} className="flex justify-between gap-2 border-b pb-4 cursor-pointer group">
 
               {/* Text */}
               <div className="flex-1">

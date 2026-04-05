@@ -84,15 +84,16 @@ export default async function Home() {
         />
 
         <Container>
-          <div className="h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400">
-            ADVERTISEMENT
+          <div
+              className="h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400">
+            {/*ADVERTISEMENT*/}
           </div>
         </Container>
 
         <CountryWideSection
-          title="সারাদেশ"
-          featureNews={saradeshFirstNews}
-          gridNews={saradeshSideNews}
+            title="সারাদেশ"
+            featureNews={saradeshFirstNews}
+            gridNews={saradeshSideNews}
           slug={CATEGORY_SLUGS.countrywide}
         />
 

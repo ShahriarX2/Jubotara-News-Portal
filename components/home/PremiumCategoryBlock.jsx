@@ -40,11 +40,11 @@ export default function PremiumCategoryBlock({ title, news, vertical = false, sl
               className="object-cover group-hover:scale-110 transition-transform duration-700"
             />
           </div>
-          <a href={`/news/${main.slug}`} className="block">
+          <Link href={`/news/${main.slug}`} className="block">
             <h3 className="text-gray-600 text-lg md:text-[22px] leading-[24px] md:leading-[26px] group-hover:text-primary font-semibold transition-colors line-clamp-2">
               {firstNews?.name}
             </h3>
-          </a>
+          </Link>
 
           <p className="text-gray-500 text-base md:text-xl line-clamp-2 leading-relaxed ">
 
