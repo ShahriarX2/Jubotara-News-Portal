@@ -30,7 +30,7 @@ const Footer = async () => {
               <Logo logoUrl={logoUrl} />
             </div>
             <div className="whitespace-pre-line text-base leading-relaxed text-gray-700 md:text-lg lg:text-xl">
-              {aboutText || "সাপ্তাহিক যুবতারা পত্রিকার ডিজিটাল সংস্করণ jubotaranews.com। দেশ-বিদেশের সর্বশেষ সংবাদ, রাজনীতি, অর্থনীতি, খেলাধুলা এবং বিনোদনের নির্ভরযোগ্য সূত্র। আমরা বিশ্বাস করি বস্তুনিষ্ঠ সাংবাদিকতায়। সারা বাংলাদেশের প্রতিটি প্রান্তের সঠিক খবর সবার আগে পৌঁছে দিতে আমরা অঙ্গীকারবদ্ধ।"}
+              {aboutText || "দেশ-বিদেশের সর্বশেষ সংবাদ, রাজনীতি, অর্থনীতি, খেলাধুলা এবং বিনোদনের নির্ভরযোগ্য সূত্র। সারা বাংলাদেশের প্রতিটি প্রান্তের সঠিক খবর সবার আগে পৌঁছে দিতে আমরা অঙ্গীকারবদ্ধ।"}
             </div>
             <div className="flex items-center gap-4">
               {facebookUrl && (
@@ -78,9 +78,6 @@ const Footer = async () => {
               <li><Link href="/team" className="transition-colors hover:text-primary">আমাদের টিম</Link></li>
               <li><Link href="/privacy" className="transition-colors hover:text-primary">গোপনীয়তা নীতি</Link></li>
               <li><Link href="/terms" className="transition-colors hover:text-primary">ব্যবহারের শর্তাবলী</Link></li>
-              <li><Link href="/rss.xml" className="transition-colors hover:text-primary">আরএসএস (RSS)</Link></li>
-              <li><Link href="/news-sitemap.xml" className="transition-colors hover:text-primary">নিউজ সাইটম্যাপ</Link></li>
-              <li><Link href="/sitemap.xml" className="transition-colors hover:text-primary">সাইটম্যাপ</Link></li>
             </ul>
           </div>
 
