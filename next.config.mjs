@@ -16,15 +16,6 @@ const nextConfig = {
 
     ],
   },
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: "https://admin.banglastar.com/api/v1/:path*",
-
-      },
-    ];
-  },
   reactStrictMode: true,
 };
 

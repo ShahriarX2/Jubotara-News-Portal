@@ -38,7 +38,7 @@ const TrendingBar = ({ trendingTags }) => {
                 className="overflow-visible!"
               >
                 {trendingTags.map((topic) => (
-                  <SwiperSlide key={topic.id} className="w-auto!">
+                  <SwiperSlide key={topic.id || topic.slug} className="w-auto!">
                     <Link
                       href={`/category/${topic.slug}`}
                       className="bg-gray-200 px-3 py-1 text-[#003366] text-[15px] font-black uppercase transition-colors hover:text-[#EE1D23] sm:text-base md:px-4 md:text-lg"
@@ -52,7 +52,7 @@ const TrendingBar = ({ trendingTags }) => {
               <div className="flex flex-wrap items-center gap-2">
                 {trendingTags.map((topic) => (
                   <Link
-                    key={topic.id}
+                    key={topic.id || topic.slug}
                     href={`/category/${topic.slug}`}
                     className="bg-gray-200 px-3 py-1 text-[#003366] text-[15px] font-black uppercase transition-colors hover:text-[#EE1D23] sm:text-base md:px-4 md:text-lg"
                   >

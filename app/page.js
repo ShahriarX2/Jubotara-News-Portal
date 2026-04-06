@@ -4,10 +4,9 @@ import Container from "@/components/common/Container";
 import PremiumCategoryBlock from "@/components/home/PremiumCategoryBlock";
 import TrendingNewsSection from "@/components/home/TrendingNewsSection";
 import ThumbnailNewsSection from "@/components/home/ThumbnailNewsSection";
-import TrendingBar from "@/components/common/Header/TrendingBar";
 import HeronNewsSection from "@/components/home/HeronNewsSection";
 import VideoSection from "@/components/home/VideoSection";
-import { getNewsByCat, getTrendingTags, getVideoNews } from "@/lib/fetchData";
+import { getNewsByCat, getVideoNews } from "@/lib/fetchData";
 
 const CATEGORY_SLUGS = {
   politics: "রাজনীতি",
@@ -23,7 +22,6 @@ const CATEGORY_SLUGS = {
 
 export default async function Home() {
   const [
-    trendingTags,
     politicsNews,
     nationalNews,
     crimeNews,
@@ -35,7 +33,6 @@ export default async function Home() {
     entertainmentNews,
     economyNews,
   ] = await Promise.all([
-    getTrendingTags(),
     getNewsByCat(CATEGORY_SLUGS.politics, 7),
     getNewsByCat(CATEGORY_SLUGS.national, 10),
     getNewsByCat(CATEGORY_SLUGS.crime, 10),
@@ -64,7 +61,6 @@ export default async function Home() {
         </div>
       </Container>
 
-      <TrendingBar trendingTags={trendingTags} />
 
       <main className="pb-12 space-y-4">
         <HeronNewsSection />

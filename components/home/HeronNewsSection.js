@@ -3,13 +3,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Container from '../common/Container';
 import LocationSearch from './LocationSearch';
-import { getTrandingNews } from '@/lib/fetchData';
+import { getNews } from '@/lib/fetchData';
 import truncate from '@/utils/truncate';
 
 const HeronNewsSection = async () => {
 
 
-    const featuredNews = await getTrandingNews();
+    const featuredNews = await getNews(1);
     const featuredNewsFirst = featuredNews[0];
     const newsCategories = featuredNewsFirst?.categories || []
     // console.log('featuredNews', featuredNews)

@@ -13,7 +13,7 @@ const Navbar = ({ news_categories }) => {
                     {news_categories?.map((item) => {
                         const href = item?.href || `/category/${item?.slug}`;
                         return (
-                            <li key={item?.id} className="relative group">
+                            <li key={item?.id || item?.slug} className="relative group">
                                 <Link
                                     href={href}
                                     className={`px-3 py-4 text-[13px] sm:text-sm md:text-xl font-semibold tracking-wide transition-colors duration-200 flex items-center gap-1 ${

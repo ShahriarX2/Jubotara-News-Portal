@@ -5,16 +5,13 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import {
     ChevronRight,
-    Facebook,
     Globe,
     Home,
     Menu,
     Newspaper,
-    Twitter,
     X,
-    Youtube,
-    YoutubeIcon,
 } from 'lucide-react';
+import { FaFacebookF, FaTwitter, FaYoutube } from 'react-icons/fa';
 
 export default function MobileBottomNav({ news_categories }) {
     const pathname = usePathname();
@@ -24,7 +21,7 @@ export default function MobileBottomNav({ news_categories }) {
         { name: 'হোম', icon: <Home size={22} />, path: '/' },
         { name: 'সারাদেশ', icon: <Globe size={22} />, path: '/category/সারাদেশ' },
         { name: 'রাজনীতি', icon: <Newspaper size={22} />, path: '/category/রাজনীতি' },
-        { name: 'ভিডিও', icon: <YoutubeIcon size={25} />, path: '/video' },
+        { name: 'ভিডিও', icon: <FaYoutube size={25} />, path: '/video' },
     ];
 
     return (
@@ -73,18 +70,32 @@ export default function MobileBottomNav({ news_categories }) {
                             </span>
                         </Link>
                     ))}
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                        <Link
+                            href="/contact"
+                            onClick={() => setIsMenuOpen(false)}
+                            className="flex items-center justify-between gap-4 p-1 rounded-xl hover:bg-[#eff3f6] transition-all group"
+                        >
+                            <span className="font-bold text-gray-500 group-hover:text-primary transition-colors">
+                                যোগাযোগ
+                            </span>
+                            <span className="w-8 h-8 flex items-center justify-center text-gray-400 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                                <ChevronRight size={16} />
+                            </span>
+                        </Link>
+                    </div>
                 </div>
 
                 <div className="p-6 bg-[#eff3f6] border-t border-gray-100">
                     <div className="flex gap-4 justify-center">
                         <a href="#" className="w-10 h-10 rounded-full bg-[#1877F2] text-white flex items-center justify-center transition-transform hover:scale-110">
-                            <Facebook size={20} />
+                            <FaFacebookF size={20} />
                         </a>
                         <a href="#" className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center transition-transform hover:scale-110">
-                            <Twitter size={20} />
+                            <FaTwitter size={20} />
                         </a>
                         <a href="#" className="w-10 h-10 rounded-full bg-[#FF0000] text-white flex items-center justify-center transition-transform hover:scale-110">
-                            <Youtube size={20} />
+                            <FaYoutube size={20} />
                         </a>
                     </div>
                 </div>

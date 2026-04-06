@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ide
+.idea/
+.vscode/
+
+# logs
+eslint_report.json
+*.log
+
+# old versions
+old-repo/

@@ -1,5 +1,16 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Environment Variables
+
+This project requires the following environment variables to communicate with the split API:
+
+- `NEXT_PUBLIC_API_BASE_URL`: The base URL of the API (e.g., `http://localhost:5000` or `https://api.jubotaranews.com`)
+- `NEXT_PUBLIC_FRONTEND_URL`: The base URL of this frontend (e.g., `http://localhost:3000` or `https://jubotaranews.com`)
+
+## API Split Status
+
+The API has been successfully split into its own project (see `api-temp` directory). The frontend now uses absolute URLs based on `NEXT_PUBLIC_API_BASE_URL` and no longer relies on Next.js rewrite proxies.
+
 ## Getting Started
 
 First, run the development server:

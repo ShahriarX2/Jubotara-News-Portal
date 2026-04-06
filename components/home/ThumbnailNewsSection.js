@@ -1,12 +1,14 @@
 
 import Link from 'next/link';
-import MediumCard from '../news/MediumCard';
 import Image from 'next/image';
 import Container from '../common/Container';
 import truncate from '@/utils/truncate';
 
 const ThumbnailNewsSection = ({ news = [], title, slug }) => {
-    if (!news || news.length === 0) return null;
+    if (!news || news.length === 0) {
+        console.log("ThumbnailNewsSection not found");
+        return null;
+    }
 
     return (
         <Container >
@@ -24,7 +26,7 @@ const ThumbnailNewsSection = ({ news = [], title, slug }) => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
-                    {news?.slice(0, 4)?.map((item, index) => (
+                    {news?.slice(0, 4)?.map((item) => (
                         <Link key={item.id} href={`/news/${item.slug}`} className="group flex flex-col gap-1 md:gap-2 ">
                             <div className="relative h-40 w-full overflow-hidden">
                                 <Image
@@ -36,7 +38,7 @@ const ThumbnailNewsSection = ({ news = [], title, slug }) => {
                                 />
 
                             </div>
-                            <h3 className="text-gray-600 text-lg md:text-[22px] leading-[24px] md:leading-[26px] group-hover:text-primary
+                            <h3 className="text-gray-600 text-lg md:text-[22px] leading-6 md:leading-6.5 group-hover:text-primary
                              font-semibold transition-colors line-clamp-1">
                                 {item?.name}
                             </h3>

@@ -30,7 +30,9 @@ const NewsPrintTemplate = ({ news, category }) => {
                     className="h-16 w-auto mb-2 object-contain"
                 />
                 <p className="text-sm font-bold text-gray-700">উন্মোচনের লক্ষে, সত্যের পক্ষে</p>
-                <p className="text-xs text-gray-500 lowercase">www.jubotaranews.com</p>
+                <p className="text-xs text-gray-500 lowercase">
+                    {FRONT_END_URL ? new URL(FRONT_END_URL).hostname : 'www.jubotaranews.com'}
+                </p>
             </div>
 
             <h1 className="text-3xl font-bold mb-4 leading-tight">{news?.name}</h1>

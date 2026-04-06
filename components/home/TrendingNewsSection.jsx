@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Container from "../common/Container";
 import Link from "next/link";
-import { getTrandingNews } from "@/lib/fetchData";
+import { getNews } from "@/lib/fetchData";
 import truncate from "@/utils/truncate";
 
 
@@ -9,7 +9,7 @@ import truncate from "@/utils/truncate";
 
 export default async function TrendingNews() {
 
-  const featuredNews = await getTrandingNews();
+  const featuredNews = await getNews(7);
 
   const featuredOthers = featuredNews.slice(1, 7)
 

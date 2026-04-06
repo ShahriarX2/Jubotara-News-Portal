@@ -5,71 +5,18 @@ import NewsPrintTemplate from "@/components/news/NewsPrintTemplate";
 import PrintButton from "@/components/news/PrintButton";
 import ShareButtons from "@/components/news/ShareButtons";
 import {
-  getNewsByCat,
-  getSettings,
+  getRelatedNews,
   getSingleNews,
   getTrandingNews,
 } from "@/lib/fetchData";
 import { FRONT_END_URL } from "@/utils/baseUrl";
 import { formatBengaliDate } from "@/utils/formatDate";
-import { getMetaValueByMetaName } from "@/utils/metaHelpers";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FaGoogle, FaWhatsapp } from "react-icons/fa";
 
 const DEFAULT_AUTHOR = "নিজস্ব প্রতিবেদক";
-
-function escapeHtml(value = "") {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
-function formatArticleContent(content = "") {
-  const trimmed = String(content || "").trim();
-
-  if (!trimmed) {
-    return "<p>No content available.</p>";
-  }
-
-  if (/<[a-z][\s\S]*>/i.test(trimmed)) {
-    return trimmed;
-  }
-
-  return trimmed
-    .split(/\n{2,}/)
-    .map(
-      (paragraph) => `<p>${escapeHtml(paragraph).replace(/\n/g, "<br />")}</p>`,
-    )
-    .join("");
-}
-
-async function getRelatedNews(news) {
-  const currentId = news?.id;
-  const categorySlug = news?.categories?.[0]?.slug;
-  const categoryName = news?.categories?.[0]?.name;
-
-  if (!categorySlug && !categoryName) {
-    return [];
-  }
-
-  const candidateKeys = [categorySlug, categoryName].filter(Boolean);
-
-  for (const key of candidateKeys) {
-    const categoryNews = await getNewsByCat(key, 16);
-    const relatedItems = categoryNews.filter((item) => item.id !== currentId);
-
-    if (relatedItems.length > 0) {
-      return relatedItems.slice(0, 4);
-    }
-  }
-
-  return [];
-}
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -159,20 +106,21 @@ export default async function NewsDetailPage({ params }) {
   const { slug } = await params;
 
   // Get current URL for sharing
-  const fullUrl = `https://jubotaranews.com/news/${slug}`;
+  const fullUrl = `${FRONT_END_URL}/news/${slug}`;
 
-  const [trendingNews, news, settings] = await Promise.all([
+  const [trendingNews, news, relatedNews ] = await Promise.all([
     getTrandingNews(),
     getSingleNews(slug),
-    getSettings(),
+    getRelatedNews(slug),
   ]);
+
+  console.log(relatedNews);
 
   if (!news || Object.keys(news).length === 0) {
     notFound();
   }
 
   const category = news.categories?.[0];
-  const relatedNews = await getRelatedNews(news);
   const articleContent = news.description;
   const googleNewsUrl = "#"; // @TODO: Add the actual Google News URL later
   const whatsappChannelUrl =
@@ -258,7 +206,7 @@ export default async function NewsDetailPage({ params }) {
                   </div>
                 </div>
 
-                <div className="relative h-[300px] w-full overflow-hidden shadow-inner md:h-[500px]">
+                <div className="relative h-75 w-full overflow-hidden shadow-inner md:h-125">
                   <Image
                     src={news?.featured_image}
                     alt={news?.name || "news image"}
@@ -273,10 +221,24 @@ export default async function NewsDetailPage({ params }) {
                   className="article-content text-gray-800 whitespace-pre-line"
                   dangerouslySetInnerHTML={{ __html: articleContent }}
                 ></div>
+
+                {news.tags && news.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 pt-4">
+                    {news.tags.map((tag) => (
+                      <Link
+                        key={tag}
+                        href={`/search?q=${encodeURIComponent(tag)}`}
+                        className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm transition-colors"
+                      >
+                        #{tag}
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="mt-10 border-t border-slate-300 pt-10">
-                <div className="rounded-sm bg-gradient-to-r from-blue-50 to-gray-50 p-6 shadow-sm md:p-8">
+                <div className="rounded-sm bg-linear-to-r from-blue-50 to-gray-50 p-6 shadow-sm md:p-8">
                   <h3 className="mb-6 text-lg font-semibold text-gray-800 md:text-2xl">
                     আপডেটেড খবর পেতে আমাদের সাথে যুক্ত থাকুন
                   </h3>
@@ -349,7 +311,7 @@ export default async function NewsDetailPage({ params }) {
         <ThumbnailNewsSection
           title="আরও খবর"
           news={relatedNews}
-          slug={category?.slug || category?.name || "সারাদেশ"}
+          slug={category?.slug || category?.name}
         />
       </div>
     </>
