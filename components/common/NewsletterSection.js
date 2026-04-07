@@ -4,7 +4,7 @@ import { useState } from "react";
 import { subscribeNewsletter } from "@/lib/fetchData";
 import Container from "@/components/common/Container";
 
-export default function NewsletterSection({ showContainer = true, showSection = true, compact = false }) {
+export default function NewsletterSection({ showContainer = true, showSection = true, compact = false, textColor }) {
     const [email, setEmail] = useState("");
     const [status, setStatus] = useState({
         loading: false,
@@ -34,7 +34,7 @@ export default function NewsletterSection({ showContainer = true, showSection = 
         return (
             <div className="space-y-3">
                 {!status.success && (
-                    <p className="text-sm text-gray-700">
+                    <p className={`text-sm ${textColor || "text-gray-700"}`}>
                         দেশ-বিদেশের সর্বশেষ সংবাদ সরাসরি আপনার ইনবক্সে পেতে সাবস্ক্রাইব করুন।
                     </p>
                 )}
