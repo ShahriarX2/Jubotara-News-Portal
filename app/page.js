@@ -82,11 +82,7 @@ export default async function Home() {
         <Container>
           <div className="h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400">
             {/*ADVERTISEMENT*/}
-            <script
-              async
-              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2919469073787343"
-              crossOrigin="anonymous"
-            ></script>
+            <BannerAd />
           </div>
         </Container>
 
@@ -125,7 +121,7 @@ export default async function Home() {
 
         <Container>
           <div className="h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400">
-            ADVERTISEMENT
+            <BannerAd />
           </div>
         </Container>
 
