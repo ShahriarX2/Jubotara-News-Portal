@@ -150,7 +150,6 @@ export default async function Home() {
           </div>
         </Container>
       </main>
-      <SocialBannerAd />
     </div>
   );
 }
