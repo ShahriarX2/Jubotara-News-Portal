@@ -218,7 +218,7 @@ export default async function NewsDetailPage({ params }) {
                 </div>
 
                 <div
-                  className="article-content text-gray-800 whitespace-pre-line"
+                  className="article-content text-gray-800"
                   dangerouslySetInnerHTML={{ __html: articleContent }}
                 ></div>
 

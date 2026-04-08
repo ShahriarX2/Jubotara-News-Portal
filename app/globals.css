@@ -31,7 +31,7 @@
   }
 
   .article-content p {
-    @apply mb-6;
+    @apply mb-4;
   }
 
   .article-content h2,
@@ -50,15 +50,19 @@
 
   .article-content ul,
   .article-content ol {
-    @apply mb-6 ml-6 space-y-2;
+    @apply mb-6 ml-10 space-y-2;
   }
 
   .article-content ul {
-    list-style: disc;
+    list-style-type: disc;
   }
 
   .article-content ol {
-    list-style: decimal;
+    list-style-type: bengali;
+  }
+
+  .article-content li {
+    @apply pl-2;
   }
 
   .article-content blockquote {
@@ -67,6 +71,14 @@
 
   .article-content img {
     @apply my-6 h-auto max-w-full rounded-md;
+  }
+
+  .article-content a {
+    @apply text-primary underline hover:no-underline;
+  }
+
+  .article-content hr {
+    @apply my-8 border-t border-gray-300;
   }
 
   .news-card-hover {
@@ -143,6 +155,25 @@
     line-height: 1.6 !important;
     margin-bottom: 4mm !important;
     color: black !important;
+  }
+
+  .news-content-print ul,
+  .news-content-print ol {
+    margin-bottom: 4mm !important;
+    margin-left: 8mm !important;
+  }
+
+  .news-content-print ul {
+    list-style-type: disc !important;
+  }
+
+  .news-content-print ol {
+    list-style-type: bengali !important;
+  }
+
+  .news-content-print li {
+    margin-bottom: 2mm !important;
+    padding-left: 2mm !important;
   }
 
   /* Page break controls */
