@@ -3,7 +3,7 @@ const trimTrailingSlash = (value = "") => value.replace(/\/+$/, "");
 const DEFAULT_API_BASE_URL =
     process.env.NODE_ENV === "development"
         ? "http://localhost:5000"
-        : "https://jubotara-news-api.onrender.com";
+        : "https://api.jubotaranews.com";
 
 export const BASE_URL = trimTrailingSlash(
     process.env.NEXT_PUBLIC_API_BASE_URL ||
