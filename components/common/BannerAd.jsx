@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-const TopAd = () => {
+const BannerAd = () => {
   const adRef = useRef(null);
 
   useEffect(() => {
@@ -37,4 +37,4 @@ const TopAd = () => {
   );
 };
 
-export default TopAd;
+export default BannerAd;

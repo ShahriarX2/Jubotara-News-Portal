@@ -7,7 +7,7 @@ import ThumbnailNewsSection from "@/components/home/ThumbnailNewsSection";
 import HeronNewsSection from "@/components/home/HeronNewsSection";
 import VideoSection from "@/components/home/VideoSection";
 import { getNewsByCat, getVideoNews } from "@/lib/fetchData";
-import TopAd from "@/components/common/TopAd";
+import BannerAd from "@/components/common/BannerAd";
 
 const CATEGORY_SLUGS = {
   politics: "রাজনীতি",
@@ -58,7 +58,7 @@ export default async function Home() {
     <div className="min-h-screen">
       <Container>
         <div className="py-2 flex items-center justify-center font-bold text-gray-400 mt-2">
-          <TopAd />
+          <BannerAd />
         </div>
       </Container>
 
