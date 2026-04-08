@@ -9,6 +9,7 @@ import VideoSection from "@/components/home/VideoSection";
 import { getNewsByCat, getVideoNews } from "@/lib/fetchData";
 import BannerAd from "@/components/common/BannerAd";
 import SocialBannerAd from "@/components/common/SocialBannerAd";
+import BannerAd2 from "@/components/common/BannerAd2";
 
 const CATEGORY_SLUGS = {
   politics: "রাজনীতি",
@@ -83,7 +84,7 @@ export default async function Home() {
         <Container>
           <div className="h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400">
             {/*ADVERTISEMENT*/}
-            <BannerAd />
+            <BannerAd2 />
           </div>
         </Container>
 
