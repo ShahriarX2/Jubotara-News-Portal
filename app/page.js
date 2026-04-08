@@ -7,6 +7,7 @@ import ThumbnailNewsSection from "@/components/home/ThumbnailNewsSection";
 import HeronNewsSection from "@/components/home/HeronNewsSection";
 import VideoSection from "@/components/home/VideoSection";
 import { getNewsByCat, getVideoNews } from "@/lib/fetchData";
+import TopAd from "@/components/common/TopAd";
 
 const CATEGORY_SLUGS = {
   politics: "রাজনীতি",
@@ -56,11 +57,10 @@ export default async function Home() {
   return (
     <div className="min-h-screen">
       <Container>
-        <div className="h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400 mt-2">
-          ADVERTISEMENT
+        <div className="py-2 flex items-center justify-center font-bold text-gray-400 mt-2">
+          <TopAd />
         </div>
       </Container>
-
 
       <main className="pb-12 space-y-4">
         <HeronNewsSection />
@@ -80,19 +80,20 @@ export default async function Home() {
         />
 
         <Container>
-          <div
-              className="h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400">
+          <div className="h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400">
             {/*ADVERTISEMENT*/}
-            <script async
-                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2919469073787343"
-                    crossOrigin="anonymous"></script>
+            <script
+              async
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2919469073787343"
+              crossOrigin="anonymous"
+            ></script>
           </div>
         </Container>
 
         <CountryWideSection
-            title="সারাদেশ"
-            featureNews={saradeshFirstNews}
-            gridNews={saradeshSideNews}
+          title="সারাদেশ"
+          featureNews={saradeshFirstNews}
+          gridNews={saradeshSideNews}
           slug={CATEGORY_SLUGS.countrywide}
         />
 
