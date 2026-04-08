@@ -15,6 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FaGoogle, FaWhatsapp } from "react-icons/fa";
+import SidebarAd from "@/components/common/SidebarAd";
 
 const DEFAULT_AUTHOR = "নিজস্ব প্রতিবেদক";
 
@@ -287,10 +288,8 @@ export default async function NewsDetailPage({ params }) {
             </article>
 
             <aside className="space-y-6 lg:col-span-3">
-              <div className="flex h-64 items-center justify-center border-2 border-dashed border-slate-300 bg-gray-100">
-                <span className="text-xs font-bold uppercase tracking-widest text-gray-400">
-                  বিজ্ঞাপন / Advertisement
-                </span>
+              <div className="flex items-center justify-center bg-gray-100">
+                <SidebarAd />
               </div>
 
               <div className="border border-slate-300 bg-white p-3 md:p-6">
