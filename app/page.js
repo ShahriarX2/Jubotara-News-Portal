@@ -8,6 +8,7 @@ import HeronNewsSection from "@/components/home/HeronNewsSection";
 import VideoSection from "@/components/home/VideoSection";
 import { getNewsByCat, getVideoNews } from "@/lib/fetchData";
 import BannerAd from "@/components/common/BannerAd";
+import SocialBannerAd from "@/components/common/SocialBannerAd";
 
 const CATEGORY_SLUGS = {
   politics: "রাজনীতি",
@@ -148,6 +149,7 @@ export default async function Home() {
           </div>
         </Container>
       </main>
+      <SocialBannerAd />
     </div>
   );
 }
