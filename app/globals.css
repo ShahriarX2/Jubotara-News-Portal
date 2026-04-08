@@ -1,10 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #EE1D23;
-  --color-secondary: #671A1B;
-  
-  --font-sans: var(--font-solaiman-lipi), "SolaimanLipi", ui-sans-serif, system-ui, sans-serif;
+  --color-primary: #ee1d23;
+  --color-secondary: #671a1b;
+
+  --font-sans:
+    var(--font-solaiman-lipi), "SolaimanLipi", ui-sans-serif, system-ui,
+    sans-serif;
   --font-bengali: var(--font-solaiman-lipi), "SolaimanLipi", sans-serif;
 }
 
@@ -13,7 +15,9 @@
   *,
   html,
   body {
-    font-family: var(--font-solaiman-lipi), "SolaimanLipi", ui-sans-serif, system-ui, sans-serif !important;
+    font-family:
+      var(--font-solaiman-lipi), "SolaimanLipi", ui-sans-serif, system-ui,
+      sans-serif !important;
   }
 
   body {
@@ -27,7 +31,7 @@
   }
 
   .article-content {
-    @apply text-[21px] leading-9 text-gray-800;
+    @apply text-lg lg:text-xl leading-9 text-gray-800 mt-3;
   }
 
   .article-content p {
@@ -127,7 +131,6 @@
 
 /* Focused News Print Styles */
 @media print {
-
   /* Basic print setup */
   body {
     background: white !important;

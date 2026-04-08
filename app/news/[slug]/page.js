@@ -108,7 +108,7 @@ export default async function NewsDetailPage({ params }) {
   // Get current URL for sharing
   const fullUrl = `${FRONT_END_URL}/news/${slug}`;
 
-  const [trendingNews, news, relatedNews ] = await Promise.all([
+  const [trendingNews, news, relatedNews] = await Promise.all([
     getTrandingNews(),
     getSingleNews(slug),
     getRelatedNews(slug),
