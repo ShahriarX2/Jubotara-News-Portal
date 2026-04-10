@@ -60,7 +60,7 @@ export default async function Home() {
     <div className="min-h-screen">
       <Container>
         <div className="py-2 flex items-center justify-center font-bold text-gray-400 mt-2">
-          <BannerAd />
+          ADVERTISEMENT
         </div>
       </Container>
 
@@ -83,8 +83,7 @@ export default async function Home() {
 
         <Container>
           <div className="h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400">
-            {/*ADVERTISEMENT*/}
-            <BannerAd2 />
+            ADVERTISEMENT
           </div>
         </Container>
 
@@ -123,7 +122,7 @@ export default async function Home() {
 
         <Container>
           <div className="h-32 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center font-bold text-gray-400">
-            <BannerAd />
+            ADVERTISEMENT
           </div>
         </Container>
 

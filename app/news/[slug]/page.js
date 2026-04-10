@@ -289,7 +289,7 @@ export default async function NewsDetailPage({ params }) {
 
             <aside className="space-y-6 lg:col-span-3">
               <div className="flex items-center justify-center bg-gray-100">
-                <SidebarAd />
+                ADVERTISEMENT
               </div>
 
               <div className="border border-slate-300 bg-white p-3 md:p-6">
