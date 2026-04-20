@@ -129,6 +129,55 @@
   }
 }
 
+/* Smooth skeleton shimmer animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #e5e7eb 0%,
+    #f3f4f6 20%,
+    #e5e7eb 40%,
+    #e5e7eb 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* View Transitions API Animations */
+@supports (view-transition-name: none) {
+  ::view-transition-old(hero-image),
+  ::view-transition-new(hero-image) {
+    animation-duration: 400ms;
+    animation-timing-function: ease-out;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 300ms;
+  }
+
+  /* News image transitions */
+  ::view-transition-old(news-image),
+  ::view-transition-new(news-image) {
+    animation-duration: 350ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Category image transitions */
+  ::view-transition-old(category-image),
+  ::view-transition-new(category-image) {
+    animation-duration: 300ms;
+  }
+}
+
 /* Focused News Print Styles */
 @media print {
   /* Basic print setup */

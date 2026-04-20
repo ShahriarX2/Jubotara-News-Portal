@@ -3,6 +3,7 @@ import ThumbnailNewsSection from "@/components/home/ThumbnailNewsSection";
 import HorizontalCard from "@/components/news/HorizontalCard";
 import NewsPrintTemplate from "@/components/news/NewsPrintTemplate";
 import PrintButton from "@/components/news/PrintButton";
+import ReadAloudButton from "@/components/news/ReadAloudButton";
 import ShareButtons from "@/components/news/ShareButtons";
 import {
   getRelatedNews,
@@ -11,7 +12,6 @@ import {
 } from "@/lib/fetchData";
 import { FRONT_END_URL } from "@/utils/baseUrl";
 import { formatBengaliDate } from "@/utils/formatDate";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FaGoogle, FaWhatsapp } from "react-icons/fa";
@@ -199,6 +199,10 @@ export default async function NewsDetailPage({ params }) {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
+                    <ReadAloudButton
+                      content={articleContent}
+                      title={news?.name}
+                    />
                     <ShareButtons
                       title={news?.name || news?.title}
                       url={fullUrl}
@@ -208,13 +212,12 @@ export default async function NewsDetailPage({ params }) {
                 </div>
 
                 <div className="relative h-75 w-full overflow-hidden shadow-inner md:h-125">
-                  <Image
+                  <img
                     src={news?.featured_image}
                     alt={news?.name || "news image"}
-                    fill
-                    priority
                     sizes="100vw"
-                    className="object-cover"
+                    className="object-cover absolute inset-0 w-full h-full"
+                    style={{ viewTransitionName: 'hero-image' }}
                   />
                 </div>
 

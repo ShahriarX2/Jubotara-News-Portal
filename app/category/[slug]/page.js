@@ -7,7 +7,6 @@ import {
 } from "@/lib/fetchData";
 import { FRONT_END_URL } from "@/utils/baseUrl";
 import truncate from "@/utils/truncate";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -187,13 +186,11 @@ export default async function CategoryPage({ params, searchParams }) {
                           </p>
                         </div>
                         <div className="relative min-h-[250px] h-[250px] md:min-h-[300px] md:w-1/2 md:h-auto">
-                          <Image
+                          <img
                             src={featuredNews.featured_image}
                             alt={featuredNews.name}
-                            fill
-                            priority
                             sizes="(max-width: 768px) 100vw, 50vw"
-                            className="rounded-md object-cover"
+                            className="rounded-md object-cover absolute inset-0 w-full h-full"
                           />
                         </div>
                       </Link>
@@ -218,12 +215,11 @@ export default async function CategoryPage({ params, searchParams }) {
                           </p>
                         </div>
                         <div className="relative h-24 w-24 shrink-0">
-                          <Image
+                          <img
                             src={news.featured_image}
                             alt={news.name}
-                            fill
                             sizes="96px"
-                            className="rounded-md object-cover"
+                            className="rounded-md object-cover absolute inset-0 w-full h-full"
                           />
                         </div>
                       </Link>
@@ -315,12 +311,11 @@ export default async function CategoryPage({ params, searchParams }) {
                         </p>
                       </div>
                       <div className="relative h-16 w-16 shrink-0">
-                        <Image
+                        <img
                           src={news.featured_image || news.image}
                           alt={news.name || "news image"}
-                          fill
                           sizes="64px"
-                          className="rounded object-cover shadow-sm"
+                          className="rounded object-cover shadow-sm absolute inset-0 w-full h-full"
                         />
                       </div>
                     </Link>

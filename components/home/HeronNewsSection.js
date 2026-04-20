@@ -1,6 +1,5 @@
 
 import Link from 'next/link';
-import Image from 'next/image';
 import Container from '../common/Container';
 import LocationSearch from './LocationSearch';
 import { getNews } from '@/lib/fetchData';
@@ -56,13 +55,12 @@ const HeronNewsSection = async () => {
                     {/* Image Side */}
                     <div className="md:col-span-5 lg:col-span-5">
                         <Link href={`/news/${featuredNewsFirst?.slug}`} className="block relative h-[250px] md:h-full w-full overflow-hidden">
-                            <Image
+                            <img
                                 src={featuredNewsFirst?.featured_image}
                                 alt={featuredNewsFirst?.name}
-                                fill
-                                priority
                                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 42vw, 40vw"
-                                className="object-cover transition-transform duration-700 hover:scale-105"
+                                className="object-cover transition-transform duration-700 hover:scale-105 absolute inset-0 w-full h-full"
+                                style={{ viewTransitionName: 'hero-image' }}
                             />
                         </Link>
                     </div>

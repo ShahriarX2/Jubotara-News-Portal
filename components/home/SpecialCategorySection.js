@@ -1,6 +1,5 @@
 
 import Link from 'next/link';
-import Image from 'next/image';
 import Container from '../common/Container';
 import { getNewsByCat } from '@/lib/fetchData';
 import truncate from '@/utils/truncate';
@@ -31,12 +30,11 @@ const SpecialCategorySection = async ({ title, firstNews = {}, sideNews = [], sl
                     {/* Left: Featured News Item */}
                     <div className="lg:col-span-4 flex flex-col group">
                         <Link href={`/news/${firstNews.slug}`} className="block relative h-64 w-full overflow-hidden">
-                            <Image
+                            <img
                                 src={firstNews?.featured_image}
                                 alt={firstNews?.name}
-                                fill
                                 sizes="(max-width: 1024px) 100vw, 33vw"
-                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                className="object-cover transition-transform duration-700 group-hover:scale-105 absolute inset-0 w-full h-full"
                             />
                         </Link>
                         <div className="mt-2 md:mt-3 space-y-1">
@@ -66,12 +64,11 @@ const SpecialCategorySection = async ({ title, firstNews = {}, sideNews = [], sl
                                         </p>
                                     </div>
                                     <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden">
-                                        <Image
+                                        <img
                                             src={item?.featured_image}
                                             alt={item?.name}
-                                            fill
                                             sizes="80px"
-                                            className="object-cover"
+                                            className="object-cover absolute inset-0 w-full h-full"
                                         />
                                     </div>
                                 </Link>

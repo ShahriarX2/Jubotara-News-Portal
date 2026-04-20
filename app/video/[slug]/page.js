@@ -2,7 +2,6 @@ import Container from '@/components/common/Container';
 import { getSingleVideoNews, getVideoNews } from '@/lib/fetchData';
 import { formatBengaliDate } from '@/utils/formatDate';
 import { getYoutubeId, getYoutubeThumbnail } from '@/utils/youtube';
-import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -97,12 +96,11 @@ export default async function VideoDetailPage({ params }) {
                                     return (
                                         <Link key={item.id} href={`/video/${item.slug}`} className="group flex gap-4">
                                             <div className="relative w-32 md:w-36 aspect-video flex-shrink-0 overflow-hidden rounded bg-gray-100">
-                                                <Image
+                                                <img
                                                     src={getYoutubeThumbnail(relatedVideoUrl)}
                                                     alt={item.name}
-                                                    fill
                                                     sizes="(max-width: 768px) 128px, 144px"
-                                                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                                    className="object-cover group-hover:scale-110 transition-transform duration-500 absolute inset-0 w-full h-full"
                                                 />
                                                 <div className="absolute inset-0 flex items-center justify-center">
                                                     <div className="w-8 h-8 bg-red-600 bg-opacity-80 rounded-full flex items-center justify-center">

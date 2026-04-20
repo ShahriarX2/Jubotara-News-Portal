@@ -2,7 +2,6 @@ import Container from '@/components/common/Container';
 import { getDistricts, getDivisions, getNews, getNewsByLocation } from '@/lib/fetchData';
 import { FRONT_END_URL } from '@/utils/baseUrl';
 import truncate from '@/utils/truncate';
-import Image from 'next/image';
 import Link from 'next/link';
 
 const BANGLA_DIGITS = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
@@ -103,13 +102,11 @@ export default async function LocationNewsPage({ searchParams }) {
                                                     </p>
                                                 </div>
                                                 <div className="md:w-1/2 relative h-[250px] md:h-[350px]">
-                                                    <Image
+                                                    <img
                                                         src={featuredNews.featured_image}
                                                         alt={featuredNews.name}
-                                                        fill
-                                                        priority
                                                         sizes="(max-width: 768px) 100vw, 50vw"
-                                                        className="object-cover rounded-md shadow-md"
+                                                        className="object-cover rounded-md shadow-md absolute inset-0 w-full h-full"
                                                     />
                                                 </div>
                                             </Link>
@@ -124,12 +121,11 @@ export default async function LocationNewsPage({ searchParams }) {
                                         {otherNews.map((news) => (
                                             <Link key={news.id} href={`/news/${news.slug}`} className="flex flex-col group bg-white border border-gray-200 overflow-hidden hover:shadow-md transition-all rounded-lg">
                                                 <div className="relative aspect-video">
-                                                    <Image
+                                                    <img
                                                         src={news.featured_image}
                                                         alt={news.name}
-                                                        fill
                                                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                                                        className="object-cover transition-transform group-hover:scale-105 duration-300"
+                                                        className="object-cover transition-transform group-hover:scale-105 duration-300 absolute inset-0 w-full h-full"
                                                     />
                                                 </div>
                                                 <div className="p-4 flex flex-col flex-1">
@@ -220,12 +216,11 @@ export default async function LocationNewsPage({ searchParams }) {
                                                 </p>
                                             </div>
                                             <div className="relative w-16 h-16 flex-shrink-0">
-                                                <Image
+                                                <img
                                                     src={news?.featured_image}
                                                     alt={news?.name}
-                                                    fill
                                                     sizes="64px"
-                                                    className="object-cover rounded shadow-sm"
+                                                    className="object-cover rounded shadow-sm absolute inset-0 w-full h-full"
                                                 />
                                             </div>
                                         </Link>

@@ -2,7 +2,6 @@ import Container from '@/components/common/Container';
 import { getVideoNews } from '@/lib/fetchData';
 import { formatBengaliDate } from '@/utils/formatDate';
 import { getYoutubeThumbnail } from '@/utils/youtube';
-import Image from 'next/image';
 import Link from 'next/link';
 
 export const metadata = {
@@ -50,12 +49,11 @@ export default async function VideoListPage({ searchParams }) {
                                     className="group block bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                                 >
                                     <div className="relative aspect-video w-full overflow-hidden bg-gray-900">
-                                        <Image
+                                        <img
                                             src={getYoutubeThumbnail(videoUrl)}
                                             alt={video.name}
-                                            fill
                                             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
-                                            className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                            className="object-cover group-hover:scale-110 transition-transform duration-500 absolute inset-0 w-full h-full"
                                         />
                                         <div className="absolute inset-0 flex items-center justify-center">
                                             <div className="w-12 h-12 bg-red-600 bg-opacity-90 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">

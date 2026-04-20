@@ -1,6 +1,5 @@
 import Container from '@/components/common/Container';
 import { getTeamMembers } from '@/lib/fetchData';
-import Image from 'next/image';
 
 export const metadata = {
     title: 'আমাদের টিম | যুবতারা নিউজ',
@@ -16,11 +15,10 @@ function MemberCard({ member, size = 'normal' }) {
     return (
         <div className={`${cardWidth} flex flex-col items-center cursor-pointer hover:scale-105 transition-all duration-300`}>
             <div className={`relative ${cardWidth} ${imageHeight} border-2 border-slate-300 bg-gray-100 overflow-hidden rounded-sm`}>
-                <Image
+                <img
                     src={imageUrl}
                     alt={member?.name || 'Member'}
-                    fill
-                    className="object-cover"
+                    className="object-cover absolute inset-0 w-full h-full"
                     sizes="(max-width: 768px) 120px, 180px"
                 />
             </div>
@@ -72,13 +70,11 @@ export default async function TeamPage() {
                         return (
                             <div key={head.id} className="flex flex-col items-center mb-8">
                                 <div className="relative w-[180px] md:w-[220px] h-[210px] md:h-[260px] border-3 border-primary bg-gray-100 overflow-hidden rounded-sm shadow-lg">
-                                    <Image
+                                    <img
                                         src={headImageUrl}
                                         alt={head?.name || 'Head Member'}
-                                        fill
-                                        className="object-cover"
+                                        className="object-cover absolute inset-0 w-full h-full"
                                         sizes="220px"
-                                        priority
                                     />
                                 </div>
                                 <div className="mt-3 text-center">

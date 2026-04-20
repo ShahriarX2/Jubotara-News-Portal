@@ -1,6 +1,5 @@
 
 import Link from 'next/link';
-import Image from 'next/image';
 
 const MediumCard = ({ news }) => {
     if (!news) return null;
@@ -8,12 +7,11 @@ const MediumCard = ({ news }) => {
     return (
         <div className="flex flex-col gap-3 group news-card-hover bg-white p-2 shadow-sm">
             <Link href={`/news/${news.slug}`} className="relative h-48 w-full overflow-hidden">
-                <Image
+                <img
                     src={news.image}
                     alt={news.title}
-                    fill
                     sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110 absolute inset-0 w-full h-full"
                 />
             </Link>
             <div className="space-y-1">

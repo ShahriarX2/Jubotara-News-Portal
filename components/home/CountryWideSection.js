@@ -1,6 +1,5 @@
 
 import Link from 'next/link';
-import Image from 'next/image';
 import Container from '../common/Container';
 import truncate from '@/utils/truncate';
 
@@ -27,12 +26,11 @@ const CountryWideSection = ({ title, featureNews, gridNews = [], slug }) => {
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-2.5 md:gap-6 lg:gap-8 mb-6 md:mb-10  border-b border-gray-50">
                     <div className="md:col-span-6">
                         <Link href={`/news/${featureNews.slug}`} className="block relative h-[250px] md:h-[350px] w-full overflow-hidden">
-                            <Image
+                            <img
                                 src={featureNews?.featured_image}
                                 alt={featureNews?.name}
-                                fill
                                 sizes="(max-width: 768px) 100vw, 50vw"
-                                className="object-cover transition-transform duration-700 hover:scale-105"
+                                className="object-cover transition-transform duration-700 hover:scale-105 absolute inset-0 w-full h-full"
                             />
                         </Link>
                     </div>
@@ -59,12 +57,11 @@ const CountryWideSection = ({ title, featureNews, gridNews = [], slug }) => {
                     {gridNews.slice(0, 4).map((news) => (
                         <Link key={news.id} href={`/news/${news.slug}`} className="group ">
                             <div className="relative h-44 w-full mb-2 overflow-hidden bg-gray-100">
-                                <Image
+                                <img
                                     src={news?.featured_image}
                                     alt={news?.name}
-                                    fill
                                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                    className="object-cover group-hover:scale-110 transition-transform duration-500 absolute inset-0 w-full h-full"
                                 />
                             </div>
                             <h4 className="text-gray-600 text-lg md:text-[22px] leading-[24px] md:leading-[26px] group-hover:text-primary font-semibold transition-colors line-clamp-2">

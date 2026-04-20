@@ -1,6 +1,5 @@
 
 import Link from 'next/link';
-import Image from 'next/image';
 import Container from '../common/Container';
 import truncate from '@/utils/truncate';
 
@@ -29,17 +28,18 @@ const ThumbnailNewsSection = ({ news = [], title, slug }) => {
                     {news?.slice(0, 4)?.map((item) => (
                         <Link key={item.id} href={`/news/${item.slug}`} className="group flex flex-col gap-1 md:gap-2 ">
                             <div className="relative h-40 w-full overflow-hidden">
-                                <Image
+                                <img
                                     src={item?.featured_image}
                                     alt={item?.name}
-                                    fill
                                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                    className="object-cover group-hover:scale-105 transition-transform duration-500 absolute inset-0 w-full h-full"
+                                    style={{ viewTransitionName: `news-image-${item.id}` }}
                                 />
 
                             </div>
                             <h3 className="text-gray-600 text-lg md:text-[22px] leading-6 md:leading-6.5 group-hover:text-primary
-                             font-semibold transition-colors line-clamp-1">
+                             font-semibold transition-colors line-clamp-1"
+                                style={{ viewTransitionName: `news-title-${item.id}` }}>
                                 {item?.name}
                             </h3>
                             <p className="text-gray-500 text-base md:text-xl line-clamp-1 leading-relaxed ">

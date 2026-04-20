@@ -5,6 +5,7 @@ import { getMenus } from "@/lib/fetchData";
 import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
+import { ViewTransitions } from "next-view-transitions";
 
 const solaimanLipi = localFont({
   src: "../public/fonts/SolaimanLipi.ttf",
@@ -38,7 +39,7 @@ export default async function RootLayout({ children }) {
       </head>
       <body className="bg-[#eff3f6] pb-16 md:pb-0">
         <Header />
-        {children}
+        <ViewTransitions>{children}</ViewTransitions>
         <MobileBottomNav news_categories={newsCategories} />
         <Footer />
       </body>

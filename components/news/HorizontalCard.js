@@ -1,6 +1,5 @@
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { formatBengaliDate } from '@/utils/formatDate';
 
 const HorizontalCard = ({ news }) => {
@@ -9,12 +8,11 @@ const HorizontalCard = ({ news }) => {
     return (
         <div className="flex gap-4 group py-2 border-b border-gray-300 last:border-0 hover:bg-[#eff3f6] transition-colors px-2 rounded">
             <Link href={`/news/${news.slug}`} className="relative h-20 w-28 flex-shrink-0 overflow-hidden rounded">
-                <Image
+                <img
                     src={news?.featured_image}
                     alt={news?.name}
-                    fill
                     sizes="112px"
-                    className="object-cover"
+                    className="object-cover absolute inset-0 w-full h-full"
                 />
             </Link>
             <div className="flex-1 min-w-0">

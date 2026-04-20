@@ -1,6 +1,5 @@
 
 import Link from 'next/link';
-import Image from 'next/image';
 
 const MainCard = ({ news }) => {
     if (!news) return null;
@@ -9,12 +8,11 @@ const MainCard = ({ news }) => {
         <div className="relative group overflow-hidden rounded-lg shadow-md news-card-hover">
             <Link href={`/news/${news.slug}`}>
                 <div className="relative h-[300px] md:h-[450px] w-full">
-                    <Image
+                    <img
                         src={news.image}
                         alt={news.title}
-                        fill
                         sizes="(max-width: 768px) 100vw, 66vw"
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="object-cover transition-transform duration-500 group-hover:scale-110 absolute inset-0 w-full h-full"
                     />
                     {/* Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>

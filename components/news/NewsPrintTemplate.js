@@ -1,19 +1,6 @@
-import Image from 'next/image';
 
 import { FRONT_END_URL } from '@/utils/baseUrl';
 import { formatBengaliDate } from '@/utils/formatDate';
-
-/** Remote hosts allowed in next.config images.remotePatterns; others use unoptimized. */
-function imageSrcNeedsUnoptimized(src) {
-    if (!src || typeof src !== 'string') return true;
-    if (src.startsWith('/')) return false;
-    try {
-        const { hostname } = new URL(src);
-        return hostname !== 'res.cloudinary.com' && hostname !== 'img.youtube.com';
-    } catch {
-        return true;
-    }
-}
 
 const NewsPrintTemplate = ({ news, category }) => {
     const formattedPublishedDate = formatBengaliDate(news?.created_at);
@@ -22,7 +9,7 @@ const NewsPrintTemplate = ({ news, category }) => {
     return (
         <div className="hidden print:block w-full text-black p-4 min-h-screen">
             <div className="flex flex-col items-center justify-center border-b-2 border-red-600 pb-6 mb-8 text-center">
-                <Image
+                <img
                     src="/images/logo.png"
                     alt="Jubotara News"
                     width={200}
@@ -49,14 +36,13 @@ const NewsPrintTemplate = ({ news, category }) => {
             </div>
 
             <div className="mb-8">
-                <Image
+                <img
                     src={featuredSrc}
                     alt={news?.name || ''}
                     width={1200}
                     height={675}
                     className="w-full h-auto object-cover rounded-none"
                     style={{ maxHeight: '450px' }}
-                    unoptimized={imageSrcNeedsUnoptimized(featuredSrc)}
                 />
             </div>
 

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Container from "../common/Container";
 import Link from "next/link";
 import { getNews } from "@/lib/fetchData";
@@ -35,12 +34,11 @@ export default async function TrendingNews() {
 
               {/* Image Right Side */}
               <div className="w-[120px] h-[100px] lg:w-[200px] lg:h-[150px] relative flex-shrink-0">
-                <Image
+                <img
                   src={news?.featured_image}
                   alt={news?.name}
-                  fill
                   sizes="(max-width: 1024px) 120px, 200px"
-                  className="object-cover"
+                  className="object-cover absolute inset-0 w-full h-full"
                 />
               </div>
             </div>
@@ -61,11 +59,10 @@ export default async function TrendingNews() {
 
                
                   <div className="w-[150px] h-[90px] relative flex-shrink-0">
-                    <Image
+                    <img
                       src={news.image}
                       alt={news.title}
-                      fill
-                      className="object-cover"
+                      className="object-cover absolute inset-0 w-full h-full"
                     />
                   </div>
                 </div>

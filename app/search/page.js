@@ -2,7 +2,6 @@ import Container from '@/components/common/Container';
 import { getTrandingNews, searchNews } from '@/lib/fetchData';
 import { FRONT_END_URL } from '@/utils/baseUrl';
 import truncate from '@/utils/truncate';
-import Image from 'next/image';
 import Link from 'next/link';
 
 const BANGLA_DIGITS = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
@@ -74,12 +73,11 @@ export default async function SearchPage({ searchParams }) {
                                                 </p>
                                             </div>
                                             <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0">
-                                                <Image
+                                                <img
                                                     src={news?.featured_image || '/placeholder.png'}
                                                     alt={news?.name}
-                                                    fill
                                                     sizes="(max-width: 768px) 96px, 128px"
-                                                    className="object-cover rounded-md"
+                                                    className="object-cover rounded-md absolute inset-0 w-full h-full"
                                                 />
                                             </div>
                                         </Link>
@@ -111,12 +109,11 @@ export default async function SearchPage({ searchParams }) {
                                                 </h4>
                                             </div>
                                             <div className="relative w-16 h-16 flex-shrink-0">
-                                                <Image
+                                                <img
                                                     src={news.featured_image || news.image}
                                                     alt={news.name}
-                                                    fill
                                                     sizes="64px"
-                                                    className="object-cover rounded shadow-sm"
+                                                    className="object-cover rounded shadow-sm absolute inset-0 w-full h-full"
                                                 />
                                             </div>
                                         </Link>

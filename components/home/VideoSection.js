@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import Container from '../common/Container';
 import { getYoutubeThumbnail } from '@/utils/youtube';
 
@@ -30,12 +29,11 @@ const VideoSection = ({ videos = [] }) => {
                         return (
                             <Link key={video.id} href={`/video/${video.slug}`} className="group block">
                                 <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-gray-800">
-                                    <Image
+                                    <img
                                         src={getYoutubeThumbnail(videoUrl)}
                                         alt={video.name}
-                                        fill
                                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                                        className="object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100"
+                                        className="object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100 absolute inset-0 w-full h-full"
                                     />
                                     {/* Play Button Overlay */}
                                     <div className="absolute inset-0 flex items-center justify-center">

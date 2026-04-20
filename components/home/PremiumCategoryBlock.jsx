@@ -1,5 +1,4 @@
 import truncate from '@/utils/truncate';
-import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
 
@@ -32,12 +31,12 @@ export default function PremiumCategoryBlock({ title, news, vertical = false, sl
         {/* Main Item in Category */}
         <div className="space-y-2 group">
           <div className="relative h-48 md:h-60 w-full overflow-hidden">
-            <Image
+            <img
               src={firstNews?.featured_image}
               alt={firstNews?.name}
-              fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover group-hover:scale-110 transition-transform duration-700"
+              className="object-cover group-hover:scale-110 transition-transform duration-700 absolute inset-0 w-full h-full"
+              style={{ viewTransitionName: `category-image-${firstNews.id}` }}
             />
           </div>
           <Link href={`/news/${main.slug}`} className="block">
@@ -62,16 +61,17 @@ export default function PremiumCategoryBlock({ title, news, vertical = false, sl
               <Link
                 href={`/news/${item?.slug}`} className="flex gap-2 md:gap-4 py-3 group first:pt-0">
                 <div className="relative h-16 w-24 flex-shrink-0 overflow-hidden">
-                  <Image
+                  <img
                     src={item?.featured_image}
                     alt={item?.name}
-                    fill
                     sizes="96px"
-                    className="object-cover"
+                    className="object-cover absolute inset-0 w-full h-full"
+                    style={{ viewTransitionName: `category-thumb-${item.id}` }}
                   />
                 </div>
                 <div className='space-y-1'>
-                  <h4 className="text-gray-600 text-lg md:text-[22px] leading-[24px] md:leading-[26px] group-hover:text-primary font-semibold transition-colors line-clamp-2 ">
+                  <h4 className="text-gray-600 text-lg md:text-[22px] leading-[24px] md:leading-[26px] group-hover:text-primary font-semibold transition-colors line-clamp-2 "
+                     style={{ viewTransitionName: `category-title-${item.id}` }}>
                     {item?.name}
                   </h4>
                   {/* <p className="text-gray-600 text-base md:text-xl leading-relaxed line-clamp-1">

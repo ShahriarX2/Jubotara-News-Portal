@@ -1,5 +1,4 @@
 import Container from '@/components/common/Container';
-import Image from 'next/image';
 
 export const metadata = {
     title: 'আমাদের টিম | বাংলা স্টার নিউজ',
@@ -102,11 +101,10 @@ function MemberCard({ member, size = 'normal' }) {
     return (
         <div className={`${cardWidth} flex flex-col items-center cursor-pointer hover:scale-105 transition-all duration-300`}>
             <div className={`relative ${cardWidth} ${imageHeight} border-2 border-slate-300 bg-gray-100 overflow-hidden rounded-sm`}>
-                <Image
+                <img
                     src={member.image}
                     alt={member.name}
-                    fill
-                    className="object-cover"
+                    className="object-cover absolute inset-0 w-full h-full"
                     sizes="(max-width: 768px) 120px, 150px"
                 />
             </div>
@@ -143,13 +141,11 @@ export default function TeamPage() {
                     {/* Head / Chief Section */}
                     <div className="flex flex-col items-center mb-8">
                         <div className="relative w-[180px] md:w-[220px] h-[210px] md:h-[260px] border-3 border-primary bg-gray-100 overflow-hidden rounded-sm shadow-lg">
-                            <Image
+                            <img
                                 src={teamData.head.image}
                                 alt={teamData.head.name}
-                                fill
-                                className="object-cover"
+                                className="object-cover absolute inset-0 w-full h-full"
                                 sizes="220px"
-                                priority
                             />
                         </div>
                         <div className="mt-3 text-center">
