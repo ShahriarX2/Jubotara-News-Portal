@@ -6,14 +6,17 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
+        protocol: "https",
+        hostname: "res.cloudinary.com",
       },
       {
-        protocol: 'https',
-        hostname: 'img.youtube.com',
-      }
-
+        protocol: "https",
+        hostname: "images.jubotaranews.com",
+      },
+      {
+        protocol: "https",
+        hostname: "img.youtube.com",
+      },
     ],
   },
   reactStrictMode: true,
