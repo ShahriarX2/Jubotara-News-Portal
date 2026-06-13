@@ -1,4 +1,5 @@
 import Container from "@/components/common/Container";
+import ScrollToTop from "@/components/common/ScrollToTop";
 import {
   getCategoryNews,
   getMenus,
@@ -143,6 +144,7 @@ export default async function CategoryPage({ params, searchParams }) {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#eff3f6]">
+      <ScrollToTop />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -22,7 +22,7 @@ export default async function TrendingNews() {
               {/* Text */}
               <div className="flex-1">
                 <Link href={`/news/${news?.slug}`} className="text-gray-600 text-lg md:text-[22px] leading-[24px] md:leading-[26px]
-                 group-hover:text-primary font-semibold line-clamp-2 ">
+                 group-hover:text-primary font-semibold line-clamp-2 " scroll>
                   {news?.name}
                 </Link>
                 <p className="text-gray-500 text-base md:text-xl mt-2 line-clamp-2 md:line-clamp-3">

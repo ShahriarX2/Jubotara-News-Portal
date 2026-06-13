@@ -16,6 +16,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FaGoogle, FaWhatsapp } from "react-icons/fa";
 import SidebarAd from "@/components/common/SidebarAd";
+import ScrollToTop from "@/components/common/ScrollToTop";
 
 const DEFAULT_AUTHOR = "নিজস্ব প্রতিবেদক";
 
@@ -115,8 +116,6 @@ export default async function NewsDetailPage({ params }) {
     getRelatedNews(slug),
   ]);
 
-  console.log(relatedNews);
-
   if (!news || Object.keys(news).length === 0) {
     notFound();
   }
@@ -165,6 +164,7 @@ export default async function NewsDetailPage({ params }) {
 
   return (
     <>
+      <ScrollToTop />
       <NewsPrintTemplate news={news} category={category} />
 
       <div className="flex min-h-screen flex-col bg-[#eff3f6] print:hidden">
