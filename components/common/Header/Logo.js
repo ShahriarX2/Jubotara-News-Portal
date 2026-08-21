@@ -1,12 +1,14 @@
 import Link from 'next/link';
-import logoImg from '@/public/images/logo.png';
+import jtLogo from '@/public/images/logo.png';
+import rpcLogo from '@/public/images/IMG_20260821_160728.jpg';
 
 const Logo = ({ logoUrl, className }) => {
+  const selectedLogo = process.env.FRONTEND_URL === 'https://jubotaranews.com' ? jtLogo : rpcLogo;
   return (
     <Link href="/" className="relative z-60 flex items-center shrink-0">
       <div className={`relative transition-transform duration-200 hover:scale-105 ${className}`}>
         <img
-          src={logoUrl || logoImg.src || logoImg}
+          src={logoUrl || selectedLogo.src || selectedLogo}
           alt="Jubotara News Logo"
           sizes="(max-width: 768px) 150px, 200px"
           className="object-contain absolute inset-0 w-full h-full"
