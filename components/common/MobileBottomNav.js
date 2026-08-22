@@ -1,143 +1,161 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-import {
-    ChevronRight,
-    Globe,
-    Home,
-    Menu,
-    Newspaper,
-    X,
-} from 'lucide-react';
-import { FaFacebookF, FaTwitter, FaYoutube } from 'react-icons/fa';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { ChevronRight, Globe, Home, Menu, Newspaper, X } from "lucide-react";
+import { FaFacebookF, FaTwitter, FaYoutube } from "react-icons/fa";
 
-export default function MobileBottomNav({ news_categories }) {
-    const pathname = usePathname();
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+export default function MobileBottomNav({ news_categories, siteName = "Jubotara" }) {
+  const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const navItems = [
-        { name: 'হোম', icon: <Home size={22} />, path: '/' },
-        { name: 'সারাদেশ', icon: <Globe size={22} />, path: '/category/সারাদেশ' },
-        { name: 'রাজনীতি', icon: <Newspaper size={22} />, path: '/category/রাজনীতি' },
-        { name: 'ভিডিও', icon: <FaYoutube size={25} />, path: '/video' },
-    ];
+  const navItems = [
+    { name: "হোম", icon: <Home size={22} />, path: "/" },
+    { name: "সারাদেশ", icon: <Globe size={22} />, path: "/category/সারাদেশ" },
+    {
+      name: "রাজনীতি",
+      icon: <Newspaper size={22} />,
+      path: "/category/রাজনীতি",
+    },
+    { name: "ভিডিও", icon: <FaYoutube size={25} />, path: "/video" },
+  ];
 
-    return (
-        <>
-            <div
-                className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-[105] transition-opacity duration-300 md:hidden ${
-                    isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                }`}
-                onClick={() => setIsMenuOpen(false)}
-            />
+  return (
+    <>
+      <div
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-[105] transition-opacity duration-300 md:hidden ${
+          isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setIsMenuOpen(false)}
+      />
 
-            <div
-                className={`fixed inset-y-0 left-0 w-[85%] max-w-sm bg-white z-[110] shadow-2xl transition-transform duration-500 ease-out md:hidden flex flex-col ${
-                    isMenuOpen ? 'translate-x-0' : '-translate-x-full'
-                }`}
+      <div
+        className={`fixed inset-y-0 left-0 w-[85%] max-w-sm bg-white z-[110] shadow-2xl transition-transform duration-500 ease-out md:hidden flex flex-col ${
+          isMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-white text-black">
+          <div>
+            <h2 className="text-lg font-black">
+              {siteName || "Jubotara"} News
+            </h2>
+            <p className="text-base opacity-80">সর্বশেষ সংবাদ ও বিনোদন</p>
+          </div>
+          <button
+            onClick={() => setIsMenuOpen(false)}
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-black/10 hover:bg-black/20 transition-colors"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-4 space-y-2">
+          <p className="text-lg font-bold text-gray-700 uppercase tracking-widest mb-2">
+            বিভাগসমূহ
+          </p>
+          {news_categories?.map((cat) => (
+            <Link
+              key={cat?.id}
+              href={cat?.href || `/category/${cat?.slug}`}
+              onClick={() => setIsMenuOpen(false)}
+              className="flex items-center justify-between gap-4 p-1 rounded-xl hover:bg-[#eff3f6] transition-all group"
             >
-                <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-white text-black">
-                    <div>
-                        <h2 className="text-lg font-black">Jubotara News</h2>
-                        <p className="text-base opacity-80">সর্বশেষ সংবাদ ও বিনোদন</p>
-                    </div>
-                    <button
-                        onClick={() => setIsMenuOpen(false)}
-                        className="w-8 h-8 flex items-center justify-center rounded-full bg-black/10 hover:bg-black/20 transition-colors"
-                    >
-                        <X size={20} />
-                    </button>
-                </div>
+              <span className="font-bold text-gray-500 group-hover:text-primary transition-colors">
+                {cat?.name}
+              </span>
+              <span className="w-8 h-8 flex items-center justify-center text-gray-400 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                <ChevronRight size={16} />
+              </span>
+            </Link>
+          ))}
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <Link
+              href="/contact"
+              onClick={() => setIsMenuOpen(false)}
+              className="flex items-center justify-between gap-4 p-1 rounded-xl hover:bg-[#eff3f6] transition-all group"
+            >
+              <span className="font-bold text-gray-500 group-hover:text-primary transition-colors">
+                যোগাযোগ
+              </span>
+              <span className="w-8 h-8 flex items-center justify-center text-gray-400 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                <ChevronRight size={16} />
+              </span>
+            </Link>
+          </div>
+        </div>
 
-                <div className="flex-1 overflow-y-auto p-4 space-y-2">
-                    <p className="text-lg font-bold text-gray-700 uppercase tracking-widest mb-2">
-                        বিভাগসমূহ
-                    </p>
-                    {news_categories?.map((cat) => (
-                        <Link
-                            key={cat?.id}
-                            href={cat?.href || `/category/${cat?.slug}`}
-                            onClick={() => setIsMenuOpen(false)}
-                            className="flex items-center justify-between gap-4 p-1 rounded-xl hover:bg-[#eff3f6] transition-all group"
-                        >
-                            <span className="font-bold text-gray-500 group-hover:text-primary transition-colors">
-                                {cat?.name}
-                            </span>
-                            <span className="w-8 h-8 flex items-center justify-center text-gray-400 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-                                <ChevronRight size={16} />
-                            </span>
-                        </Link>
-                    ))}
-                    <div className="mt-4 pt-4 border-t border-gray-100">
-                        <Link
-                            href="/contact"
-                            onClick={() => setIsMenuOpen(false)}
-                            className="flex items-center justify-between gap-4 p-1 rounded-xl hover:bg-[#eff3f6] transition-all group"
-                        >
-                            <span className="font-bold text-gray-500 group-hover:text-primary transition-colors">
-                                যোগাযোগ
-                            </span>
-                            <span className="w-8 h-8 flex items-center justify-center text-gray-400 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-                                <ChevronRight size={16} />
-                            </span>
-                        </Link>
-                    </div>
-                </div>
+        <div className="p-6 bg-[#eff3f6] border-t border-gray-100">
+          <div className="flex gap-4 justify-center">
+            <a
+              href="#"
+              className="w-10 h-10 rounded-full bg-[#1877F2] text-white flex items-center justify-center transition-transform hover:scale-110"
+            >
+              <FaFacebookF size={20} />
+            </a>
+            <a
+              href="#"
+              className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center transition-transform hover:scale-110"
+            >
+              <FaTwitter size={20} />
+            </a>
+            <a
+              href="#"
+              className="w-10 h-10 rounded-full bg-[#FF0000] text-white flex items-center justify-center transition-transform hover:scale-110"
+            >
+              <FaYoutube size={20} />
+            </a>
+          </div>
+        </div>
+      </div>
 
-                <div className="p-6 bg-[#eff3f6] border-t border-gray-100">
-                    <div className="flex gap-4 justify-center">
-                        <a href="#" className="w-10 h-10 rounded-full bg-[#1877F2] text-white flex items-center justify-center transition-transform hover:scale-110">
-                            <FaFacebookF size={20} />
-                        </a>
-                        <a href="#" className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center transition-transform hover:scale-110">
-                            <FaTwitter size={20} />
-                        </a>
-                        <a href="#" className="w-10 h-10 rounded-full bg-[#FF0000] text-white flex items-center justify-center transition-transform hover:scale-110">
-                            <FaYoutube size={20} />
-                        </a>
-                    </div>
+      <nav className="fixed bottom-0 left-0 right-0 z-[100] md:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] pb-safe">
+        <div className="flex items-center justify-between h-16 px-2 max-w-lg mx-auto">
+          {navItems.map((item) => {
+            const isActive = pathname === item.path;
+            return (
+              <Link
+                key={item.path}
+                href={item.path}
+                className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-all duration-300 ${
+                  isActive ? "text-primary" : "text-black hover:text-primary"
+                }`}
+              >
+                <div
+                  className={
+                    isActive
+                      ? "scale-110 drop-shadow-[0_0_8px_rgba(238,29,35,0.4)]"
+                      : ""
+                  }
+                >
+                  {item.icon}
                 </div>
+                <span
+                  className={`text-[10px] font-black tracking-tight ${isActive ? "opacity-100" : "opacity-80"}`}
+                >
+                  {item.name}
+                </span>
+              </Link>
+            );
+          })}
+
+          <button
+            onClick={() => setIsMenuOpen(true)}
+            className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-all duration-300 ${
+              isMenuOpen ? "text-primary" : "text-black hover:text-primary"
+            }`}
+          >
+            <div
+              className={`${isMenuOpen ? "scale-110 rotate-90" : ""} transition-transform`}
+            >
+              <Menu size={22} />
             </div>
-
-            <nav className="fixed bottom-0 left-0 right-0 z-[100] md:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] pb-safe">
-                <div className="flex items-center justify-between h-16 px-2 max-w-lg mx-auto">
-                    {navItems.map((item) => {
-                        const isActive = pathname === item.path;
-                        return (
-                            <Link
-                                key={item.path}
-                                href={item.path}
-                                className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-all duration-300 ${
-                                    isActive ? 'text-primary' : 'text-black hover:text-primary'
-                                }`}
-                            >
-                                <div className={isActive ? 'scale-110 drop-shadow-[0_0_8px_rgba(238,29,35,0.4)]' : ''}>
-                                    {item.icon}
-                                </div>
-                                <span className={`text-[10px] font-black tracking-tight ${isActive ? 'opacity-100' : 'opacity-80'}`}>
-                                    {item.name}
-                                </span>
-                            </Link>
-                        );
-                    })}
-
-                    <button
-                        onClick={() => setIsMenuOpen(true)}
-                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-all duration-300 ${
-                            isMenuOpen ? 'text-primary' : 'text-black hover:text-primary'
-                        }`}
-                    >
-                        <div className={`${isMenuOpen ? 'scale-110 rotate-90' : ''} transition-transform`}>
-                            <Menu size={22} />
-                        </div>
-                        <span className="text-[10px] font-black tracking-tight opacity-80">
-                            মেনু
-                        </span>
-                    </button>
-                </div>
-            </nav>
-        </>
-    );
+            <span className="text-[10px] font-black tracking-tight opacity-80">
+              মেনু
+            </span>
+          </button>
+        </div>
+      </nav>
+    </>
+  );
 }

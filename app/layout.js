@@ -63,6 +63,11 @@ export const metadata = {
 export default async function RootLayout({ children }) {
   const newsCategories = await getMenus();
   const theme = getSiteTheme();
+  const siteName = (
+    process.env.SITE_NAME ||
+    process.env.NEXT_PUBLIC_SITE_NAME ||
+    "Jubotara"
+  ).trim();
 
   return (
     <html
@@ -84,7 +89,7 @@ export default async function RootLayout({ children }) {
       <body className="bg-[#eff3f6] pb-16 md:pb-0">
         <Header />
         <ViewTransitions>{children}</ViewTransitions>
-        <MobileBottomNav news_categories={newsCategories} />
+        <MobileBottomNav news_categories={newsCategories} siteName={siteName} />
         <Footer />
       </body>
     </html>
