@@ -1,9 +1,9 @@
 const trimTrailingSlash = (value = "") => value.replace(/\/+$/, "");
 
 const DEFAULT_API_BASE_URL =
-    process.env.NODE_ENV === "development"
+    process.env.SITE_NAME === "jubotara"
         ? "https://api.jubotaranews.com"
-        : "https://api.jubotaranews.com";
+        : "https://api.rpcnews.com";
 
 export const BASE_URL = trimTrailingSlash(
     process.env.NEXT_PUBLIC_API_BASE_URL ||

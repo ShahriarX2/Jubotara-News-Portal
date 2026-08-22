@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import jtLogo from '@/public/images/logo.png';
-import rpcLogo from '@/public/images/IMG_20260821_160728.jpg';
+import rpcLogo from '@/public/images/rpcLogo.jpg';
 
 const Logo = ({ logoUrl, className }) => {
   const selectedLogo = process.env.FRONTEND_URL === 'https://jubotaranews.com' ? jtLogo : rpcLogo;
