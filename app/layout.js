@@ -13,6 +13,42 @@ const solaimanLipi = localFont({
   display: "swap",
 });
 
+const siteThemeMap = {
+  jubotara: {
+    primary: "#ee1d23",
+    secondary: "#671a1b",
+  },
+  rpcNews: {
+    primary: "#2e7d32",
+    secondary: "#1b5e20",
+  },
+  default: {
+    primary: "#0f172a",
+    secondary: "#1d4ed8",
+  },
+};
+
+const getSiteTheme = () => {
+  const siteName = (
+    process.env.SITE_NAME ||
+    process.env.NEXT_PUBLIC_SITE_NAME ||
+    process.env.FRONT_END_URL ||
+    process.env.NEXT_PUBLIC_FRONTEND_URL ||
+    ""
+  ).toLowerCase();
+
+  const baseTheme = siteName.includes("jubotara")
+    ? siteThemeMap.jubotara
+    : siteName.includes("rpc") || siteName.includes("rpcnews")
+      ? siteThemeMap.rpcNews
+      : siteThemeMap.default;
+
+  return {
+    primary: process.env.NEXT_PUBLIC_THEME_PRIMARY || baseTheme.primary,
+    secondary: process.env.NEXT_PUBLIC_THEME_SECONDARY || baseTheme.secondary,
+  };
+};
+
 export const metadata = {
   title: "Jubotara News | সর্বশেষ সংবাদ ও ব্রেকিং নিউজ",
   description:
@@ -26,9 +62,17 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   const newsCategories = await getMenus();
+  const theme = getSiteTheme();
 
   return (
-    <html lang="bn" className={`${solaimanLipi.variable} font-sans`}>
+    <html
+      lang="bn"
+      className={`${solaimanLipi.variable} font-sans`}
+      style={{
+        "--color-primary": theme.primary,
+        "--color-secondary": theme.secondary,
+      }}
+    >
       <head>
         <Script
           async
