@@ -1,8 +1,24 @@
 {
-  // ...
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "jubotara-news-portal",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-11-26",
+  "compatibility_flags": ["nodejs_compat"],
+
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "jubotara-news-portal"
+    }
+  ],
+
   "vars": {
     "NEXT_PUBLIC_SITE_NAME": "jubotara",
     "SITE_NAME": "jubotara"
-  },
-  // ...
+  }
 }
