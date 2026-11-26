@@ -1,0 +1,34 @@
+{
+  "version": 3,
+  "middleware": {
+    "/": {
+      "files": [
+        "server/edge/chunks/node_modules_next_dist_esm_build_templates_edge-wrapper_1nw6_jxjsxuoc.js",
+        "server/edge/chunks/[root-of-the-server]__0rhlzsn5p009_._.js",
+        "server/edge/chunks/turbopack-node_modules_next_dist_esm_build_templates_edge-wrapper_0bg0l9qkreyx5.js"
+      ],
+      "name": "middleware",
+      "page": "/",
+      "entrypoint": "server/edge/chunks/turbopack-node_modules_next_dist_esm_build_templates_edge-wrapper_0bg0l9qkreyx5.js",
+      "matchers": [
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/news(?:\\/((?:[^\\/#\\?]+?)(?:\\/(?:[^\\/#\\?]+?))*))?(\\.json|\\.rsc|\\.segments\\/.+\\.segment\\.rsc)?[\\/#\\?]?$",
+          "originalSource": "/news/:path*"
+        }
+      ],
+      "wasm": [],
+      "assets": [],
+      "env": {
+        "__NEXT_BUILD_ID": "9DKGbPbVvlLfeXqygVhpJ",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "lCGH4Ai1rMiDY6983Zqj3aDKJVR+f1Ec28ObMhA8lJA=",
+        "__NEXT_PREVIEW_MODE_ID": "0b0948cffff09cb70e47b670ebc2f4f9",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "827f4b9c07beb6b67519177bc59e70356e9e7bd192d8a8f6f167729e38d4a08b",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "143343fa5fcb64787d6a551041fe619a7ebe1a4efec060707807f00c2ffb175b"
+      }
+    }
+  },
+  "sortedMiddleware": [
+    "/"
+  ],
+  "functions": {}
+}

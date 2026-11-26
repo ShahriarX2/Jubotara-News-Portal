@@ -1,0 +1,43 @@
+{
+  "app": {
+    "[project]/app/_not-found/page": [
+      "static/media/SolaimanLipi-s.p.096543rjlne_w.ttf"
+    ],
+    "[project]/app/category/[slug]/page": [
+      "static/media/SolaimanLipi-s.p.096543rjlne_w.ttf"
+    ],
+    "[project]/app/contact/page": [
+      "static/media/SolaimanLipi-s.p.096543rjlne_w.ttf"
+    ],
+    "[project]/app/location/page": [
+      "static/media/SolaimanLipi-s.p.096543rjlne_w.ttf"
+    ],
+    "[project]/app/news/[slug]/page": [
+      "static/media/SolaimanLipi-s.p.096543rjlne_w.ttf"
+    ],
+    "[project]/app/page": [
+      "static/media/SolaimanLipi-s.p.096543rjlne_w.ttf"
+    ],
+    "[project]/app/privacy/page": [
+      "static/media/SolaimanLipi-s.p.096543rjlne_w.ttf"
+    ],
+    "[project]/app/search/page": [
+      "static/media/SolaimanLipi-s.p.096543rjlne_w.ttf"
+    ],
+    "[project]/app/team/page": [
+      "static/media/SolaimanLipi-s.p.096543rjlne_w.ttf"
+    ],
+    "[project]/app/terms/page": [
+      "static/media/SolaimanLipi-s.p.096543rjlne_w.ttf"
+    ],
+    "[project]/app/video/[slug]/page": [
+      "static/media/SolaimanLipi-s.p.096543rjlne_w.ttf"
+    ],
+    "[project]/app/video/page": [
+      "static/media/SolaimanLipi-s.p.096543rjlne_w.ttf"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}

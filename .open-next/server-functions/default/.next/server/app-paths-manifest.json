@@ -1,0 +1,21 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/tts/route": "app/api/tts/route.js",
+  "/category/[slug]/page": "app/category/[slug]/page.js",
+  "/contact/page": "app/contact/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/location/page": "app/location/page.js",
+  "/news-sitemap.xml/route": "app/news-sitemap.xml/route.js",
+  "/news/[slug]/page": "app/news/[slug]/page.js",
+  "/page": "app/page.js",
+  "/privacy/page": "app/privacy/page.js",
+  "/robots.txt/route": "app/robots.txt/route.js",
+  "/rss.xml/route": "app/rss.xml/route.js",
+  "/search/page": "app/search/page.js",
+  "/sitemap.xml/route": "app/sitemap.xml/route.js",
+  "/team/page": "app/team/page.js",
+  "/terms/page": "app/terms/page.js",
+  "/video/[slug]/page": "app/video/[slug]/page.js",
+  "/video/page": "app/video/page.js"
+}

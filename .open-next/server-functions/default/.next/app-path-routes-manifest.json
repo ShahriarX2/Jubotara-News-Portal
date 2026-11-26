@@ -1,0 +1,21 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/api/tts/route": "/api/tts",
+  "/category/[slug]/page": "/category/[slug]",
+  "/contact/page": "/contact",
+  "/favicon.ico/route": "/favicon.ico",
+  "/location/page": "/location",
+  "/news-sitemap.xml/route": "/news-sitemap.xml",
+  "/news/[slug]/page": "/news/[slug]",
+  "/page": "/",
+  "/privacy/page": "/privacy",
+  "/robots.txt/route": "/robots.txt",
+  "/rss.xml/route": "/rss.xml",
+  "/search/page": "/search",
+  "/sitemap.xml/route": "/sitemap.xml",
+  "/team/page": "/team",
+  "/terms/page": "/terms",
+  "/video/[slug]/page": "/video/[slug]",
+  "/video/page": "/video"
+}
